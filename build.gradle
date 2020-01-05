@@ -6,15 +6,13 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.4"
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.4"
     }
 }
-plugins {
-    id "com.matthewprenger.cursegradle" version "1.1.0"
-}
-apply plugin: 'com.github.johnrengelman.shadow'
+
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
@@ -94,49 +92,56 @@ minecraft {
     }
 }
 
-configurations {
-    embed
-    compile.extendsFrom(embed)
+
+dependencies {
+    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+    shadow("net.dv8tion:JDA:${jda_version}") {
+        exclude module: 'opus-java'
+    }
+    shadow("org.slf4j:slf4j-simple:${slf4j_version}")
+    shadow "club.minnced:discord-webhooks:${discord_webhooks_version}"
 }
 
 shadowJar {
-    classifier = '1.14'
-    configurations = [project.configurations.embed]
-    relocate 'okhttp3', 'dcshadow.okhttp'
-    relocate 'okio', 'dcshadow.okio'
-    relocate 'club.minnced', 'dcshadow.club.minnced'
-    relocate 'com.sun', 'dcshadow.com.sun'
-    relocate 'com.iwebpp', 'dcshadow.com.iwebpp'
-    relocate 'com.neovisionaries', 'dcshadow.com.neovisionaries'
-    relocate 'gnu', 'dcshadow.gnu'
-    relocate 'org.apache.commons.collections4', 'dcshadow.apache-collections4'
-    relocate 'org.slf4j', 'dcshadow.slf4j'
-    relocate 'org.json', 'dcshadow.org.json'
-    relocate 'org.intellij', 'dcshadow.intellij'
-    relocate 'org.jetbrains', 'dcshadow.jetbrains'
-    relocate 'tomp2p', 'dcshadow.tomp2p'
-    relocate 'com.fasterxml', 'dcshadow.fasterxml'
-}
-dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    relocate 'org.apache.commons.collections4', 'lib.org.apache.commons.collections4'
+    relocate 'gnu.trove', 'lib.gnu.trove'
+    relocate "com.neovisionaries.ws.client", "lib.com.neovisionaries.ws.client"
+    relocate "com.iwebpp.crypto", "lib.com.iwebpp.crypto"
+    relocate "net.dv8tion.jda", "lib.net.dv8tion.jda"
+    relocate "org.json", "lib.org.json"
+    relocate "okio", "lib.okio"
+    relocate "okhttp3", "lib.okhttp3"
+    relocate "okhttp3", "lib.okhttp3"
+    relocate "org.slf4j", "lib.org.slf4j"
+    relocate "com.fasterxml.jackson", "lib.com.fasterxml.jackson"
+    relocate "club.minnced.discord", "lib.club.minnced.discord"
 
-    embed("net.dv8tion:JDA:${jda_version}")
-    embed "club.minnced:discord-webhooks:${discord_webhooks_version}"
+    classifier ''
+    configurations = [project.configurations.shadow]
+    dependencies{
+        exclude(dependency('org.jetbrains:annotations'))
+        exclude(dependency('com.google.code.findbugs:jsr305'))
+    }
 }
 
 reobf {
     shadowJar {
-        dependsOn tasks.createMcpToSrg
-        mappings = tasks.createMcpToSrg.outputs.files.singleFile
+        dependsOn createMcpToSrg
+        mappings = createMcpToSrg.output
     }
 }
 
 artifacts {
-    archives tasks.shadowJar
+    archives shadowJar
 }
 
+// Example for how to get properties into the manifest for reading by the runtime..
 jar {
-    classifier = "1.14"
+    classifier "slim"
     manifest {
         attributes([
                 "Specification-Title": "discordintegration",
@@ -149,6 +154,8 @@ jar {
         ])
     }
 }
+
+build.dependsOn(shadowJar)
 
 def reobfFile = file("$buildDir/reobfShadowJar/output.jar")
 def reobfArtifact = artifacts.add('default', reobfFile) {

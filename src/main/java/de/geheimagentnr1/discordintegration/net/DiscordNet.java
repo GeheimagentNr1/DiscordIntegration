@@ -17,7 +17,7 @@ import javax.security.auth.login.LoginException;
 public class DiscordNet {
 	
 	
-	private static boolean on = true;
+	private static boolean on = false;
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -36,6 +36,8 @@ public class DiscordNet {
 			if( channel == null ) {
 				LOGGER.error( "Discord Text Channel {} not found", ModConfig.CHANNEL_ID.get() );
 				on = false;
+			} else {
+				on = true;
 			}
 		} catch( LoginException | InterruptedException exception ) {
 			LOGGER.error( "Login to Discord failed", exception );
@@ -45,7 +47,9 @@ public class DiscordNet {
 	
 	public static void stop() {
 		
-		jda.shutdown();
+		if( on && jda != null ) {
+			jda.shutdown();
+		}
 	}
 	
 	public static void sendChatMessage( PlayerEntity player, String message ) {
