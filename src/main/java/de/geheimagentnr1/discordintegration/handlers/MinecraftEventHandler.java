@@ -92,7 +92,7 @@ public class MinecraftEventHandler {
 		if( displayInfo != null && displayInfo.shouldAnnounceToChat() ) {
 			//noinspection HardcodedLineSeparator
 			String message = "has made the advancement **" + displayInfo.getTitle().getString() +
-				"**\n" + displayInfo.getDescription().getString();
+				"**\n*" + displayInfo.getDescription().getString() + "*";
 			DiscordNet.sendPlayerMessage( event.getPlayer(), message );
 		}
 	}
