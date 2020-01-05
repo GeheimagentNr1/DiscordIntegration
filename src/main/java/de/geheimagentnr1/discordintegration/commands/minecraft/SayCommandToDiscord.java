@@ -1,0 +1,31 @@
+package de.geheimagentnr1.discordintegration.commands.minecraft;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.MessageArgument;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
+
+public class SayCommandToDiscord {
+	
+	
+	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
+		
+		LiteralArgumentBuilder<CommandSource> sayCommand = Commands.literal( "say" ).requires(
+			source -> source.hasPermissionLevel( 2 ) );
+		sayCommand.then( Commands.argument( "message", MessageArgument.message() ).executes(
+			context -> {
+				CommandSource source = context.getSource();
+				ITextComponent message = MessageArgument.getMessage( context, "message" );
+				source.getServer().getPlayerList().sendMessage( new TranslationTextComponent( "chat.type.announcement",
+					source.getDisplayName(), message ) );
+				DiscordNet.sendChatMessage( source, message );
+				return 1;
+			} ) );
+		dispatcher.register( sayCommand );
+	}
+}
