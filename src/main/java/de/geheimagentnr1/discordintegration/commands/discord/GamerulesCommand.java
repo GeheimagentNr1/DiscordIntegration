@@ -41,8 +41,12 @@ public class GamerulesCommand extends CommandHandler {
 				
 			}
 		} );
-		for( String message : messages ) {
-			DiscordNet.sendMessage( message );
+		if( messages.size() == 1 ) {
+			DiscordNet.sendMessage( "```" + messages.get( 0 ) + "```" );
+		} else {
+			for( String message : messages ) {
+				DiscordNet.sendMessage( message );
+			}
 		}
 	}
 }
