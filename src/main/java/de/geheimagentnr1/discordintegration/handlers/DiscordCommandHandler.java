@@ -24,6 +24,7 @@ public class DiscordCommandHandler {
 		ArrayList<CommandHandler> commandHandlers = new ArrayList<>();
 		
 		commandHandlers.add( new DifficultyCommand() );
+		commandHandlers.add( new GamerulesCommand() );
 		commandHandlers.add( new OnlineCommand() );
 		commandHandlers.add( new TimeCommand() );
 		commandHandlers.add( new TpsCommand() );
