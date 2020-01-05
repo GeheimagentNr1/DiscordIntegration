@@ -7,7 +7,6 @@ import net.minecraft.server.MinecraftServer;
 public class TimeCommand extends CommandHandler {
 	
 	
-	
 	public TimeCommand() {
 		
 		super( "time" );

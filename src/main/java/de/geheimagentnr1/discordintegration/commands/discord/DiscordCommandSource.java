@@ -12,9 +12,9 @@ public class DiscordCommandSource implements ICommandSource {
 	 * Send a chat message to the CommandSender
 	 */
 	@Override
-	public void sendMessage( ITextComponent iTextComponent ) {
+	public void sendMessage( ITextComponent component ) {
 		
-		DiscordNet.sendMessage( iTextComponent.getFormattedText() );
+		DiscordNet.sendMessage( component.getFormattedText() );
 	}
 	
 	@Override
