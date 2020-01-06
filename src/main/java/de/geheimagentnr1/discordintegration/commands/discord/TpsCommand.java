@@ -14,7 +14,7 @@ public class TpsCommand extends CommandHandler {
 	}
 	
 	@Override
-	public void run( CommandSource source, MinecraftServer server ) {
+	protected void run( CommandSource source, MinecraftServer server ) {
 		
 		server.getCommandManager().handleCommand( source, "/forge tps" );
 	}

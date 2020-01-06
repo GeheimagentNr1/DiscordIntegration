@@ -19,7 +19,7 @@ public class GamerulesCommand extends CommandHandler {
 	}
 	
 	@Override
-	public void run( CommandSource source, MinecraftServer server ) {
+	protected void run( CommandSource source, MinecraftServer server ) {
 		
 		ArrayList<String> messages = new ArrayList<>();
 		GameRules.func_223590_a( new GameRules.IRuleEntryVisitor() {

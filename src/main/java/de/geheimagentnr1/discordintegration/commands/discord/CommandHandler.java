@@ -9,7 +9,8 @@ public abstract class CommandHandler {
 	
 	private final String command;
 	
-	protected CommandHandler( String name ) {
+	//package-private
+	CommandHandler( String name ) {
 		
 		command = "!" + name;
 	}
@@ -23,5 +24,5 @@ public abstract class CommandHandler {
 		return false;
 	}
 	
-	public abstract void run( CommandSource source, MinecraftServer server );
+	protected abstract void run( CommandSource source, MinecraftServer server );
 }

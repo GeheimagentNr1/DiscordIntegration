@@ -13,7 +13,7 @@ public class TimeCommand extends CommandHandler {
 	}
 	
 	@Override
-	public void run( CommandSource source, MinecraftServer server ) {
+	protected void run( CommandSource source, MinecraftServer server ) {
 		
 		server.getCommandManager().handleCommand( source, "/time query daytime" );
 	}
