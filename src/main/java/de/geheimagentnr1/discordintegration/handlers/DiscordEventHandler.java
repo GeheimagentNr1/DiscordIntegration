@@ -20,6 +20,11 @@ public class DiscordEventHandler extends ListenerAdapter {
 		DiscordCommandHandler.initSource( _server );
 	}
 	
+	public static boolean isServerNotDedicated() {
+		
+		return !server.isDedicatedServer();
+	}
+	
 	@Override
 	public void onMessageReceived( @NotNull MessageReceivedEvent event ) {
 		

@@ -27,6 +27,10 @@ public class MinecraftEventHandler {
 	@SubscribeEvent
 	public static void handleServerStarting( FMLServerStartingEvent event ) {
 		
+		DiscordEventHandler.setServer( event.getServer() );
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		SayCommandToDiscord.register( event.getCommandDispatcher() );
 		MeCommandToDiscord.register( event.getCommandDispatcher() );
 	}
@@ -34,9 +38,11 @@ public class MinecraftEventHandler {
 	@SubscribeEvent
 	public static void handleServerStarted( FMLServerStartedEvent event ) {
 		
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		ModConfig.load();
 		DiscordNet.init();
-		DiscordEventHandler.setServer( event.getServer() );
 		DiscordNet.sendMessage( "Server started" );
 	}
 	
@@ -44,6 +50,9 @@ public class MinecraftEventHandler {
 	@SubscribeEvent
 	public static void handleServerStoppedEvent( FMLServerStoppedEvent event ) {
 		
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		if( event.getServer().isServerRunning() ) {
 			DiscordNet.sendMessage( "Server crashed" );
 		} else {
@@ -55,6 +64,9 @@ public class MinecraftEventHandler {
 	@SubscribeEvent
 	public static void handlePlayerLoggedInEvent( PlayerEvent.PlayerLoggedInEvent event ) {
 		
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		DiscordNet.sendPlayerMessage( event.getPlayer(), "joined the game." );
 	}
 	
@@ -62,18 +74,27 @@ public class MinecraftEventHandler {
 	@SubscribeEvent
 	public static void handlePlayerLoggedOutEvent( PlayerEvent.PlayerLoggedOutEvent event ) {
 		
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		DiscordNet.sendPlayerMessage( event.getPlayer(), "disconnected." );
 	}
 	
 	@SubscribeEvent
 	public static void handleServerChatEvent( ServerChatEvent event ) {
 		
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		DiscordNet.sendChatMessage( event.getPlayer(), event.getMessage() );
 	}
 	
 	@SubscribeEvent
 	public static void handleLivingEntityDeathEvent( LivingDeathEvent event ) {
 		
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		LivingEntity entity = event.getEntityLiving();
 		
 		if( entity instanceof PlayerEntity || entity instanceof TameableEntity &&
@@ -87,6 +108,9 @@ public class MinecraftEventHandler {
 	@SubscribeEvent
 	public static void handleAdvancementEvent( AdvancementEvent event ) {
 		
+		if( DiscordEventHandler.isServerNotDedicated() ) {
+			return;
+		}
 		DisplayInfo displayInfo = event.getAdvancement().getDisplay();
 		
 		if( displayInfo != null && displayInfo.shouldAnnounceToChat() ) {

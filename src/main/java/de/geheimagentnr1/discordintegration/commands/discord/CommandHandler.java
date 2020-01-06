@@ -26,10 +26,11 @@ public abstract class CommandHandler {
 	
 	protected abstract void run( CommandSource source, MinecraftServer server );
 	
-	public String getCommand() {
+	//package-private
+	String getCommand() {
 		
 		return command;
 	}
 	
-	public abstract String getDescription();
+	protected abstract String getDescription();
 }
