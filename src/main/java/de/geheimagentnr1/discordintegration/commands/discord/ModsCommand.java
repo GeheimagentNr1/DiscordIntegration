@@ -42,4 +42,10 @@ public class ModsCommand extends CommandHandler {
 			}
 		}
 	}
+	
+	@Override
+	public String getDescription() {
+		
+		return "shows a list of the mods on the server.";
+	}
 }

@@ -18,4 +18,10 @@ public class TpsCommand extends CommandHandler {
 		
 		server.getCommandManager().handleCommand( source, "/forge tps" );
 	}
+	
+	@Override
+	public String getDescription() {
+		
+		return "shows the tps statistic of the server and it's dimensions.";
+	}
 }

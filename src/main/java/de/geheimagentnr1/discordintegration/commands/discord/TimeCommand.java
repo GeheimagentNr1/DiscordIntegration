@@ -17,4 +17,10 @@ public class TimeCommand extends CommandHandler {
 		
 		server.getCommandManager().handleCommand( source, "/time query daytime" );
 	}
+	
+	@Override
+	public String getDescription() {
+		
+		return "shows the current day time on the server.";
+	}
 }

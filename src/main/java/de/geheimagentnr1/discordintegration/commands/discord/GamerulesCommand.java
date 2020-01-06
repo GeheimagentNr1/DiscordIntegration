@@ -49,4 +49,10 @@ public class GamerulesCommand extends CommandHandler {
 			}
 		}
 	}
+	
+	@Override
+	public String getDescription() {
+		
+		return "shows the gamerules and there values.";
+	}
 }

@@ -25,6 +25,7 @@ public class DiscordCommandHandler {
 		
 		commandHandlers.add( new DifficultyCommand() );
 		commandHandlers.add( new GamerulesCommand() );
+		commandHandlers.add( new HelpCommand() );
 		commandHandlers.add( new ModsCommand() );
 		commandHandlers.add( new OnlineCommand() );
 		commandHandlers.add( new SeedCommand() );
@@ -50,5 +51,10 @@ public class DiscordCommandHandler {
 		source = new CommandSource( new DiscordCommandSource(), Vec3d.ZERO, Vec2f.ZERO,
 			server.getWorld( DimensionType.OVERWORLD ), 2, "Discord Integration Mod",
 			new StringTextComponent( "Discord Integration Mod" ), server, null );
+	}
+	
+	public static CommandHandler[] getCommands() {
+		
+		return command_handlers;
 	}
 }

@@ -17,4 +17,10 @@ public class DifficultyCommand extends CommandHandler {
 		
 		server.getCommandManager().handleCommand( source, "/difficulty" );
 	}
+	
+	@Override
+	public String getDescription() {
+		
+		return "shows the difficulty of the server.";
+	}
 }

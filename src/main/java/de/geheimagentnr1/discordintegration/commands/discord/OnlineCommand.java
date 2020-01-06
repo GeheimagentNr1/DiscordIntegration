@@ -18,4 +18,10 @@ public class OnlineCommand extends CommandHandler {
 		
 		server.getCommandManager().handleCommand( source, "/list" );
 	}
+	
+	@Override
+	public String getDescription() {
+		
+		return "shows how many and which players are on the server.";
+	}
 }

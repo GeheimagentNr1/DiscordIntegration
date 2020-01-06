@@ -18,4 +18,10 @@ public class SeedCommand extends CommandHandler {
 		
 		DiscordNet.sendMessage( "Seed: " + source.getWorld().getSeed() );
 	}
+	
+	@Override
+	public String getDescription() {
+		
+		return "shows the seed of the active world.";
+	}
 }
