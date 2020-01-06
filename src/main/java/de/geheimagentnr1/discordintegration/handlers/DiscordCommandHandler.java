@@ -25,7 +25,9 @@ public class DiscordCommandHandler {
 		
 		commandHandlers.add( new DifficultyCommand() );
 		commandHandlers.add( new GamerulesCommand() );
+		commandHandlers.add( new ModsCommand() );
 		commandHandlers.add( new OnlineCommand() );
+		commandHandlers.add( new SeedCommand() );
 		commandHandlers.add( new TimeCommand() );
 		commandHandlers.add( new TpsCommand() );
 		return commandHandlers.toArray( new CommandHandler[0] );
