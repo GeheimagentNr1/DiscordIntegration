@@ -9,8 +9,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.regex.Pattern;
-
 
 public class DiscordEventHandler extends ListenerAdapter {
 	
