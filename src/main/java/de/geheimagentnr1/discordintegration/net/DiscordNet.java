@@ -80,7 +80,11 @@ public class DiscordNet {
 	public static void sendMessage( String message ) {
 		
 		if( on ) {
-			channel.sendMessage( message ).queue();
+			try {
+				channel.sendMessage( message ).queue();
+			} catch( IllegalStateException exception ) {
+				LOGGER.error( "Message could not be send", exception );
+			}
 		}
 	}
 	
