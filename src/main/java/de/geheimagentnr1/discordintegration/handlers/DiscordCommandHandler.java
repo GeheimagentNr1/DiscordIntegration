@@ -1,6 +1,8 @@
 package de.geheimagentnr1.discordintegration.handlers;
 
 import de.geheimagentnr1.discordintegration.commands.discord.*;
+import de.geheimagentnr1.discordintegration.commands.discord.dimension_access_manager.DimensionAccessManagerIntegration;
+import de.geheimagentnr1.discordintegration.commands.discord.moremobgriefingoptions.MoreMobGriefingOptionsIntegration;
 import net.dv8tion.jda.api.entities.Message;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
@@ -31,6 +33,8 @@ public class DiscordCommandHandler {
 		commandHandlers.add( new SeedCommand() );
 		commandHandlers.add( new TimeCommand() );
 		commandHandlers.add( new TpsCommand() );
+		DimensionAccessManagerIntegration.registerDiscordCommands( commandHandlers );
+		MoreMobGriefingOptionsIntegration.registerDiscordCommands( commandHandlers );
 		return commandHandlers.toArray( new CommandHandler[0] );
 	}
 	

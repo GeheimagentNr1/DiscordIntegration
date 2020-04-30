@@ -16,10 +16,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-repositories {
-    jcenter()
-}
-
 version = "${major_version}.${minor_version}.${patch_version}"
 group = 'de.geheimagentnr1.discordintegration' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'discordintegration'
@@ -92,6 +88,13 @@ minecraft {
     }
 }
 
+repositories {
+    jcenter()
+    maven {
+        name = "ModdingMavenRepositories"
+        url = "file:../ModdingMavenRepositories"
+    }
+}
 
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
@@ -104,6 +107,16 @@ dependencies {
     }
     shadow("org.slf4j:slf4j-simple:${slf4j_version}")
     shadow "club.minnced:discord-webhooks:${discord_webhooks_version}"
+    runtimeOnly("net.dv8tion:JDA:${jda_version}") {
+        exclude module: 'opus-java'
+    }
+    runtimeOnly("org.slf4j:slf4j-simple:${slf4j_version}")
+    runtimeOnly "club.minnced:discord-webhooks:${discord_webhooks_version}"
+
+    compileOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
+
+    runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
+    runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
 }
 
 shadowJar {

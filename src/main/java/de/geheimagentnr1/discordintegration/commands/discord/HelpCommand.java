@@ -20,8 +20,7 @@ public class HelpCommand extends CommandHandler {
 		StringBuilder message = new StringBuilder();
 		
 		for( CommandHandler commandHandler : DiscordCommandHandler.getCommands() ) {
-			//noinspection HardcodedLineSeparator
-			message.append( String.format( "%s - %s\n", commandHandler.getCommand(),
+			message.append( String.format( "%s - %s%n", commandHandler.getCommand(),
 				commandHandler.getDescription() ) );
 		}
 		DiscordNet.sendMessage( message.toString() );

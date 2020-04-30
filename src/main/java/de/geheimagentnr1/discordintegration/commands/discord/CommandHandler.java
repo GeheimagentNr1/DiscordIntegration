@@ -9,8 +9,7 @@ public abstract class CommandHandler {
 	
 	private final String command;
 	
-	//package-private
-	CommandHandler( String name ) {
+	protected CommandHandler( String name ) {
 		
 		command = "!" + name;
 	}
