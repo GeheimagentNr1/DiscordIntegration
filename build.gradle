@@ -114,7 +114,6 @@ dependencies {
     runtimeOnly "club.minnced:discord-webhooks:${discord_webhooks_version}"
 
     compileOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
-
     runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
     runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
 }
@@ -157,12 +156,12 @@ jar {
     classifier "slim"
     manifest {
         attributes([
-                "Specification-Title": "discordintegration",
-                "Specification-Vendor": "GeheimagentNr1",
-                "Specification-Version": "${version}", // We are version 1 of ourselves
+                "Specification-Title": "${mod_id}",
+                "Specification-Vendor": "${modder}",
+                "Specification-Version": "1", // We are version 1 of ourselves
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
-                "Implementation-Vendor" :"GeheimagentNr1",
+                "Implementation-Vendor" :"${modder}",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

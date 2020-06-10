@@ -3,6 +3,7 @@ package de.geheimagentnr1.discordintegration.handlers;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.server.MinecraftServer;
@@ -39,6 +40,9 @@ public class DiscordEventHandler extends ListenerAdapter {
 				}
 				for( Role role : event.getMessage().getMentionedRoles() ) {
 					message = message.replace( "<@&" + role.getId() + ">", "@" + role.getName() );
+				}
+				for( TextChannel channel : event.getMessage().getMentionedChannels() ) {
+					message = message.replace( "<#" + channel.getId() + ">", "#" + channel.getName() );
 				}
 				server.getPlayerList().sendMessage( new StringTextComponent( "[" )
 					.appendText( event.getAuthor().getName() ).appendText( "] " )
