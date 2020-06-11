@@ -7,6 +7,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 
@@ -22,15 +23,14 @@ public class GamerulesCommand extends CommandHandler {
 	protected void run( CommandSource source, MinecraftServer server ) {
 		
 		ArrayList<String> messages = new ArrayList<>();
-		GameRules.func_223590_a( new GameRules.IRuleEntryVisitor() {
+		GameRules.visitAll( new GameRules.IRuleEntryVisitor() {
 			
-			@SuppressWarnings( "ParameterNameDiffersFromOverriddenParameter" )
 			@Override
-			public <T extends GameRules.RuleValue<T>> void func_223481_a( @NotNull GameRules.RuleKey<T> key,
-				@NotNull GameRules.RuleType<T> type ) {
+			public <T extends GameRules.RuleValue<T>> void visit( @NotNull GameRules.RuleKey<T> key,
+				@Nonnull GameRules.RuleType<T> type ) {
 				
 				int messagePos = messages.size() - 1;
-				String gameruleText = new TranslationTextComponent( "commands.gamerule.query", key.func_223576_a(),
+				String gameruleText = new TranslationTextComponent( "commands.gamerule.query", key.getName(),
 					server.getGameRules().get( key ) ).getUnformattedComponentText();
 				if( !messages.isEmpty() && messages.get( messagePos ).length() + gameruleText.length() + 1 < 2000 ) {
 					//noinspection HardcodedLineSeparator
@@ -38,7 +38,6 @@ public class GamerulesCommand extends CommandHandler {
 				} else {
 					messages.add( gameruleText );
 				}
-				
 			}
 		} );
 		if( messages.size() == 1 ) {

@@ -16,7 +16,7 @@ public class SeedCommand extends CommandHandler {
 	@Override
 	protected void run( CommandSource source, MinecraftServer server ) {
 		
-		DiscordNet.sendMessage( "Seed: " + source.func_197023_e().getSeed() );
+		DiscordNet.sendMessage( "Seed: " + source.getWorld().getSeed() );
 	}
 	
 	@Override

@@ -53,7 +53,7 @@ public class DiscordCommandHandler {
 	static void initSource( MinecraftServer server ) {
 		
 		source = new CommandSource( new DiscordCommandSource(), Vec3d.ZERO, Vec2f.ZERO,
-			server.func_71218_a( DimensionType.OVERWORLD ), 2, "Discord Integration Mod",
+			server.getWorld( DimensionType.OVERWORLD ), 2, "Discord Integration Mod",
 			new StringTextComponent( "Discord Integration Mod" ), server, null );
 	}
 	
