@@ -29,6 +29,6 @@ public class HelpCommand extends CommandHandler {
 	@Override
 	public String getDescription() {
 		
-		return "shows all commands with it's description.";
+		return "shows all commands with its description.";
 	}
 }
