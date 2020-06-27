@@ -6,6 +6,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TranslationTextComponent;
 
 
@@ -19,8 +21,15 @@ public class MeCommandToDiscord {
 			context -> {
 				CommandSource source = context.getSource();
 				String action = StringArgumentType.getString( context, "action" );
-				source.getServer().getPlayerList().sendMessage( new TranslationTextComponent( "chat.type.emote",
-					source.getDisplayName(), action ) );
+				TranslationTextComponent translationTextComponent = new TranslationTextComponent( "chat.type.emote",
+					source.getDisplayName(), action );
+				if( source.getEntity() != null ) {
+					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
+						ChatType.CHAT, source.getEntity().getUniqueID() );
+				} else {
+					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
+						ChatType.SYSTEM, Util.field_240973_b_ );
+				}
 				DiscordNet.sendMeChatMessage( source, action );
 				return 1;
 			} ) );

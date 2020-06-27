@@ -4,17 +4,17 @@ import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.command.ICommandSource;
 import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nonnull;
+import java.util.UUID;
+
 
 public class DiscordCommandSource implements ICommandSource {
 	
 	
-	/**
-	 * Send a chat message to the CommandSender
-	 */
 	@Override
-	public void sendMessage( ITextComponent component ) {
+	public void sendMessage( ITextComponent component, @Nonnull UUID uuid ) {
 		
-		DiscordNet.sendMessage( component.getFormattedText() );
+		DiscordNet.sendMessage( component.getString() );
 	}
 	
 	@Override

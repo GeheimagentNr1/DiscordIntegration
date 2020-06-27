@@ -31,7 +31,7 @@ public class GamerulesCommand extends CommandHandler {
 				
 				int messagePos = messages.size() - 1;
 				String gameruleText = new TranslationTextComponent( "commands.gamerule.query", key.getName(),
-					server.getGameRules().get( key ) ).getUnformattedComponentText();
+					server.getGameRules().get( key ).toString() ).getString();
 				if( !messages.isEmpty() && messages.get( messagePos ).length() + gameruleText.length() + 1 < 2000 ) {
 					//noinspection HardcodedLineSeparator
 					messages.set( messagePos, messages.get( messagePos ) + "\n" + gameruleText );

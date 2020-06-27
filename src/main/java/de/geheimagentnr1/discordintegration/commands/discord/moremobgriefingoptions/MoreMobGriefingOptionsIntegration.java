@@ -7,13 +7,12 @@ import java.util.ArrayList;
 
 
 public class MoreMobGriefingOptionsIntegration {
-    
-    
-    
-    public static void registerDiscordCommands( ArrayList<CommandHandler> commandHandlers ) {
-        
-        if( ModList.get().isLoaded( "moremobgriefingoptions" ) ) {
-            commandHandlers.add( new MobgriefingCommand() );
-        }
-    }
+	
+	
+	public static void registerDiscordCommands( ArrayList<CommandHandler> commandHandlers ) {
+		
+		if( ModList.get().isLoaded( "moremobgriefingoptions" ) ) {
+			commandHandlers.add( new MobgriefingCommand() );
+		}
+	}
 }

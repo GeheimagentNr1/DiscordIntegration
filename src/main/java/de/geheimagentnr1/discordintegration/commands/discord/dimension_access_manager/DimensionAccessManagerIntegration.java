@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 
 public class DimensionAccessManagerIntegration {
-    
-    
-    public static void registerDiscordCommands( ArrayList<CommandHandler> commandHandlers ) {
-    
-        if( ModList.get().isLoaded( "dimension_access_manager" ) ) {
-            commandHandlers.add( new DimensionsCommand() );
-        }
-    }
+	
+	
+	public static void registerDiscordCommands( ArrayList<CommandHandler> commandHandlers ) {
+		
+		if( ModList.get().isLoaded( "dimension_access_manager" ) ) {
+			commandHandlers.add( new DimensionsCommand() );
+		}
+	}
 }

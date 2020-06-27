@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,9 +46,9 @@ public class DiscordEventHandler extends ListenerAdapter {
 				for( TextChannel channel : event.getMessage().getMentionedChannels() ) {
 					message = message.replace( "<#" + channel.getId() + ">", "#" + channel.getName() );
 				}
-				server.getPlayerList().sendMessage( new StringTextComponent( "[" )
-					.appendText( event.getAuthor().getName() ).appendText( "] " )
-					.appendText( message ), true );
+				server.getPlayerList().func_232641_a_( new StringTextComponent( "[" )
+					.func_240702_b_( event.getAuthor().getName() ).func_240702_b_( "] " )
+					.func_240702_b_( message ), ChatType.SYSTEM, Util.field_240973_b_ );
 			}
 		}
 	}

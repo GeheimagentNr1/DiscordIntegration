@@ -6,10 +6,9 @@ import de.geheimagentnr1.discordintegration.commands.discord.moremobgriefingopti
 import net.dv8tion.jda.api.entities.Message;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
 
@@ -52,8 +51,8 @@ public class DiscordCommandHandler {
 	//package-private
 	static void initSource( MinecraftServer server ) {
 		
-		source = new CommandSource( new DiscordCommandSource(), Vec3d.ZERO, Vec2f.ZERO,
-			server.getWorld( DimensionType.OVERWORLD ), 2, "Discord Integration Mod",
+		source = new CommandSource( new DiscordCommandSource(), Vector3d.ZERO, Vector2f.ZERO,
+			server.func_241755_D_(), 2, "Discord Integration Mod",
 			new StringTextComponent( "Discord Integration Mod" ), server, null );
 	}
 	
