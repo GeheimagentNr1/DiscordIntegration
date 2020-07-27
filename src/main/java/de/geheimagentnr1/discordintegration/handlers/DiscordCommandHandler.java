@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class DiscordCommandHandler {
 	
 	
-	private final static CommandHandler[] command_handlers = init();
+	private static final CommandHandler[] command_handlers = init();
 	
 	private static CommandSource source;
 	
@@ -37,7 +37,8 @@ public class DiscordCommandHandler {
 		return commandHandlers.toArray( new CommandHandler[0] );
 	}
 	
-	public static boolean handleCommand( Message message, MinecraftServer server ) {
+	//package-private
+	static boolean handleCommand( Message message, MinecraftServer server ) {
 		
 		String command = message.getContentRaw();
 		for( CommandHandler command_handler : command_handlers ) {

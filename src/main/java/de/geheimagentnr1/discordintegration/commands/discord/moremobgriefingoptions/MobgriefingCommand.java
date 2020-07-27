@@ -13,7 +13,8 @@ import java.util.Locale;
 public class MobgriefingCommand extends CommandHandler {
 	
 	
-	protected MobgriefingCommand() {
+	//package-private
+	MobgriefingCommand() {
 		
 		super( "mobgriefing" );
 	}

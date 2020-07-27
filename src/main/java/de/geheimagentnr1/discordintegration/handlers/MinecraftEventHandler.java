@@ -5,9 +5,11 @@ import de.geheimagentnr1.discordintegration.commands.minecraft.SayCommandToDisco
 import de.geheimagentnr1.discordintegration.config.ModConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.advancements.DisplayInfo;
+import net.minecraft.command.Commands;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
@@ -28,11 +30,15 @@ public class MinecraftEventHandler {
 	public static void handleServerStarting( FMLServerStartingEvent event ) {
 		
 		DiscordEventHandler.setServer( event.getServer() );
-		if( DiscordEventHandler.isServerNotDedicated() ) {
-			return;
+	}
+	
+	@SubscribeEvent
+	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
+		
+		if( event.getEnvironment() == Commands.EnvironmentType.DEDICATED ) {
+			SayCommandToDiscord.register( event.getDispatcher() );
+			MeCommandToDiscord.register( event.getDispatcher() );
 		}
-		SayCommandToDiscord.register( event.getCommandDispatcher() );
-		MeCommandToDiscord.register( event.getCommandDispatcher() );
 	}
 	
 	@SubscribeEvent
