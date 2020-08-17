@@ -12,17 +12,17 @@ import org.apache.logging.log4j.Logger;
 public class ModConfig {
 	
 	
-	private final static Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final static String mod_name = "Discord Integration";
+	private static final String mod_name = "Discord Integration";
 	
-	private final static ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	
-	private final static ForgeConfigSpec CONFIG;
+	private static final ForgeConfigSpec CONFIG;
 	
-	public final static ForgeConfigSpec.ConfigValue<String> BOT_TOKEN;
+	public static final ForgeConfigSpec.ConfigValue<String> BOT_TOKEN;
 	
-	public final static ForgeConfigSpec.LongValue CHANNEL_ID;
+	public static final ForgeConfigSpec.LongValue CHANNEL_ID;
 	
 	static {
 		

@@ -7,5 +7,5 @@ import net.minecraftforge.fml.common.Mod;
 public class DiscordIntegration {
 	
 	
-	public final static String MODID = "discordintegration";
+	public static final String MODID = "discordintegration";
 }

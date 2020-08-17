@@ -23,7 +23,8 @@ public class DiscordEventHandler extends ListenerAdapter {
 		DiscordCommandHandler.initSource( _server );
 	}
 	
-	public static boolean isServerNotDedicated() {
+	//package-private
+	static boolean isServerNotDedicated() {
 		
 		return !server.isDedicatedServer();
 	}
