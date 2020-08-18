@@ -28,7 +28,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	//package-private
 	static boolean isServerNotDedicated() {
 		
-		return !server.isDedicatedServer();
+		return server == null || !server.isDedicatedServer();
 	}
 	
 	@Override

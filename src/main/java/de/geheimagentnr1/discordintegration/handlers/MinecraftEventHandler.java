@@ -2,7 +2,6 @@ package de.geheimagentnr1.discordintegration.handlers;
 
 import de.geheimagentnr1.discordintegration.commands.minecraft.MeCommandToDiscord;
 import de.geheimagentnr1.discordintegration.commands.minecraft.SayCommandToDiscord;
-import de.geheimagentnr1.discordintegration.config.ModConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.command.Commands;
@@ -47,7 +46,6 @@ public class MinecraftEventHandler {
 		if( DiscordEventHandler.isServerNotDedicated() ) {
 			return;
 		}
-		ModConfig.load();
 		DiscordNet.init();
 		DiscordNet.sendMessage( "Server started" );
 	}
