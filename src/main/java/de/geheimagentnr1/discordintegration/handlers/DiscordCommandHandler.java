@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class DiscordCommandHandler {
 	
 	
-	private final static CommandHandler[] command_handlers = init();
+	private static final CommandHandler[] command_handlers = init();
 	
 	private static CommandSource source;
 	

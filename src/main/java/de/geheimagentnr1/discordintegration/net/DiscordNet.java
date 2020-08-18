@@ -1,6 +1,6 @@
 package de.geheimagentnr1.discordintegration.net;
 
-import de.geheimagentnr1.discordintegration.config.ModConfig;
+import de.geheimagentnr1.discordintegration.config.MainConfig;
 import de.geheimagentnr1.discordintegration.handlers.DiscordEventHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -28,13 +28,13 @@ public class DiscordNet {
 	public static void init() {
 		
 		try {
-			jda = new JDABuilder( ModConfig.BOT_TOKEN.get() ).addEventListeners( new DiscordEventHandler() )
+			jda = new JDABuilder( MainConfig.getBotToken() ).addEventListeners( new DiscordEventHandler() )
 				.build();
 			jda.setAutoReconnect( true );
 			jda.awaitReady();
-			channel = jda.getTextChannelById( ModConfig.CHANNEL_ID.get() );
+			channel = jda.getTextChannelById( MainConfig.getChannelID() );
 			if( channel == null ) {
-				LOGGER.error( "Discord Text Channel {} not found", ModConfig.CHANNEL_ID.get() );
+				LOGGER.error( "Discord Text Channel {} not found", MainConfig.getChannelID() );
 				on = false;
 			} else {
 				on = true;
