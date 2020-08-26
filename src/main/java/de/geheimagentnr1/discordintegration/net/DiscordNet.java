@@ -27,28 +27,35 @@ public class DiscordNet {
 	
 	public static void init() {
 		
-		try {
-			jda = new JDABuilder( MainConfig.getBotToken() ).addEventListeners( new DiscordEventHandler() )
-				.build();
-			jda.setAutoReconnect( true );
-			jda.awaitReady();
-			channel = jda.getTextChannelById( MainConfig.getChannelID() );
-			if( channel == null ) {
-				LOGGER.error( "Discord Text Channel {} not found", MainConfig.getChannelID() );
+		if( MainConfig.getActive() ) {
+			try {
+				jda = new JDABuilder( MainConfig.getBotToken() ).addEventListeners( new DiscordEventHandler() )
+					.build();
+				jda.setAutoReconnect( true );
+				jda.awaitReady();
+				channel = jda.getTextChannelById( MainConfig.getChannelID() );
+				if( channel == null ) {
+					LOGGER.error( "Discord Text Channel {} not found", MainConfig.getChannelID() );
+					on = false;
+				} else {
+					on = true;
+				}
+			} catch( LoginException | InterruptedException exception ) {
+				LOGGER.error( "Login to Discord failed", exception );
 				on = false;
-			} else {
-				on = true;
 			}
-		} catch( LoginException | InterruptedException exception ) {
-			LOGGER.error( "Login to Discord failed", exception );
-			on = false;
+		} else {
+			stop();
 		}
 	}
 	
 	public static void stop() {
 		
 		if( on && jda != null ) {
+			on = false;
 			jda.shutdown();
+			channel = null;
+			jda = null;
 		}
 	}
 	
