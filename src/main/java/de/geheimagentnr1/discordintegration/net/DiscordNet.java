@@ -25,8 +25,9 @@ public class DiscordNet {
 	
 	private static TextChannel channel;
 	
-	public static void init() {
+	public static synchronized void init() {
 		
+		stop();
 		if( MainConfig.getActive() ) {
 			try {
 				jda = new JDABuilder( MainConfig.getBotToken() ).addEventListeners( new DiscordEventHandler() )
@@ -44,12 +45,10 @@ public class DiscordNet {
 				LOGGER.error( "Login to Discord failed", exception );
 				on = false;
 			}
-		} else {
-			stop();
 		}
 	}
 	
-	public static void stop() {
+	public static synchronized void stop() {
 		
 		if( on && jda != null ) {
 			on = false;
@@ -84,7 +83,7 @@ public class DiscordNet {
 		sendMessage( "**" + getPlayerName( player ) + "** " + message );
 	}
 	
-	public static void sendMessage( String message ) {
+	public static synchronized void sendMessage( String message ) {
 		
 		if( on ) {
 			try {
@@ -105,7 +104,7 @@ public class DiscordNet {
 		return source.getDisplayName().getString();
 	}
 	
-	public static TextChannel getChannel() {
+	public static synchronized TextChannel getChannel() {
 		
 		return channel;
 	}
