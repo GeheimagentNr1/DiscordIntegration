@@ -36,7 +36,6 @@ public class MainConfig {
 	public static void handleConfigEvent() {
 		
 		printConfig();
-		DiscordNet.stop();
 		DiscordNet.init();
 	}
 	
