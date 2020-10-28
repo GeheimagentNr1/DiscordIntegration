@@ -5,6 +5,7 @@ import de.geheimagentnr1.discordintegration.handlers.DiscordEventHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
@@ -12,6 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
+import java.util.Collections;
+import java.util.List;
 
 
 public class DiscordNet {
@@ -25,12 +28,15 @@ public class DiscordNet {
 	
 	private static TextChannel channel;
 	
+	private static final List<GatewayIntent> INTENTS = Collections.singletonList( GatewayIntent.GUILD_MESSAGES );
+	
 	public static synchronized void init() {
 		
 		stop();
 		if( MainConfig.getActive() ) {
 			try {
-				jda = new JDABuilder( MainConfig.getBotToken() ).addEventListeners( new DiscordEventHandler() )
+				jda = JDABuilder.create( MainConfig.getBotToken(), INTENTS )
+					.addEventListeners( new DiscordEventHandler() )
 					.build();
 				jda.setAutoReconnect( true );
 				jda.awaitReady();
