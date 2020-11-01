@@ -32,7 +32,8 @@ public class DiscordEventHandler extends ListenerAdapter {
 	@Override
 	public void onMessageReceived( @NotNull MessageReceivedEvent event ) {
 		
-		if( server != null && event.getChannel().getId().equals( DiscordNet.getChannel().getId() ) &&
+		if( server != null && DiscordNet.getChannel() != null &&
+			event.getChannel().getId().equals( DiscordNet.getChannel().getId() ) &&
 			!event.getAuthor().isBot() ) {
 			if( !DiscordCommandHandler.handleCommand( event.getMessage(), server ) ) {
 				String message = event.getMessage().getContentRaw();
