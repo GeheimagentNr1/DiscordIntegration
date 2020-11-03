@@ -48,8 +48,8 @@ public class DiscordEventHandler extends ListenerAdapter {
 					message = message.replace( "<#" + channel.getId() + ">", "#" + channel.getName() );
 				}
 				server.getPlayerList().func_232641_a_( new StringTextComponent( "[" )
-					.func_240702_b_( event.getAuthor().getName() ).func_240702_b_( "] " )
-					.func_240702_b_( message ), ChatType.SYSTEM, Util.field_240973_b_ );
+					.appendString( event.getAuthor().getName() ).appendString( "] " )
+					.appendString( message ), ChatType.SYSTEM, Util.DUMMY_UUID );
 			}
 		}
 	}

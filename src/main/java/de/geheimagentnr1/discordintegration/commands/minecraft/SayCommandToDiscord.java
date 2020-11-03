@@ -32,7 +32,7 @@ public class SayCommandToDiscord {
 						ChatType.CHAT, entity.getUniqueID() );
 				} else {
 					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.SYSTEM, Util.field_240973_b_ );
+						ChatType.SYSTEM, Util.DUMMY_UUID);
 				}
 				DiscordNet.sendChatMessage( source, message );
 				return 1;
