@@ -1,25 +1,25 @@
 package de.geheimagentnr1.discordintegration.handlers;
 
-import de.geheimagentnr1.discordintegration.config.MainConfig;
+import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
 
-@SuppressWarnings( "unused" )
-@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
+@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER )
 public class ModEventHandler {
 	
 	
 	@SubscribeEvent
 	public static void handleModConfigLoadingEvent( ModConfig.Loading event ) {
 		
-		MainConfig.handleConfigEvent();
+		ServerConfig.handleConfigEvent();
 	}
 	
 	@SubscribeEvent
 	public static void handleModConfigReloadingEvent( ModConfig.ConfigReloading event ) {
 		
-		MainConfig.handleConfigEvent();
+		ServerConfig.handleConfigEvent();
 	}
 }

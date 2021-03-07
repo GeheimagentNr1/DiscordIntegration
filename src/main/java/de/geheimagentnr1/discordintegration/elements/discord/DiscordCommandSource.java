@@ -1,12 +1,21 @@
-package de.geheimagentnr1.discordintegration.commands.discord;
+package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.command.ICommandSource;
 import net.minecraft.util.text.ITextComponent;
 
 
-public class DiscordCommandSource implements ICommandSource {
+//package-private
+class DiscordCommandSource implements ICommandSource {
 	
+	
+	private String message = "";
+	
+	//package-private
+	void sendMessage() {
+		
+		DiscordNet.sendFeedbackMessage( message );
+	}
 	
 	/**
 	 * Send a chat message to the CommandSender
@@ -14,7 +23,7 @@ public class DiscordCommandSource implements ICommandSource {
 	@Override
 	public void sendMessage( ITextComponent component ) {
 		
-		DiscordNet.sendMessage( component.getFormattedText() );
+		message += String.format( "%s%n", component.getString() );
 	}
 	
 	@Override
