@@ -24,8 +24,6 @@ public class DiscordNet {
 	
 	public static final String FEEDBACK_END = "```**";
 	
-	//private static final List<GatewayIntent> INTENTS = Collections.singletonList( GatewayIntent.GUILD_MESSAGES );
-	
 	private static JDA jda;
 	
 	private static TextChannel channel;
@@ -36,9 +34,7 @@ public class DiscordNet {
 		stop();
 		if( ServerConfig.getActive() ) {
 			try {
-				jda =
-					new JDABuilder( ServerConfig.getBotToken() )//JDABuilder.create( ServerConfig.getBotToken(),
-						// INTENTS )
+				jda = new JDABuilder( ServerConfig.getBotToken() )
 						.addEventListeners( new DiscordEventHandler() )
 						.setAutoReconnect( true )
 						.build();
