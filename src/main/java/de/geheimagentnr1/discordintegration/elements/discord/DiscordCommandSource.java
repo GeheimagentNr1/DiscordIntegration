@@ -1,4 +1,4 @@
-package de.geheimagentnr1.discordintegration.commands.discord;
+package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.command.ICommandSource;
@@ -8,13 +8,22 @@ import javax.annotation.Nonnull;
 import java.util.UUID;
 
 
-public class DiscordCommandSource implements ICommandSource {
+//package-private
+class DiscordCommandSource implements ICommandSource {
 	
+	
+	private String message = "";
+	
+	//package-private
+	void sendMessage() {
+		
+		DiscordNet.sendFeedbackMessage( message );
+	}
 	
 	@Override
 	public void sendMessage( ITextComponent component, @Nonnull UUID uuid ) {
 		
-		DiscordNet.sendMessage( component.getString() );
+		message += String.format( "%s%n", component.getString() );
 	}
 	
 	@Override

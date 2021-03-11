@@ -3,17 +3,31 @@ buildscript {
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
         mavenCentral()
+        google()
+        maven { url = "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath "com.github.jengelman.gradle.plugins:shadow:2.0.4"
+        classpath 'com.jaredsburrows:gradle-license-plugin:0.8.90'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.jaredsburrows.license'
+
+delete "src/main/java/com"
+publish.dependsOn(clean)
+
+task copyLicenses(type: Copy) {
+    from 'build/reports/licenses'
+    into 'lib_licences'
+}
+compileJava.dependsOn( copyLicenses )
+copyLicenses.dependsOn( "licenseReport" )
 
 version = "${major_version}.${minor_version}.${patch_version}"
 group = "${domain}.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -37,7 +51,7 @@ minecraft {
     // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/client')
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -46,7 +60,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                discordintegration {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -62,14 +76,14 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                discordintegration {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
         }
 
         data {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/data')
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -77,10 +91,10 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'discordintegration', '--all', '--output', file('src/generated/resources/')
+            args '--mod', "${mod_id}".toString(), '--all', '--output', file('src/generated/resources/')
 
             mods {
-                discordintegration {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -90,6 +104,7 @@ minecraft {
 
 repositories {
     jcenter()
+    maven { url 'https://jitpack.io' }
     maven {
         name = "ModdingMavenRepositories"
         url = "file:../ModdingMavenRepositories"
@@ -102,42 +117,60 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
+    // You may put jars on which you depend on in ./libs or you may define them like so..
+    // compile "some.group:artifact:version:classifier"
+    // compile "some.group:artifact:version"
+
+    //compile("com.discord4j:discord4j-core:3.2.0-M1")
+    //shadow("com.discord4j:discord4j-core:3.2.0-M1")
+    compile("net.dv8tion:JDA:${jda_version}") {
+        exclude module: 'opus-java'
+    }
     shadow("net.dv8tion:JDA:${jda_version}") {
         exclude module: 'opus-java'
     }
-    shadow("org.slf4j:slf4j-simple:${slf4j_version}")
-    shadow "club.minnced:discord-webhooks:${discord_webhooks_version}"
-    runtimeOnly("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-    }
-    runtimeOnly("org.slf4j:slf4j-simple:${slf4j_version}")
-    runtimeOnly "club.minnced:discord-webhooks:${discord_webhooks_version}"
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4j_version}"
+    shadow group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4j_version}"
 
-    compileOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
-    runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
     runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
+    runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
+
+    // Real examples
+    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
+    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
+    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // These dependencies get remapped to your current MCP mappings
+    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // For more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
 }
 
 shadowJar {
-    relocate 'org.apache.commons.collections4', 'lib.org.apache.commons.collections4'
-    relocate 'gnu.trove', 'lib.gnu.trove'
-    relocate "com.neovisionaries.ws.client", "lib.com.neovisionaries.ws.client"
-    relocate "com.iwebpp.crypto", "lib.com.iwebpp.crypto"
-    relocate "net.dv8tion.jda", "lib.net.dv8tion.jda"
-    relocate "org.json", "lib.org.json"
-    relocate "okio", "lib.okio"
-    relocate "okhttp3", "lib.okhttp3"
-    relocate "okhttp3", "lib.okhttp3"
-    relocate "org.slf4j", "lib.org.slf4j"
-    relocate "com.fasterxml.jackson", "lib.com.fasterxml.jackson"
-    relocate "club.minnced.discord", "lib.club.minnced.discord"
-
-    classifier ''
+    classifier ""
     configurations = [project.configurations.shadow]
-    dependencies{
-        exclude(dependency('org.jetbrains:annotations'))
-        exclude(dependency('com.google.code.findbugs:jsr305'))
-    }
+
+    relocate 'com.fasterxml.jackson.annotation', 'lib.com.fasterxml.jackson.annotation'
+    relocate 'com.fasterxml.jackson.core', 'lib.com.fasterxml.jackson.core'
+    relocate 'com.fasterxml.jackson.databind', 'lib.com.fasterxml.jackson.databind'
+    relocate 'com.iwebpp.crypto', 'lib.com.iwebpp.crypto'
+    relocate 'com.neovisionaries.ws.client', 'lib.com.neovisionaries.ws.client'
+    relocate 'gnu.trove', 'lib.gnu.trove'
+    relocate 'javax.annotation', 'lib.javax.annotation'
+    relocate 'net.dv8tion.jda.annotations', 'lib.net.dv8tion.jda.annotations'
+    relocate 'net.dv8tion.jda.api', 'lib.net.dv8tion.jda.api'
+    relocate 'net.dv8tion.jda.internal', 'lib.net.dv8tion.jda.internal'
+    relocate 'okhttp3', 'lib.okhttp3'
+    relocate 'okio', 'lib.okio'
+    relocate 'org.apache.commons.collections4', 'lib.org.apache.commons.collections4'
+    relocate 'org.intellij.lang.annotations', 'lib.org.intellij.lang.annotations'
+    relocate 'org.jetbrains.annotations', 'lib.org.jetbrains.annotations'
+    relocate 'org.slf4j', 'lib.org.slf4j'
 }
 
 reobf {
@@ -153,31 +186,30 @@ artifacts {
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
-    classifier "slim"
+    classifier ""
     manifest {
         attributes([
-                "Specification-Title": "${mod_id}",
-                "Specification-Vendor": "${modder}",
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": project.name,
-                "Implementation-Version": "${version}",
-                "Implementation-Vendor" :"${modder}",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Specification-Title": "${mod_id}",
+            "Specification-Vendor": "${modder}",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"${modder}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
-build.dependsOn(shadowJar)
+// Example configuration to allow publishing using the maven-publish task
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfShadowJar')
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+//publish.dependsOn('reobfJar')
 
-def reobfFile = file("$buildDir/reobfShadowJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfShadowJar'
-}
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact shadowJar
         }
     }
     repositories {
