@@ -1,5 +1,6 @@
-package de.geheimagentnr1.discordintegration.commands.minecraft;
+package de.geheimagentnr1.discordintegration.elements.commands;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -11,18 +12,21 @@ import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TranslationTextComponent;
 
 
-public class MeCommandToDiscord {
+public class MeToDiscordCommand {
 	
 	
 	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
 		
 		LiteralArgumentBuilder<CommandSource> meCommand = Commands.literal( "me" );
-		meCommand.then( Commands.argument( "action", StringArgumentType.greedyString() ).executes(
-			context -> {
+		meCommand.then( Commands.argument( "action", StringArgumentType.greedyString() )
+			.executes( context -> {
 				CommandSource source = context.getSource();
 				String action = StringArgumentType.getString( context, "action" );
-				TranslationTextComponent translationTextComponent = new TranslationTextComponent( "chat.type.emote",
-					source.getDisplayName(), action );
+				TranslationTextComponent translationTextComponent = new TranslationTextComponent(
+					"chat.type.emote",
+					source.getDisplayName(),
+					action
+				);
 				if( source.getEntity() != null ) {
 					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
 						ChatType.CHAT, source.getEntity().getUniqueID() );
@@ -31,7 +35,7 @@ public class MeCommandToDiscord {
 						ChatType.SYSTEM, Util.DUMMY_UUID );
 				}
 				DiscordNet.sendMeChatMessage( source, action );
-				return 1;
+				return Command.SINGLE_SUCCESS;
 			} ) );
 		dispatcher.register( meCommand );
 	}
