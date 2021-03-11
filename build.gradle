@@ -170,7 +170,6 @@ shadowJar {
     relocate 'org.intellij.lang.annotations', 'lib.org.intellij.lang.annotations'
     relocate 'org.jetbrains.annotations', 'lib.org.jetbrains.annotations'
     relocate 'org.slf4j', 'lib.org.slf4j'
-
 }
 
 reobf {
