@@ -28,7 +28,7 @@ class DiscordCommandHandler {
 		for( AbstractCommentedConfig abstractCommentedConfig : ServerConfig.getCommands() ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) &&
 				buildDiscordCommand( abstractCommentedConfig ).equals( command ) ) {
-				server.getCommandManager().handleCommand( source, buildMinecraftCommand( abstractCommentedConfig ) );
+				server.getCommands().performCommand( source, buildMinecraftCommand( abstractCommentedConfig ) );
 				discordCommandSource.sendMessage();
 				return true;
 			}
@@ -42,7 +42,7 @@ class DiscordCommandHandler {
 			discordCommandSource,
 			Vector3d.ZERO,
 			Vector2f.ZERO,
-			Objects.requireNonNull( server.getWorld( World.OVERWORLD ) ),
+			Objects.requireNonNull( server.overworld() ),
 			4,
 			MOD_NAME,
 			new StringTextComponent( MOD_NAME ),

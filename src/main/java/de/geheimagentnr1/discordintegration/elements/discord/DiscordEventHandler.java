@@ -73,10 +73,10 @@ public class DiscordEventHandler extends ListenerAdapter {
 		
 		if( ServerConfig.isTransmitBotMessages() ) {
 			if( !message.startsWith( DiscordNet.FEEDBACK_START ) || !message.endsWith( DiscordNet.FEEDBACK_END ) ) {
-				server.getPlayerList().func_232641_a_(
+				server.getPlayerList().broadcastMessage(
 					new StringTextComponent( message ),
 					ChatType.CHAT,
-					Util.DUMMY_UUID
+					Util.NIL_UUID
 				);
 			}
 		}
@@ -85,7 +85,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	private void handleUserMessage( String message, User author ) {
 		
 		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
-			server.getPlayerList().func_232641_a_(
+			server.getPlayerList().broadcastMessage(
 				new StringTextComponent(
 					String.format(
 						"[%s] %s",
@@ -93,7 +93,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 						message
 					) ),
 					ChatType.CHAT,
-					Util.DUMMY_UUID
+					Util.NIL_UUID
 				);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(

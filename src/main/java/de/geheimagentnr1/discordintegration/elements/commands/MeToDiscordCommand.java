@@ -28,11 +28,11 @@ public class MeToDiscordCommand {
 					action
 				);
 				if( source.getEntity() != null ) {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.CHAT, source.getEntity().getUniqueID() );
+					context.getSource().getServer().getPlayerList().broadcastMessage( translationTextComponent,
+						ChatType.CHAT, source.getEntity().getUUID() );
 				} else {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.SYSTEM, Util.DUMMY_UUID );
+					context.getSource().getServer().getPlayerList().broadcastMessage( translationTextComponent,
+						ChatType.SYSTEM, Util.NIL_UUID );
 				}
 				DiscordNet.sendMeChatMessage( source, action );
 				return Command.SINGLE_SUCCESS;

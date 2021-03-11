@@ -20,7 +20,7 @@ public class SayToDiscordCommand {
 	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
 		
 		LiteralArgumentBuilder<CommandSource> sayCommand = Commands.literal( "say" )
-			.requires( source -> source.hasPermissionLevel( 2 ) );
+			.requires( source -> source.hasPermission( 2 ) );
 		sayCommand.then( Commands.argument( "message", MessageArgument.message() )
 			.executes( context -> {
 				CommandSource source = context.getSource();
@@ -32,11 +32,11 @@ public class SayToDiscordCommand {
 					message
 				);
 				if( entity != null ) {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.CHAT, entity.getUniqueID() );
+					context.getSource().getServer().getPlayerList().broadcastMessage( translationTextComponent,
+						ChatType.CHAT, entity.getUUID() );
 				} else {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.SYSTEM, Util.DUMMY_UUID);
+					context.getSource().getServer().getPlayerList().broadcastMessage( translationTextComponent,
+						ChatType.SYSTEM, Util.NIL_UUID);
 				}
 				DiscordNet.sendChatMessage( source, message );
 				return Command.SINGLE_SUCCESS;

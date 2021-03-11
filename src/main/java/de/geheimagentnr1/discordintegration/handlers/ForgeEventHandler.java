@@ -52,7 +52,7 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handleServerStoppedEvent( FMLServerStoppedEvent event ) {
 		
-		if( event.getServer().isServerRunning() ) {
+		if( event.getServer().isRunning() ) {
 			DiscordNet.sendMessage( "Server crashed" );
 		} else {
 			DiscordNet.sendMessage( "Server stopped" );
@@ -84,9 +84,9 @@ public class ForgeEventHandler {
 		LivingEntity entity = event.getEntityLiving();
 		
 		if( entity instanceof PlayerEntity || entity instanceof TameableEntity &&
-			( (TameableEntity)entity ).getOwnerId() != null ) {
+			( (TameableEntity)entity ).getOwnerUUID() != null ) {
 			String name = entity.getDisplayName().getString();
-			DiscordNet.sendMessage( event.getSource().getDeathMessage( entity ).getString()
+			DiscordNet.sendMessage( event.getSource().getLocalizedDeathMessage( entity ).getString()
 				.replaceFirst( name, "**" + name + "**" ) );
 		}
 	}
@@ -96,7 +96,7 @@ public class ForgeEventHandler {
 		
 		DisplayInfo displayInfo = event.getAdvancement().getDisplay();
 		
-		if( displayInfo != null && displayInfo.shouldAnnounceToChat() ) {
+		if( displayInfo != null && displayInfo.shouldAnnounceChat() ) {
 			DiscordNet.sendPlayerMessage(
 				event.getPlayer(),
 				String.format(

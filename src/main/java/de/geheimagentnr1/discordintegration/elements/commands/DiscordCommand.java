@@ -43,7 +43,7 @@ public class DiscordCommand {
 		commands.sort( Comparator.comparing( CommandConfig::getDiscordCommand ) );
 		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) ) {
-				source.sendFeedback(
+				source.sendSuccess(
 					new StringTextComponent( String.format(
 						"%s%s - %s",
 						ServerConfig.getCommandPrefix(),
@@ -60,18 +60,18 @@ public class DiscordCommand {
 	private static int showGamerules( CommandContext<CommandSource> context ) {
 		
 		CommandSource source = context.getSource();
-		GameRules.visitAll( new GameRules.IRuleEntryVisitor() {
+		GameRules.visitGameRuleTypes( new GameRules.IRuleEntryVisitor() {
 			
 			@Override
 			public <T extends GameRules.RuleValue<T>> void visit(
 				@Nonnull GameRules.RuleKey<T> key,
 				@Nonnull GameRules.RuleType<T> type ) {
 				
-				source.sendFeedback(
+				source.sendSuccess(
 					new TranslationTextComponent(
 						"commands.gamerule.query",
-						key.getName(),
-						source.getServer().getGameRules().get( key )
+						key.getId(),
+						source.getServer().getGameRules().getRule( key )
 					),
 					false
 				);
@@ -85,7 +85,7 @@ public class DiscordCommand {
 		CommandSource source = context.getSource();
 		ModList.get().forEachModFile( modFile -> {
 			for( IModInfo modInfo : modFile.getModInfos() ) {
-				source.sendFeedback(
+				source.sendSuccess(
 					new StringTextComponent( String.format(
 						"%s (%s) - %s",
 						modInfo.getModId(),
