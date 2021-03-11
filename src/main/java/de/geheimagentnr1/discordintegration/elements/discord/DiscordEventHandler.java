@@ -85,7 +85,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	private void handleUserMessage( String message, User author ) {
 		
 		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
-			server.getPlayerList().sendMessage(
+			server.getPlayerList().func_232641_a_(
 				new StringTextComponent(
 					String.format(
 						"[%s] %s",
