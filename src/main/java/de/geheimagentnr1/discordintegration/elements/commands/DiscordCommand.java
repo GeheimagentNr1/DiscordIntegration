@@ -60,17 +60,17 @@ public class DiscordCommand {
 	private static int showGamerules( CommandContext<CommandSource> context ) {
 		
 		CommandSource source = context.getSource();
-		GameRules.func_223590_a( new GameRules.IRuleEntryVisitor() {
+		GameRules.visitAll( new GameRules.IRuleEntryVisitor() {
 			
 			@Override
-			public <T extends GameRules.RuleValue<T>> void func_223481_a(
+			public <T extends GameRules.RuleValue<T>> void visit(
 				@Nonnull GameRules.RuleKey<T> key,
 				@Nonnull GameRules.RuleType<T> type ) {
 				
 				source.sendFeedback(
 					new TranslationTextComponent(
 						"commands.gamerule.query",
-						key.func_223576_a(),
+						key.getName(),
 						source.getServer().getGameRules().get( key )
 					),
 					false

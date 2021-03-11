@@ -40,7 +40,7 @@ class DiscordCommandHandler {
 			discordCommandSource,
 			Vec3d.ZERO,
 			Vec2f.ZERO,
-			server.func_71218_a( DimensionType.OVERWORLD ),
+			server.getWorld( DimensionType.OVERWORLD ),
 			4,
 			MOD_NAME,
 			new StringTextComponent( MOD_NAME ),
