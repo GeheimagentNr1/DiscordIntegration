@@ -76,7 +76,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 				server.getPlayerList().func_232641_a_(
 					new StringTextComponent( message ),
 					ChatType.CHAT,
-					Util.field_240973_b_
+					Util.DUMMY_UUID
 				);
 			}
 		}
@@ -93,7 +93,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 						message
 					) ),
 					ChatType.CHAT,
-					Util.field_240973_b_
+					Util.DUMMY_UUID
 				);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(

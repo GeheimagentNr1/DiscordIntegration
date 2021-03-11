@@ -32,7 +32,7 @@ public class MeToDiscordCommand {
 						ChatType.CHAT, source.getEntity().getUniqueID() );
 				} else {
 					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.SYSTEM, Util.field_240973_b_ );
+						ChatType.SYSTEM, Util.DUMMY_UUID );
 				}
 				DiscordNet.sendMeChatMessage( source, action );
 				return Command.SINGLE_SUCCESS;

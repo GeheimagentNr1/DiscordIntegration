@@ -42,7 +42,7 @@ class DiscordCommandHandler {
 			discordCommandSource,
 			Vector3d.ZERO,
 			Vector2f.ZERO,
-			Objects.requireNonNull( server.getWorld( World.field_234918_g_ ) ),
+			Objects.requireNonNull( server.getWorld( World.OVERWORLD ) ),
 			4,
 			MOD_NAME,
 			new StringTextComponent( MOD_NAME ),
