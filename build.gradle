@@ -120,8 +120,6 @@ dependencies {
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
 
-    //compile("com.discord4j:discord4j-core:3.2.0-M1")
-    //shadow("com.discord4j:discord4j-core:3.2.0-M1")
     compile("net.dv8tion:JDA:${jda_version}") {
         exclude module: 'opus-java'
     }
