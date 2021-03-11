@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
@@ -14,8 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
-import java.util.Collections;
-import java.util.List;
 
 
 public class DiscordNet {
@@ -27,7 +24,7 @@ public class DiscordNet {
 	
 	public static final String FEEDBACK_END = "```**";
 	
-	private static final List<GatewayIntent> INTENTS = Collections.singletonList( GatewayIntent.GUILD_MESSAGES );
+	//private static final List<GatewayIntent> INTENTS = Collections.singletonList( GatewayIntent.GUILD_MESSAGES );
 	
 	private static JDA jda;
 	
@@ -39,10 +36,12 @@ public class DiscordNet {
 		stop();
 		if( ServerConfig.getActive() ) {
 			try {
-				jda = JDABuilder.create( ServerConfig.getBotToken(), INTENTS )
-					.addEventListeners( new DiscordEventHandler() )
-					.setAutoReconnect( true )
-					.build();
+				jda =
+					new JDABuilder( ServerConfig.getBotToken() )//JDABuilder.create( ServerConfig.getBotToken(),
+						// INTENTS )
+						.addEventListeners( new DiscordEventHandler() )
+						.setAutoReconnect( true )
+						.build();
 				jda.awaitReady();
 				channel = jda.getTextChannelById( ServerConfig.getChannelId() );
 				if( channel == null ) {

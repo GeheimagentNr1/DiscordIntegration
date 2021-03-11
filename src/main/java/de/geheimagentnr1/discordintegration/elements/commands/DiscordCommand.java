@@ -14,8 +14,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.Comparator;
 import java.util.List;
 
@@ -64,8 +64,8 @@ public class DiscordCommand {
 			
 			@Override
 			public <T extends GameRules.RuleValue<T>> void func_223481_a(
-				@NotNull GameRules.RuleKey<T> key,
-				@NotNull GameRules.RuleType<T> type ) {
+				@Nonnull GameRules.RuleKey<T> key,
+				@Nonnull GameRules.RuleType<T> type ) {
 				
 				source.sendFeedback(
 					new TranslationTextComponent(

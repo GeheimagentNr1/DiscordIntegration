@@ -2,7 +2,7 @@
   {
     "project": "${project.groupId}:${project.artifactId}",
     "description": "WebSocket client implementation in Java.",
-    "version": "2.10",
+    "version": "2.5",
     "developers": [
       "Takahiko Kawasaki"
     ],
@@ -14,7 +14,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.neovisionaries:nv-websocket-client:2.10"
+    "dependency": "com.neovisionaries:nv-websocket-client:2.5"
   },
   {
     "project": "Access Transformers",
@@ -608,7 +608,7 @@
   {
     "project": "Jackson-annotations",
     "description": "Core annotations used for value types, used by Jackson data binding package.",
-    "version": "2.10.1",
+    "version": "2.9.0",
     "developers": [],
     "url": "http://github.com/FasterXML/jackson",
     "year": "2008",
@@ -618,12 +618,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.fasterxml.jackson.core:jackson-annotations:2.10.1"
+    "dependency": "com.fasterxml.jackson.core:jackson-annotations:2.9.0"
   },
   {
     "project": "Jackson-core",
     "description": "Core Jackson processing abstractions (aka Streaming API), implementation for JSON",
-    "version": "2.10.1",
+    "version": "2.9.8",
     "developers": [],
     "url": "https://github.com/FasterXML/jackson-core",
     "year": "2008",
@@ -633,12 +633,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.fasterxml.jackson.core:jackson-core:2.10.1"
+    "dependency": "com.fasterxml.jackson.core:jackson-core:2.9.8"
   },
   {
     "project": "jackson-databind",
     "description": "General data-binding functionality for Jackson: works on core streaming API",
-    "version": "2.10.1",
+    "version": "2.9.8",
     "developers": [],
     "url": "http://github.com/FasterXML/jackson",
     "year": "2008",
@@ -648,7 +648,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.fasterxml.jackson.core:jackson-databind:2.10.1"
+    "dependency": "com.fasterxml.jackson.core:jackson-databind:2.9.8"
   },
   {
     "project": "Java Native Access",
@@ -702,12 +702,12 @@
   {
     "project": "JDA",
     "description": null,
-    "version": "4.2.0_232",
+    "version": "4.0.0_77",
     "developers": [],
     "url": null,
     "year": null,
     "licenses": [],
-    "dependency": "net.dv8tion:JDA:4.2.0_232"
+    "dependency": "net.dv8tion:JDA:4.0.0_77"
   },
   {
     "project": "JetBrains Java Annotations",
