@@ -7,13 +7,12 @@ import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordComman
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordEventHandler;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.advancements.DisplayInfo;
-import net.minecraft.command.Commands;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
@@ -38,9 +37,10 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
+		CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
 		DiscordCommand.register( dispatcher );
-		SayCommandToDiscord.register( event.getDispatcher() );
-		MeCommandToDiscord.register( event.getDispatcher() );
+		MeToDiscordCommand.register( dispatcher );
+		SayToDiscordCommand.register( dispatcher );
 	}
 	
 	@SubscribeEvent

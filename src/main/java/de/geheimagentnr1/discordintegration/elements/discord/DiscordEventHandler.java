@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,7 +73,11 @@ public class DiscordEventHandler extends ListenerAdapter {
 		
 		if( ServerConfig.isTransmitBotMessages() ) {
 			if( !message.startsWith( DiscordNet.FEEDBACK_START ) || !message.endsWith( DiscordNet.FEEDBACK_END ) ) {
-				server.getPlayerList().sendMessage( new StringTextComponent( message ), true );
+				server.getPlayerList().func_232641_a_(
+					new StringTextComponent( message ),
+					ChatType.CHAT,
+					Util.field_240973_b_
+				);
 			}
 		}
 	}
@@ -79,9 +85,12 @@ public class DiscordEventHandler extends ListenerAdapter {
 	private void handleUserMessage( String message, User author ) {
 		
 		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
-			server.getPlayerList().sendMessage( new StringTextComponent( "[" )
+			server.getPlayerList().func_232641_a_( new StringTextComponent( "[" )
 				.appendText( author.getName() ).appendText( "] " )
-				.appendText( message ), true );
+				.appendText( message ),
+				ChatType.CHAT,
+				Util.field_240973_b_
+			);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(
 				"%n%s%nError: Message to long.%n" +

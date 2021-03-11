@@ -5,11 +5,13 @@ import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.ModLoadingContext;
+
+import java.util.Objects;
 
 
 //package-private
@@ -38,9 +40,9 @@ class DiscordCommandHandler {
 		
 		return new CommandSource(
 			discordCommandSource,
-			Vec3d.ZERO,
-			Vec2f.ZERO,
-			server.getWorld( DimensionType.OVERWORLD ),
+			Vector3d.ZERO,
+			Vector2f.ZERO,
+			Objects.requireNonNull( server.getWorld( World.field_234918_g_ ) ),
 			4,
 			MOD_NAME,
 			new StringTextComponent( MOD_NAME ),
