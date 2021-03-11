@@ -79,9 +79,15 @@ public class DiscordEventHandler extends ListenerAdapter {
 	private void handleUserMessage( String message, User author ) {
 		
 		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
-			server.getPlayerList().sendMessage( new StringTextComponent( "[" )
-				.appendText( author.getName() ).appendText( "] " )
-				.appendText( message ), true );
+			server.getPlayerList().sendMessage(
+				new StringTextComponent(
+					String.format(
+						"[%s] %s",
+						author.getName(),
+						message
+					) ),
+					true
+				);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(
 				"%n%s%nError: Message to long.%n" +
