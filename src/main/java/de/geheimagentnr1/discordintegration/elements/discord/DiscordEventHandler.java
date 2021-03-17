@@ -92,9 +92,9 @@ public class DiscordEventHandler extends ListenerAdapter {
 						author.getName(),
 						message
 					) ),
-					ChatType.CHAT,
+				ChatType.CHAT,
 					Util.NIL_UUID
-				);
+			);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(
 				"%n%s%nError: Message to long.%n" +
