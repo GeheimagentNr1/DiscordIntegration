@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.handlers;
 
 import com.mojang.brigadier.CommandDispatcher;
+import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.commands.DiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.commands.MeToDiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordCommand;
@@ -46,7 +47,7 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handleServerStarted( FMLServerStartedEvent event ) {
 		
-		DiscordNet.sendMessage( "Server started" );
+		DiscordNet.sendMessage( ServerConfig.getStartMessage() );
 	}
 	
 	@SubscribeEvent
@@ -55,7 +56,7 @@ public class ForgeEventHandler {
 		if( event.getServer().isRunning() ) {
 			DiscordNet.sendMessage( "Server crashed" );
 		} else {
-			DiscordNet.sendMessage( "Server stopped" );
+			DiscordNet.sendMessage( ServerConfig.getStopMessage() );
 		}
 		DiscordNet.stop();
 	}
