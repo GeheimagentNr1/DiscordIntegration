@@ -50,3 +50,15 @@ Mod for Discord Integration
     versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
+[[dependencies.discordintegration]]
+    modId="dimension_access_manager"
+    mandatory=false
+    versionRange="[2.0.1)"
+    ordering="BEFORE"
+    side="BOTH"
+[[dependencies.discordintegration]]
+    modId="moremobgriefingoptions"
+    mandatory=false
+    versionRange="[1.0.3)"
+    ordering="BEFORE"
+    side="BOTH"

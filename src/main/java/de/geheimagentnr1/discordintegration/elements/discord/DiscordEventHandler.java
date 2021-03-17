@@ -86,8 +86,8 @@ public class DiscordEventHandler extends ListenerAdapter {
 						author.getName(),
 						message
 					) ),
-					true
-				);
+				true
+			);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(
 				"%n%s%nError: Message to long.%n" +

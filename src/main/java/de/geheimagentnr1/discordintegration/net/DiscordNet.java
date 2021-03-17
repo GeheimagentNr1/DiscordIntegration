@@ -39,9 +39,9 @@ public class DiscordNet {
 		if( ServerConfig.getActive() ) {
 			try {
 				jda = JDABuilder.create( ServerConfig.getBotToken(), INTENTS )
-						.addEventListeners( new DiscordEventHandler() )
-						.setAutoReconnect( true )
-						.build();
+					.addEventListeners( new DiscordEventHandler() )
+					.setAutoReconnect( true )
+					.build();
 				jda.awaitReady();
 				channel = jda.getTextChannelById( ServerConfig.getChannelId() );
 				if( channel == null ) {
