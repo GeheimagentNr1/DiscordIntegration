@@ -4,15 +4,12 @@ import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import de.geheimagentnr1.discordintegration.util.VersionHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 
 public class ServerConfig {
