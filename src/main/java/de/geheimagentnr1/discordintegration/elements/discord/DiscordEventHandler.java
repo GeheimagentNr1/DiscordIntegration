@@ -93,7 +93,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 						message
 					) ),
 				ChatType.CHAT,
-					Util.DUMMY_UUID
+				Util.DUMMY_UUID
 			);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(
