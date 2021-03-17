@@ -33,6 +33,10 @@ public class ServerConfig {
 	
 	private static final ForgeConfigSpec.IntValue MAX_CHAR_COUNT;
 	
+	private static final ForgeConfigSpec.ConfigValue<String> START_MESSAGE;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> STOP_MESSAGE;
+	
 	private static final ForgeConfigSpec.BooleanValue TRANSMIT_BOT_MESSAGES;
 	
 	private static final ForgeConfigSpec.ConfigValue<List<String>> OTHER_BOTS_COMMAND_PREFIXES;
@@ -52,6 +56,12 @@ public class ServerConfig {
 		MAX_CHAR_COUNT = BUILDER.comment( "How long should Discord messages send to Minecraft Chat be at most? " +
 			"If the value is -1, there is no limit to the length." )
 			.defineInRange( "max_char_count", -1, -1, 2000 );
+		BUILDER.comment( "Messages shown on Discord." )
+			.push( "messages" );
+		START_MESSAGE = BUILDER.comment( "Messages shown in Discord, if the Minecraft server started." )
+			.define( "start", "Server started" );
+		STOP_MESSAGE = BUILDER.comment( "Messages shown in Discord, if the Minecraft server stoped." )
+			.define( "stop", "Server stopped" );
 		BUILDER.comment( "Options how to deal with other bots" )
 			.push( "other_bots" );
 		TRANSMIT_BOT_MESSAGES = BUILDER.comment( "Should messages of other bots be sent to the Minecraft chat?" )
@@ -188,6 +198,16 @@ public class ServerConfig {
 	public static int getMaxCharCount() {
 		
 		return MAX_CHAR_COUNT.get();
+	}
+	
+	public static String getStartMessage() {
+		
+		return START_MESSAGE.get();
+	}
+	
+	public static String getStopMessage() {
+		
+		return STOP_MESSAGE.get();
 	}
 	
 	public static List<? extends AbstractCommentedConfig> getCommands() {
