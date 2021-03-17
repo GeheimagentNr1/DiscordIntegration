@@ -2,14 +2,17 @@ package de.geheimagentnr1.discordintegration.config;
 
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.discordintegration.util.VersionHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 public class ServerConfig {
@@ -117,15 +120,15 @@ public class ServerConfig {
 			true,
 			"shows the tps statistic of the server and it's dimensions."
 		) );
-		if( ModList.get().isLoaded( "dimension_access_manager" ) ) {
+		if( VersionHelper.isDependecyWithVersionPresent( "dimension_access_manager" ) ) {
 			commands.add( new CommandConfig(
 				"dimensions",
-				"dimensions_status",
+				"dimensions status",
 				true,
 				"shows the access states of all dimensions."
 			) );
 		}
-		if( ModList.get().isLoaded( "moremobgriefingoptions" ) ) {
+		if( VersionHelper.isDependecyWithVersionPresent( "moremobgriefingoptions" ) ) {
 			commands.add( new CommandConfig(
 				"mobgriefing",
 				"mobgriefing list",
