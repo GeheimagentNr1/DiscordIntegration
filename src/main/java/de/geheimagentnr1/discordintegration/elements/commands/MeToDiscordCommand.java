@@ -29,16 +29,22 @@ public class MeToDiscordCommand {
 		CommandSource source = context.getSource();
 		String action = StringArgumentType.getString( context, "action" );
 		TranslationTextComponent translationTextComponent = new TranslationTextComponent(
-					"chat.type.emote",
-					source.getDisplayName(),
-					action
-				);
-				if( source.getEntity() != null ) {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.CHAT, source.getEntity().getUniqueID() );
-				} else {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.SYSTEM, Util.field_240973_b_ );
+			"chat.type.emote",
+			source.getDisplayName(),
+			action
+		);
+		if( source.getEntity() != null ) {
+			context.getSource().getServer().getPlayerList().func_232641_a_(
+				translationTextComponent,
+				ChatType.CHAT,
+				source.getEntity().getUniqueID()
+			);
+		} else {
+			context.getSource().getServer().getPlayerList().func_232641_a_(
+				translationTextComponent,
+				ChatType.SYSTEM,
+				Util.field_240973_b_
+			);
 		}
 		DiscordNet.sendMeChatMessage( source, action );
 		return Command.SINGLE_SUCCESS;

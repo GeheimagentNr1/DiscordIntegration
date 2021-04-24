@@ -33,17 +33,23 @@ public class SayToDiscordCommand {
 		CommandSource source = context.getSource();
 		ITextComponent message = MessageArgument.getMessage( context, "message" );
 		Entity entity = context.getSource().getEntity();
-				TranslationTextComponent translationTextComponent =
-					new TranslationTextComponent(
-					"chat.type.announcement", source.getDisplayName(),
-					message
-				);
-				if( entity != null ) {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.CHAT, entity.getUniqueID() );
-				} else {
-					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
-						ChatType.SYSTEM, Util.field_240973_b_ );
+		TranslationTextComponent translationTextComponent = new TranslationTextComponent(
+			"chat.type.announcement",
+			source.getDisplayName(),
+			message
+		);
+		if( entity != null ) {
+			context.getSource().getServer().getPlayerList().func_232641_a_(
+				translationTextComponent,
+				ChatType.CHAT,
+				entity.getUniqueID()
+			);
+		} else {
+			context.getSource().getServer().getPlayerList().func_232641_a_(
+				translationTextComponent,
+				ChatType.SYSTEM,
+				Util.field_240973_b_
+			);
 		}
 		DiscordNet.sendChatMessage( source, message );
 		return Command.SINGLE_SUCCESS;
