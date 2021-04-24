@@ -1,5 +1,5 @@
 project,description,version,developers,url,year,licenses,license urls,dependency
-${project.groupId}:${project.artifactId},WebSocket client implementation in Java.,2.10,Takahiko Kawasaki,https://github.com/TakahikoKawasaki/nv-websocket-client,null,The Apache Software License, Version 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,com.neovisionaries:nv-websocket-client:2.10
+${project.groupId}:${project.artifactId},WebSocket client implementation in Java.,2.14,Takahiko Kawasaki,https://github.com/TakahikoKawasaki/nv-websocket-client,null,The Apache Software License, Version 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,com.neovisionaries:nv-websocket-client:2.14
 Access Transformers,Transforms class member access based on specification files,3.0.1,"cpw,DemonWav",https://github.com/MinecraftForge/AccessTransformers,null,MIT,https://opensource.org/licenses/MIT,net.minecraftforge:accesstransformers:3.0.1
 ANTLR 4 Runtime,The ANTLR 4 Runtime,4.9.1,null,null,null,The BSD License,http://www.antlr.org/license.html,org.antlr:antlr4-runtime:4.9.1
 Apache Commons Codec,The Apache Commons Codec package contains simple encoder and decoders for
@@ -38,7 +38,7 @@ forge,null,1.16.5-36.0.48_mapped_official_1.16.5,null,null,null,null,null,net.mi
 Forge Service Provider Interface,API for services which can plug into forge, or which are used by forge in other places,3.2.0,cpw,https://github.com/MinecraftForge/ForgeSPI,null,LGPLv2.1,https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt,net.minecraftforge:forgespi:3.2.0
 GNU Trove,The Trove library provides high speed regular and primitive
         collections for Java.,3.0.3,"Rob Eden,Jeff Randall,Johan Parent,Eric D. Friedman",http://trove4j.sf.net,null,GNU Lesser General Public License 2.1,http://www.gnu.org/licenses/lgpl-2.1.txt,net.sf.trove4j:trove4j:3.0.3
-Grotesque Java 9 Hacks,Grotesque Java 9 Hacks to allow modlauncher to function,1.3.0,cpw,https://github.com/cpw/grossjava9classpathhacks,null,null,null,cpw.mods:grossjava9hacks:1.3.0
+Grotesque Java 9 Hacks,Grotesque Java 9 Hacks to allow modlauncher to function,1.3.3,cpw,https://github.com/cpw/grossjava9classpathhacks,null,null,null,cpw.mods:grossjava9hacks:1.3.3
 Gson,null,2.8.0,null,null,null,Apache 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,com.google.code.gson:gson:2.8.0
 Guava: Google Core Libraries for Java,Guava is a suite of core and expanded libraries that include
     utility classes, google's collections, io classes, and much
@@ -54,7 +54,7 @@ jackson-databind,General data-binding functionality for Jackson: works on core s
 Java Native Access,Java Native Access,4.4.0,"Timothy Wall,Matthias Bläsing",https://github.com/java-native-access/jna,null,"LGPL, version 2.1,Apache License v2.0","http://www.gnu.org/licenses/licenses.html,http://www.apache.org/licenses/LICENSE-2.0.txt",net.java.dev.jna:jna:4.4.0
 Java Native Access Platform,Java Native Access Platform,3.4.0,Timotyh Wall,https://github.com/twall/jna,null,LGPL, version 2.1,http://creativecommons.org/licenses/LGPL/2.1/,net.java.dev.jna:platform:3.4.0
 javabridge,null,1.0.22,null,null,null,null,null,com.mojang:javabridge:1.0.22
-JDA,null,4.2.0_232,null,null,null,null,null,net.dv8tion:JDA:4.2.0_232
+JDA,null,4.2.1_261,null,null,null,null,null,net.dv8tion:JDA:4.2.1_261
 JetBrains Java Annotations,A set of annotations used for code inspection support and code documentation.,16.0.1,JetBrains Team,https://github.com/JetBrains/java-annotations,null,The Apache Software License, Version 2.0,http://www.apache.org/license/LICENSE-2.0.txt,org.jetbrains:annotations:16.0.1
 JInput,Library for access to input devices.,2.0.5,,http://java.net/projects/jinput,null,BSD,http://www.opensource.org/licenses/bsd-license.php,net.java.jinput:jinput:2.0.5
 JInput natives,Library for access to input devices.,2.0.5,,http://java.net/projects/jinput,null,BSD,http://www.opensource.org/licenses/bsd-license.php,net.java.jinput:jinput-platform:2.0.5

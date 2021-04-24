@@ -61,10 +61,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 		
 		if( !author.isBot() ) {
 			if( !DiscordCommandHandler.handleCommand( command, server ) ) {
-				DiscordNet.sendFeedbackMessage( String.format(
-					"%n%s%nError: Unknown Command",
-					author.getName()
-				) );
+				DiscordNet.sendFeedbackMessage( String.format( "%n%s%nError: Unknown Command", author.getName() ) );
 			}
 		}
 	}
@@ -86,12 +83,11 @@ public class DiscordEventHandler extends ListenerAdapter {
 		
 		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
 			server.getPlayerList().broadcastMessage(
-				new StringTextComponent(
-					String.format(
-						"[%s] %s",
-						author.getName(),
-						message
-					) ),
+				new StringTextComponent( String.format(
+					"[%s] %s",
+					author.getName(),
+					message
+				) ),
 				ChatType.CHAT,
 				Util.NIL_UUID
 			);

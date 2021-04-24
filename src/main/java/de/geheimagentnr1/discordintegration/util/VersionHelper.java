@@ -23,9 +23,8 @@ public class VersionHelper {
 			.getMods()
 			.stream()
 			.filter( modInfo -> modInfo.getModId().equals( dependencyModId ) )
-			.anyMatch(
-				modInfo ->
-					dependency.isPresent() && dependency.get().getVersionRange().containsVersion( modInfo.getVersion() )
+			.anyMatch( modInfo ->
+				dependency.isPresent() && dependency.get().getVersionRange().containsVersion( modInfo.getVersion() )
 			);
 	}
 }

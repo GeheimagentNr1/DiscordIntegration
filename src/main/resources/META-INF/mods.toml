@@ -34,7 +34,7 @@ credits="Thanks for the logo goes to Muse31" #optional
 authors="GeheimagentNr1" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Mod for Discord Integration
+Adds chat linking between Discord and Minecraft and Discord commands to request server data.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.discordintegration]] #optional
@@ -58,12 +58,12 @@ Mod for Discord Integration
 [[dependencies.discordintegration]]
     modId="dimension_access_manager"
     mandatory=false
-    versionRange="[2.0.1,)"
+    versionRange="[3.0.0,)"
     ordering="BEFORE"
     side="BOTH"
 [[dependencies.discordintegration]]
     modId="moremobgriefingoptions"
     mandatory=false
-    versionRange="[1.0.3,)"
+    versionRange="[2.0.0,)"
     ordering="BEFORE"
     side="BOTH"
