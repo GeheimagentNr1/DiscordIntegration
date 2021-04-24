@@ -14,18 +14,14 @@ import org.apache.commons.lang3.tuple.Pair;
 public class DiscordIntegration {
 	
 	
-	//package-private
-	static final String MODID = "discordintegration";
+	public static final String MODID = "discordintegration";
 	
 	public DiscordIntegration() {
 		
 		ModLoadingContext.get().registerConfig( ModConfig.Type.SERVER, ServerConfig.CONFIG );
 		ModLoadingContext.get().registerExtensionPoint(
 			ExtensionPoint.DISPLAYTEST,
-			() -> Pair.of(
-				() -> FMLNetworkConstants.IGNORESERVERONLY,
-				( remote, isServer ) -> true
-			)
+			() -> Pair.of( () -> FMLNetworkConstants.IGNORESERVERONLY, ( remote, isServer ) -> true )
 		);
 	}
 }
