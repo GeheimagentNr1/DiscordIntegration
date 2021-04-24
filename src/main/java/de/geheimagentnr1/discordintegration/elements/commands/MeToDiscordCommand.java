@@ -11,6 +11,7 @@ import net.minecraft.command.Commands;
 import net.minecraft.util.text.TranslationTextComponent;
 
 
+@SuppressWarnings( "SameReturnValue" )
 public class MeToDiscordCommand {
 	
 	

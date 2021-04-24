@@ -13,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 
+@SuppressWarnings( "SameReturnValue" )
 public class SayToDiscordCommand {
 	
 	
