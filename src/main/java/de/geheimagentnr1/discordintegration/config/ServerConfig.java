@@ -154,7 +154,7 @@ public class ServerConfig {
 	
 	private static void printConfig() {
 		
-		LOGGER.info( "Loading \"{}\" Config", MOD_NAME );
+		LOGGER.info( "Loading \"{}\" Server Config", MOD_NAME );
 		LOGGER.info( "{} = {}", ACTIVE.getPath(), ACTIVE.get() );
 		LOGGER.info( "{} = {}", BOT_TOKEN.getPath(), BOT_TOKEN.get() );
 		LOGGER.info( "{} = {}", CHANNEL_ID.getPath(), CHANNEL_ID.get() );
@@ -162,7 +162,7 @@ public class ServerConfig {
 		LOGGER.info( "{} = {}", TRANSMIT_BOT_MESSAGES.getPath(), TRANSMIT_BOT_MESSAGES.get() );
 		LOGGER.info( "{} = {}", MAX_CHAR_COUNT.getPath(), MAX_CHAR_COUNT.get() );
 		LOGGER.info( "{} = {}", COMMANDS.getPath(), COMMANDS.get() );
-		LOGGER.info( "\"{}\" Config loaded", MOD_NAME );
+		LOGGER.info( "\"{}\" Server Config loaded", MOD_NAME );
 	}
 	
 	public static boolean getActive() {

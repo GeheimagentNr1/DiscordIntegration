@@ -74,8 +74,7 @@ public class DiscordNet {
 	
 	public static synchronized boolean feedBackAllowed( TextChannel _channel, User author ) {
 		
-		return _channel.getIdLong() == ServerConfig.getChannelId() &&
-			_channel.getIdLong() == channel.getIdLong() &&
+		return _channel.getIdLong() == ServerConfig.getChannelId() && _channel.getIdLong() == channel.getIdLong() &&
 			author.getIdLong() != jda.getSelfUser().getIdLong();
 	}
 	
@@ -117,9 +116,8 @@ public class DiscordNet {
 	public static void sendFeedbackMessage( String message ) {
 		
 		for( int start = 0; start <= message.length(); start += 1990 ) {
-			sendMessage(
-				FEEDBACK_START + message.substring( start, Math.min( message.length(), start + 1990 ) ) + FEEDBACK_END
-			);
+			sendMessage( FEEDBACK_START + message.substring( start, Math.min( message.length(), start + 1990 ) ) +
+				FEEDBACK_END );
 		}
 	}
 	
@@ -128,9 +126,8 @@ public class DiscordNet {
 		if( isInitialized() ) {
 			try {
 				for( int start = 0; start < message.length(); start += 2000 ) {
-					channel.sendMessage(
-						message.substring( start, Math.min( message.length(), start + 2000 ) )
-					).queue();
+					channel.sendMessage( message.substring( start, Math.min( message.length(), start + 2000 ) ) )
+						.queue();
 				}
 			} catch( Exception exception ) {
 				LOGGER.error( "Message could not be send", exception );

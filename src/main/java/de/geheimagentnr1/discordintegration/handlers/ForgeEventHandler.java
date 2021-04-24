@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.handlers;
 
 import com.mojang.brigadier.CommandDispatcher;
+import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.commands.DiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.commands.MeToDiscordCommand;
@@ -24,12 +25,14 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 
-@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER )
+@Mod.EventBusSubscriber( modid = DiscordIntegration.MODID,
+	bus = Mod.EventBusSubscriber.Bus.FORGE,
+	value = Dist.DEDICATED_SERVER )
 public class ForgeEventHandler {
 	
 	
 	@SubscribeEvent
-	public static void handleServerStarting( FMLServerStartingEvent event ) {
+	public static void handleServerStartingEvent( FMLServerStartingEvent event ) {
 		
 		DiscordEventHandler.setServer( event.getServer() );
 		CommandDispatcher<CommandSource> dispatcher = event.getCommandDispatcher();
@@ -39,7 +42,7 @@ public class ForgeEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void handleServerStarted( FMLServerStartedEvent event ) {
+	public static void handleServerStartedEvent( FMLServerStartedEvent event ) {
 		
 		DiscordNet.sendMessage( ServerConfig.getStartMessage() );
 	}
@@ -74,15 +77,19 @@ public class ForgeEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void handleLivingEntityDeathEvent( LivingDeathEvent event ) {
+	public static void handleLivingDeathEvent( LivingDeathEvent event ) {
 		
 		LivingEntity entity = event.getEntityLiving();
 		
-		if( entity instanceof PlayerEntity || entity instanceof TameableEntity &&
-			( (TameableEntity)entity ).getOwnerId() != null ) {
+		if( entity instanceof PlayerEntity ||
+			entity instanceof TameableEntity && ( (TameableEntity)entity ).getOwnerId() != null ) {
 			String name = entity.getDisplayName().getString();
-			DiscordNet.sendMessage( event.getSource().getDeathMessage( entity ).getString()
-				.replaceFirst( name, "**" + name + "**" ) );
+			DiscordNet.sendMessage(
+				event.getSource()
+					.getDeathMessage( entity )
+					.getString()
+					.replace( name, "**" + name + "**" )
+			);
 		}
 	}
 	
