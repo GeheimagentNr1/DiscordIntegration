@@ -13,6 +13,7 @@ import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TranslationTextComponent;
 
 
+@SuppressWarnings( "SameReturnValue" )
 public class MeToDiscordCommand {
 	
 	
