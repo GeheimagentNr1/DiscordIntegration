@@ -82,7 +82,7 @@ public class ForgeEventHandler {
 			( (TameableEntity)entity ).getOwnerId() != null ) {
 			String name = entity.getDisplayName().getString();
 			DiscordNet.sendMessage( event.getSource().getDeathMessage( entity ).getString()
-				.replaceFirst( name, "**" + name + "**" ) );
+				.replace( name, "**" + name + "**" ) );
 		}
 	}
 	

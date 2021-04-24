@@ -53,12 +53,12 @@ Mod for Discord Integration
 [[dependencies.discordintegration]]
     modId="dimension_access_manager"
     mandatory=false
-    versionRange="[2.0.1,)"
+    versionRange="[3.0.0,)"
     ordering="BEFORE"
     side="BOTH"
 [[dependencies.discordintegration]]
     modId="moremobgriefingoptions"
     mandatory=false
-    versionRange="[1.0.3,)"
+    versionRange="[2.0.0,)"
     ordering="BEFORE"
     side="BOTH"
