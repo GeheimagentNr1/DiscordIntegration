@@ -104,11 +104,15 @@ minecraft {
 }
 
 repositories {
-    jcenter()
     maven { url 'https://jitpack.io' }
     maven {
         name = "ModdingMavenRepositories"
         url = "file:../ModdingMavenRepositories"
+    }
+    mavenCentral() // for transitive dependencies
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
     }
 }
 
