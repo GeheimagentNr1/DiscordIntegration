@@ -3,6 +3,8 @@ package de.geheimagentnr1.discordintegration.elements.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -22,10 +24,15 @@ public class SayToDiscordCommand {
 		LiteralArgumentBuilder<CommandSource> sayCommand = Commands.literal( "say" )
 			.requires( source -> source.hasPermissionLevel( 2 ) );
 		sayCommand.then( Commands.argument( "message", MessageArgument.message() )
-			.executes( context -> {
-				CommandSource source = context.getSource();
-				ITextComponent message = MessageArgument.getMessage( context, "message" );
-				Entity entity = context.getSource().getEntity();
+			.executes( SayToDiscordCommand::sendSayMessage ) );
+		dispatcher.register( sayCommand );
+	}
+	
+	private static int sendSayMessage( CommandContext<CommandSource> context ) throws CommandSyntaxException {
+		
+		CommandSource source = context.getSource();
+		ITextComponent message = MessageArgument.getMessage( context, "message" );
+		Entity entity = context.getSource().getEntity();
 				TranslationTextComponent translationTextComponent =
 					new TranslationTextComponent(
 					"chat.type.announcement", source.getDisplayName(),
@@ -37,10 +44,8 @@ public class SayToDiscordCommand {
 				} else {
 					context.getSource().getServer().getPlayerList().func_232641_a_( translationTextComponent,
 						ChatType.SYSTEM, Util.field_240973_b_ );
-				}
-				DiscordNet.sendChatMessage( source, message );
-				return Command.SINGLE_SUCCESS;
-			} ) );
-		dispatcher.register( sayCommand );
+		}
+		DiscordNet.sendChatMessage( source, message );
+		return Command.SINGLE_SUCCESS;
 	}
 }
