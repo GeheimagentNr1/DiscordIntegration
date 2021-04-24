@@ -45,18 +45,18 @@ public class ServerConfig {
 	
 	static {
 		
-		ACTIVE = BUILDER.comment( "Should the discord integration be active?" )
+		ACTIVE = BUILDER.comment( "Should the Discord integration be active?" )
 			.define( "active", false );
 		BOT_TOKEN = BUILDER.comment( "Token of your Discord bot:" )
 			.define( "bot_token", "INSERT BOT TOKEN HERE" );
 		CHANNEL_ID = BUILDER.comment( "Channel ID where the bot will be working" )
 			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
-		COMMAND_PREFIX = BUILDER.comment( "Command prefix for Discord commands." )
+		COMMAND_PREFIX = BUILDER.comment( "Command prefix for Discord commands" )
 			.define( "command_prefix", "!" );
 		MAX_CHAR_COUNT = BUILDER.comment( "How long should Discord messages send to Minecraft Chat be at most? " +
 			"If the value is -1, there is no limit to the length." )
 			.defineInRange( "max_char_count", -1, -1, 2000 );
-		BUILDER.comment( "Messages shown on Discord." )
+		BUILDER.comment( "Messages shown on Discord" )
 			.push( "messages" );
 		START_MESSAGE = BUILDER.comment( "Messages shown in Discord, if the Minecraft server started." )
 			.define( "start", "Server started" );
@@ -67,7 +67,7 @@ public class ServerConfig {
 		TRANSMIT_BOT_MESSAGES = BUILDER.comment( "Should messages of other bots be sent to the Minecraft chat?" )
 			.define( "transmit_bot_messages", false );
 		OTHER_BOTS_COMMAND_PREFIXES = BUILDER.comment( "Command prefixes of other bots. " +
-			"Messages with these prefixes are not sent to the Mincraft chat." )
+			"Messages with these prefixes are not sent to the Minecraft chat." )
 			.define( "other_bots_command_prefixes", new ArrayList<>() );
 		BUILDER.pop();
 		COMMANDS = BUILDER.comment( "Command mapping from Discord to Minecraft commands" )
