@@ -3,11 +3,9 @@ package de.geheimagentnr1.discordintegration.util;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.forgespi.language.IModInfo;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 
 public class VersionHelper {
