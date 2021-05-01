@@ -62,6 +62,7 @@ public class ServerConfig {
 			.define( "start", "Server started" );
 		STOP_MESSAGE = BUILDER.comment( "Messages shown in Discord, if the Minecraft server stoped." )
 			.define( "stop", "Server stopped" );
+		BUILDER.pop();
 		BUILDER.comment( "Options how to deal with other bots" )
 			.push( "other_bots" );
 		TRANSMIT_BOT_MESSAGES = BUILDER.comment( "Should messages of other bots be sent to the Minecraft chat?" )
