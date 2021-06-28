@@ -26,9 +26,11 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 
-@Mod.EventBusSubscriber( modid = DiscordIntegration.MODID,
+@Mod.EventBusSubscriber(
+	modid = DiscordIntegration.MODID,
 	bus = Mod.EventBusSubscriber.Bus.FORGE,
-	value = Dist.DEDICATED_SERVER )
+	value = Dist.DEDICATED_SERVER
+)
 public class ForgeEventHandler {
 	
 	
@@ -50,16 +52,22 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handleServerStartedEvent( FMLServerStartedEvent event ) {
 		
-		DiscordNet.sendMessage( ServerConfig.getStartMessage() );
+		if( ServerConfig.getServerStartedMessageEnabled() ) {
+			DiscordNet.sendMessage( ServerConfig.getServerStartedMessage() );
+		}
 	}
 	
 	@SubscribeEvent
 	public static void handleServerStoppedEvent( FMLServerStoppedEvent event ) {
 		
 		if( event.getServer().isRunning() ) {
-			DiscordNet.sendMessage( "Server crashed" );
+			if( ServerConfig.getServerCrashedMessageEnabled() ) {
+				DiscordNet.sendMessage( ServerConfig.getServerCrashedMessage() );
+			}
 		} else {
-			DiscordNet.sendMessage( ServerConfig.getStopMessage() );
+			if( ServerConfig.getServerStoppedMessageEnabled() ) {
+				DiscordNet.sendMessage( ServerConfig.getServerStoppedMessage() );
+			}
 		}
 		DiscordNet.stop();
 	}
@@ -67,13 +75,17 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handlePlayerLoggedInEvent( PlayerEvent.PlayerLoggedInEvent event ) {
 		
-		DiscordNet.sendPlayerMessage( event.getPlayer(), "joined the game." );
+		if( ServerConfig.getPlayerJoinedMessageEnabled() ) {
+			DiscordNet.sendPlayerMessage( event.getPlayer(), ServerConfig.getPlayerJoinedMessage() );
+		}
 	}
 	
 	@SubscribeEvent
 	public static void handlePlayerLoggedOutEvent( PlayerEvent.PlayerLoggedOutEvent event ) {
 		
-		DiscordNet.sendPlayerMessage( event.getPlayer(), "disconnected." );
+		if( ServerConfig.getPlayerLeftMessageEnabled() ) {
+			DiscordNet.sendPlayerMessage( event.getPlayer(), ServerConfig.getPlayerLeftMessage() );
+		}
 	}
 	
 	@SubscribeEvent
@@ -87,15 +99,16 @@ public class ForgeEventHandler {
 		
 		LivingEntity entity = event.getEntityLiving();
 		
-		if( entity instanceof PlayerEntity ||
-			entity instanceof TameableEntity && ( (TameableEntity)entity ).getOwnerUUID() != null ) {
-			String name = entity.getDisplayName().getString();
-			DiscordNet.sendMessage(
-				event.getSource()
-					.getLocalizedDeathMessage( entity )
-					.getString()
-					.replace( name, "**" + name + "**" )
-			);
+		if( entity instanceof PlayerEntity ) {
+			if( ServerConfig.getPlayerDiedMessageEnabled() ) {
+				DiscordNet.sendDeathMessage( event, ServerConfig.getPlayerDiedMessage() );
+			}
+		} else {
+			if( entity instanceof TameableEntity && ( (TameableEntity)entity ).getOwnerUUID() != null ) {
+				if( ServerConfig.getTamedMobDiedMessageEnabled() ) {
+					DiscordNet.sendDeathMessage( event, ServerConfig.getTamedMobDiedMessage() );
+				}
+			}
 		}
 	}
 	
@@ -104,11 +117,13 @@ public class ForgeEventHandler {
 		
 		DisplayInfo displayInfo = event.getAdvancement().getDisplay();
 		
-		if( displayInfo != null && displayInfo.shouldAnnounceChat() ) {
+		if( displayInfo != null && displayInfo.shouldAnnounceChat() &&
+			ServerConfig.getPlayerGotAdvancementMessageEnabled() ) {
 			DiscordNet.sendPlayerMessage(
 				event.getPlayer(),
 				String.format(
-					"has made the advancement **%s**%n*%s*",
+					"%s **%s**%n*%s*",
+					ServerConfig.getPlayerGotAdvancementMessage(),
 					displayInfo.getTitle().getString(),
 					displayInfo.getDescription().getString()
 				)

@@ -33,9 +33,37 @@ public class ServerConfig {
 	
 	private static final ForgeConfigSpec.IntValue MAX_CHAR_COUNT;
 	
-	private static final ForgeConfigSpec.ConfigValue<String> START_MESSAGE;
+	private static final ForgeConfigSpec.BooleanValue SERVER_STARTED_MESSAGE_ENABLED;
 	
-	private static final ForgeConfigSpec.ConfigValue<String> STOP_MESSAGE;
+	private static final ForgeConfigSpec.ConfigValue<String> SERVER_STARTED_MESSAGE;
+	
+	private static final ForgeConfigSpec.BooleanValue SERVER_STOPPED_MESSAGE_ENABLED;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> SERVER_STOPPED_MESSAGE;
+	
+	private static final ForgeConfigSpec.BooleanValue SERVER_CRASHED_MESSAGE_ENABLED;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> SERVER_CRASHED_MESSAGE;
+	
+	private static final ForgeConfigSpec.BooleanValue PLAYER_JOINED_MESSAGE_ENABLED;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_JOINED_MESSAGE;
+	
+	private static final ForgeConfigSpec.BooleanValue PLAYER_LEFT_MESSAGE_ENABLED;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_LEFT_MESSAGE;
+	
+	private static final ForgeConfigSpec.BooleanValue PLAYER_DIED_MESSAGE_ENABLED;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_DIED_MESSAGE;
+	
+	private static final ForgeConfigSpec.BooleanValue TAMED_MOB_DIED_MESSAGE_ENABLED;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> TAMED_MOB_DIED_MESSAGE;
+	
+	private static final ForgeConfigSpec.BooleanValue PLAYER_GOT_ADVANCEMENT_MESSAGE_ENABLED;
+	
+	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_GOT_ADVANCEMENT_MESSAGE;
 	
 	private static final ForgeConfigSpec.BooleanValue TRANSMIT_BOT_MESSAGES;
 	
@@ -58,10 +86,81 @@ public class ServerConfig {
 			.defineInRange( "max_char_count", -1, -1, 2000 );
 		BUILDER.comment( "Messages shown on Discord" )
 			.push( "messages" );
-		START_MESSAGE = BUILDER.comment( "Messages shown in Discord, if the Minecraft server started." )
-			.define( "start", "Server started" );
-		STOP_MESSAGE = BUILDER.comment( "Messages shown in Discord, if the Minecraft server stoped." )
-			.define( "stop", "Server stopped" );
+		BUILDER.comment( "Options for the server start message" )
+			.push( "server_started" );
+		SERVER_STARTED_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be send to the Discord chat, if the server started?" )
+			.define( "enabled", true );
+		SERVER_STARTED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server started" +
+			"." )
+			.define( "message", "Server started" );
+		BUILDER.pop();
+		BUILDER.comment( "Options for the server stop message" )
+			.push( "server_stopped" );
+		SERVER_STOPPED_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be send to the Discord chat, if the server stopped?" )
+			.define( "enabled", true );
+		SERVER_STOPPED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server stopped" +
+			"." )
+			.define( "message", "Server stopped" );
+		BUILDER.pop();
+		BUILDER.comment( "Options for the server crash message" )
+			.push( "server_crashed" );
+		SERVER_CRASHED_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be send to the Discord chat, if the server crashed?" )
+			.define( "enabled", true );
+		SERVER_CRASHED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server crashed" +
+			"." )
+			.define( "message", "Server crashed" );
+		BUILDER.pop();
+		BUILDER.comment( "Options for the player joined message" )
+			.push( "player_joined" );
+		PLAYER_JOINED_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be send to the Discord chat, if a player joined?" )
+			.define( "enabled", true );
+		PLAYER_JOINED_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if a player joined. (<player name> <message>)" )
+			.define( "message", "joined the game." );
+		BUILDER.pop();
+		BUILDER.comment( "Options for the player left message" )
+			.push( "player_left" );
+		PLAYER_LEFT_MESSAGE_ENABLED =
+			BUILDER.comment( "Should a message be send to the Discord chat, if a player left?" )
+				.define( "enabled", true );
+		PLAYER_LEFT_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if a player left the server. (<player name> <message>)" )
+			.define( "message", "disconnected." );
+		BUILDER.pop();
+		BUILDER.comment( "Options for the player died message" )
+			.push( "player_died" );
+		PLAYER_DIED_MESSAGE_ENABLED =
+			BUILDER.comment( "Should a message be send to the Discord chat, if a player died?" )
+				.define( "enabled", true );
+		PLAYER_DIED_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if a player died. (<player name> <message>) If left empty, the default " +
+				"Minecraft message is send." )
+			.define( "message", "" );
+		BUILDER.pop();
+		BUILDER.comment( "Options for the tamed mob died message" )
+			.push( "tamed_mob_died" );
+		TAMED_MOB_DIED_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be send to the Discord chat, if a tamed mob left?" )
+			.define( "enabled", true );
+		TAMED_MOB_DIED_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if a tameb mob died. (<player name> <message>) If left empty, the " +
+				"default Minecraft message is send." )
+			.define( "message", "" );
+		BUILDER.pop();
+		BUILDER.comment( "Options for the player got advancement message" )
+			.push( "player_got_advancement" );
+		PLAYER_GOT_ADVANCEMENT_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be send to the Discord chat, if a player got an advancement?" )
+			.define( "enabled", true );
+		PLAYER_GOT_ADVANCEMENT_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if a player got an advancement. (<player name> <message>) " +
+				"**<advancement title>**<new line>*<advancement description>*" )
+			.define( "message", "has made the advancement" );
+		BUILDER.pop();
 		BUILDER.pop();
 		BUILDER.comment( "Options how to deal with other bots" )
 			.push( "other_bots" );
@@ -201,14 +300,84 @@ public class ServerConfig {
 		return MAX_CHAR_COUNT.get();
 	}
 	
-	public static String getStartMessage() {
+	public static boolean getServerStartedMessageEnabled() {
 		
-		return START_MESSAGE.get();
+		return SERVER_STARTED_MESSAGE_ENABLED.get();
 	}
 	
-	public static String getStopMessage() {
+	public static String getServerStartedMessage() {
 		
-		return STOP_MESSAGE.get();
+		return SERVER_STARTED_MESSAGE.get();
+	}
+	
+	public static boolean getServerStoppedMessageEnabled() {
+		
+		return SERVER_STOPPED_MESSAGE_ENABLED.get();
+	}
+	
+	public static String getServerStoppedMessage() {
+		
+		return SERVER_STOPPED_MESSAGE.get();
+	}
+	
+	public static boolean getServerCrashedMessageEnabled() {
+		
+		return SERVER_CRASHED_MESSAGE_ENABLED.get();
+	}
+	
+	public static String getServerCrashedMessage() {
+		
+		return SERVER_CRASHED_MESSAGE.get();
+	}
+	
+	public static boolean getPlayerJoinedMessageEnabled() {
+		
+		return PLAYER_JOINED_MESSAGE_ENABLED.get();
+	}
+	
+	public static String getPlayerJoinedMessage() {
+		
+		return PLAYER_JOINED_MESSAGE.get();
+	}
+	
+	public static boolean getPlayerLeftMessageEnabled() {
+		
+		return PLAYER_LEFT_MESSAGE_ENABLED.get();
+	}
+	
+	public static String getPlayerLeftMessage() {
+		
+		return PLAYER_LEFT_MESSAGE.get();
+	}
+	
+	public static boolean getPlayerDiedMessageEnabled() {
+		
+		return PLAYER_DIED_MESSAGE_ENABLED.get();
+	}
+	
+	public static String getPlayerDiedMessage() {
+		
+		return PLAYER_DIED_MESSAGE.get();
+	}
+	
+	public static boolean getTamedMobDiedMessageEnabled() {
+		
+		return TAMED_MOB_DIED_MESSAGE_ENABLED.get();
+	}
+	
+	public static String getTamedMobDiedMessage() {
+		
+		return TAMED_MOB_DIED_MESSAGE.get();
+	}
+	
+	public static boolean getPlayerGotAdvancementMessageEnabled() {
+		
+		return PLAYER_GOT_ADVANCEMENT_MESSAGE_ENABLED.get();
+	}
+	
+	public static String getPlayerGotAdvancementMessage() {
+		
+		return PLAYER_GOT_ADVANCEMENT_MESSAGE.get();
 	}
 	
 	public static List<? extends AbstractCommentedConfig> getCommands() {

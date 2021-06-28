@@ -8,8 +8,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -76,6 +78,22 @@ public class DiscordNet {
 		
 		return _channel.getIdLong() == ServerConfig.getChannelId() && _channel.getIdLong() == channel.getIdLong() &&
 			author.getIdLong() != jda.getSelfUser().getIdLong();
+	}
+	
+	public static void sendDeathMessage( LivingDeathEvent event, String customMessage ) {
+		
+		LivingEntity entity = event.getEntityLiving();
+		String name = entity.getDisplayName().getString();
+		if( customMessage.isEmpty() ) {
+			sendMessage(
+				event.getSource()
+					.getLocalizedDeathMessage( entity )
+					.getString()
+					.replace( name, "**" + name + "**" )
+			);
+		} else {
+			sendMessage( String.format( "**%s** %s", entity.getDisplayName().getString(), customMessage ) );
+		}
 	}
 	
 	public static void sendPlayerMessage( PlayerEntity player, String message ) {
