@@ -7,7 +7,7 @@ buildscript {
         maven { url = "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
         classpath 'com.jaredsburrows:gradle-license-plugin:0.8.90'
     }
@@ -153,13 +153,13 @@ dependencies {
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
 
-    compile("net.dv8tion:JDA:${jda_version}") {
+    implementation("net.dv8tion:JDA:${jda_version}") {
         exclude module: 'opus-java'
     }
     shadow("net.dv8tion:JDA:${jda_version}") {
         exclude module: 'opus-java'
     }
-    compile group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4j_version}"
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4j_version}"
     shadow group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4j_version}"
 
     runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
