@@ -147,7 +147,7 @@ public class ServerConfig {
 			"Should a message be send to the Discord chat, if a tamed mob left?" )
 			.define( "enabled", true );
 		TAMED_MOB_DIED_MESSAGE = BUILDER.comment(
-			"Message send to the Discord chat, if a tameb mob died. (<player name> <message>) If left empty, the " +
+			"Message send to the Discord chat, if a tamed mob died. (<player name> <message>) If left empty, the " +
 				"default Minecraft message is send." )
 			.define( "message", "" );
 		BUILDER.pop();
