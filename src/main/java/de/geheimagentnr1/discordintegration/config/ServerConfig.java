@@ -89,7 +89,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the server start message" )
 			.push( "server_started" );
 		SERVER_STARTED_MESSAGE_ENABLED = BUILDER.comment(
-			"Should a message be send to the Discord chat, if the server started?" )
+			"Should a message be sent to the Discord chat, if the server started?" )
 			.define( "enabled", true );
 		SERVER_STARTED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server started" +
 			"." )
@@ -98,7 +98,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the server stop message" )
 			.push( "server_stopped" );
 		SERVER_STOPPED_MESSAGE_ENABLED = BUILDER.comment(
-			"Should a message be send to the Discord chat, if the server stopped?" )
+			"Should a message be sent to the Discord chat, if the server stopped?" )
 			.define( "enabled", true );
 		SERVER_STOPPED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server stopped" +
 			"." )
@@ -107,7 +107,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the server crash message" )
 			.push( "server_crashed" );
 		SERVER_CRASHED_MESSAGE_ENABLED = BUILDER.comment(
-			"Should a message be send to the Discord chat, if the server crashed?" )
+			"Should a message be sent to the Discord chat, if the server crashed?" )
 			.define( "enabled", true );
 		SERVER_CRASHED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server crashed" +
 			"." )
@@ -116,7 +116,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the player joined message" )
 			.push( "player_joined" );
 		PLAYER_JOINED_MESSAGE_ENABLED = BUILDER.comment(
-			"Should a message be send to the Discord chat, if a player joined?" )
+			"Should a message be sent to the Discord chat, if a player joined?" )
 			.define( "enabled", true );
 		PLAYER_JOINED_MESSAGE = BUILDER.comment(
 			"Message send to the Discord chat, if a player joined. (<player name> <message>)" )
@@ -125,7 +125,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the player left message" )
 			.push( "player_left" );
 		PLAYER_LEFT_MESSAGE_ENABLED =
-			BUILDER.comment( "Should a message be send to the Discord chat, if a player left?" )
+			BUILDER.comment( "Should a message be sent to the Discord chat, if a player left?" )
 				.define( "enabled", true );
 		PLAYER_LEFT_MESSAGE = BUILDER.comment(
 			"Message send to the Discord chat, if a player left the server. (<player name> <message>)" )
@@ -134,7 +134,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the player died message" )
 			.push( "player_died" );
 		PLAYER_DIED_MESSAGE_ENABLED =
-			BUILDER.comment( "Should a message be send to the Discord chat, if a player died?" )
+			BUILDER.comment( "Should a message be sent to the Discord chat, if a player died?" )
 				.define( "enabled", true );
 		PLAYER_DIED_MESSAGE = BUILDER.comment(
 			"Message send to the Discord chat, if a player died. (<player name> <message>) If left empty, the default " +
@@ -144,7 +144,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the tamed mob died message" )
 			.push( "tamed_mob_died" );
 		TAMED_MOB_DIED_MESSAGE_ENABLED = BUILDER.comment(
-			"Should a message be send to the Discord chat, if a tamed mob left?" )
+			"Should a message be sent to the Discord chat, if a tamed mob left?" )
 			.define( "enabled", true );
 		TAMED_MOB_DIED_MESSAGE = BUILDER.comment(
 			"Message send to the Discord chat, if a tamed mob died. (<player name> <message>) If left empty, the " +
@@ -154,7 +154,7 @@ public class ServerConfig {
 		BUILDER.comment( "Options for the player got advancement message" )
 			.push( "player_got_advancement" );
 		PLAYER_GOT_ADVANCEMENT_MESSAGE_ENABLED = BUILDER.comment(
-			"Should a message be send to the Discord chat, if a player got an advancement?" )
+			"Should a message be sent to the Discord chat, if a player got an advancement?" )
 			.define( "enabled", true );
 		PLAYER_GOT_ADVANCEMENT_MESSAGE = BUILDER.comment(
 			"Message send to the Discord chat, if a player got an advancement. (<player name> <message>) " +
