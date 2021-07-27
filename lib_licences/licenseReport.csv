@@ -34,7 +34,7 @@ datafixerupper,null,4.0.26,null,null,null,null,null,com.mojang:datafixerupper:4.
 Event Bus,High performance Event Bus library,4.0.0,"cpw,LexManos",https://github.com/MinecraftForge/eventbus,null,LGPLv2.1,https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt,net.minecraftforge:eventbus:4.0.0
 fastutil,fastutil extends the Java Collections Framework by providing type-specific maps, sets, lists and priority queues with a small memory footprint and fast access and insertion; provides also big (64-bit) arrays, sets and lists, and fast, practical I/O classes for binary and text files.,8.2.1,Sebastiano Vigna,http://fastutil.di.unimi.it/,null,Apache License, Version 2.0,http://www.apache.org/licenses/LICENSE-2.0.html,it.unimi.dsi:fastutil:8.2.1
 FindBugs-jsr305,JSR305 Annotations for Findbugs,3.0.2,null,http://findbugs.sourceforge.net/,null,The Apache Software License, Version 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,com.google.code.findbugs:jsr305:3.0.2
-forge,null,1.16.5-36.2.1_mapped_official_1.16.5,null,null,null,null,null,net.minecraftforge:forge:1.16.5-36.2.1_mapped_official_1.16.5
+forge,null,1.16.5-36.2.2_mapped_official_1.16.5,null,null,null,null,null,net.minecraftforge:forge:1.16.5-36.2.2_mapped_official_1.16.5
 Forge Service Provider Interface,API for services which can plug into forge, or which are used by forge in other places,3.2.0,cpw,https://github.com/MinecraftForge/ForgeSPI,null,LGPLv2.1,https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt,net.minecraftforge:forgespi:3.2.0
 GNU Trove,The Trove library provides high speed regular and primitive
         collections for Java.,3.0.3,"Rob Eden,Jeff Randall,Johan Parent,Eric D. Friedman",http://trove4j.sf.net,null,GNU Lesser General Public License 2.1,http://www.gnu.org/licenses/lgpl-2.1.txt,net.sf.trove4j:trove4j:3.0.3
@@ -54,7 +54,7 @@ jackson-databind,General data-binding functionality for Jackson: works on core s
 Java Native Access,Java Native Access,4.4.0,"Timothy Wall,Matthias Bläsing",https://github.com/java-native-access/jna,null,"LGPL, version 2.1,Apache License v2.0","http://www.gnu.org/licenses/licenses.html,http://www.apache.org/licenses/LICENSE-2.0.txt",net.java.dev.jna:jna:4.4.0
 Java Native Access Platform,Java Native Access Platform,3.4.0,Timotyh Wall,https://github.com/twall/jna,null,LGPL, version 2.1,http://creativecommons.org/licenses/LGPL/2.1/,net.java.dev.jna:platform:3.4.0
 javabridge,null,1.0.22,null,null,null,null,null,com.mojang:javabridge:1.0.22
-JDA,null,4.3.0_298,null,null,null,null,null,net.dv8tion:JDA:4.3.0_298
+JDA,null,4.3.0_299,null,null,null,null,null,net.dv8tion:JDA:4.3.0_299
 JetBrains Java Annotations,A set of annotations used for code inspection support and code documentation.,16.0.1,JetBrains Team,https://github.com/JetBrains/java-annotations,null,The Apache Software License, Version 2.0,http://www.apache.org/license/LICENSE-2.0.txt,org.jetbrains:annotations:16.0.1
 JInput,Library for access to input devices.,2.0.5,,http://java.net/projects/jinput,null,BSD,http://www.opensource.org/licenses/bsd-license.php,net.java.jinput:jinput:2.0.5
 JInput natives,Library for access to input devices.,2.0.5,,http://java.net/projects/jinput,null,BSD,http://www.opensource.org/licenses/bsd-license.php,net.java.jinput:jinput-platform:2.0.5

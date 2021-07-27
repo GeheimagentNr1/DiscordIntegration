@@ -495,12 +495,12 @@
   {
     "project": "forge",
     "description": null,
-    "version": "1.16.5-36.2.1_mapped_official_1.16.5",
+    "version": "1.16.5-36.2.2_mapped_official_1.16.5",
     "developers": [],
     "url": null,
     "year": null,
     "licenses": [],
-    "dependency": "net.minecraftforge:forge:1.16.5-36.2.1_mapped_official_1.16.5"
+    "dependency": "net.minecraftforge:forge:1.16.5-36.2.2_mapped_official_1.16.5"
   },
   {
     "project": "Forge Service Provider Interface",
@@ -702,12 +702,12 @@
   {
     "project": "JDA",
     "description": null,
-    "version": "4.3.0_298",
+    "version": "4.3.0_299",
     "developers": [],
     "url": null,
     "year": null,
     "licenses": [],
-    "dependency": "net.dv8tion:JDA:4.3.0_298"
+    "dependency": "net.dv8tion:JDA:4.3.0_299"
   },
   {
     "project": "JetBrains Java Annotations",
