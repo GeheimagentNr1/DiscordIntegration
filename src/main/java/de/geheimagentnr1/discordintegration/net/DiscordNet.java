@@ -7,10 +7,10 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,32 +96,32 @@ public class DiscordNet {
 		}
 	}
 	
-	public static void sendPlayerMessage( PlayerEntity player, String message ) {
+	public static void sendPlayerMessage( Player player, String message ) {
 		
 		sendMessage( String.format( "**%s** %s", getPlayerName( player ), message ) );
 	}
 	
-	public static void sendChatMessage( PlayerEntity player, String message ) {
+	public static void sendChatMessage( Player player, String message ) {
 		
 		sendChatMessage( getPlayerName( player ), message );
 	}
 	
-	private static String getPlayerName( PlayerEntity player ) {
+	private static String getPlayerName( Player player ) {
 		
 		return player.getDisplayName().getString();
 	}
 	
-	public static void sendChatMessage( CommandSource source, ITextComponent message ) {
+	public static void sendChatMessage( CommandSourceStack source, Component message ) {
 		
 		sendCommandChatMessage( source, message.getString() );
 	}
 	
-	public static void sendMeChatMessage( CommandSource source, String action ) {
+	public static void sendMeChatMessage( CommandSourceStack source, String action ) {
 		
 		sendCommandChatMessage( source, String.format( "*%s*", action ) );
 	}
 	
-	private static void sendCommandChatMessage( CommandSource source, String message ) {
+	private static void sendCommandChatMessage( CommandSourceStack source, String message ) {
 		
 		sendChatMessage( source.getDisplayName().getString(), message );
 	}

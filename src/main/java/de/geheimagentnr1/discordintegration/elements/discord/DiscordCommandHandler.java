@@ -3,11 +3,11 @@ package de.geheimagentnr1.discordintegration.elements.discord;
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModLoadingContext;
 
 import java.util.Objects;
@@ -23,7 +23,7 @@ class DiscordCommandHandler {
 	static boolean handleCommand( String command, MinecraftServer server ) {
 		
 		DiscordCommandSource discordCommandSource = new DiscordCommandSource();
-		CommandSource source = buildSource( server, discordCommandSource );
+		CommandSourceStack source = buildSource( server, discordCommandSource );
 		for( AbstractCommentedConfig abstractCommentedConfig : ServerConfig.getCommands() ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) &&
 				buildDiscordCommand( abstractCommentedConfig ).equals( command ) ) {
@@ -35,16 +35,16 @@ class DiscordCommandHandler {
 		return false;
 	}
 	
-	private static CommandSource buildSource( MinecraftServer server, DiscordCommandSource discordCommandSource ) {
+	private static CommandSourceStack buildSource( MinecraftServer server, DiscordCommandSource discordCommandSource ) {
 		
-		return new CommandSource(
+		return new CommandSourceStack(
 			discordCommandSource,
-			Vector3d.ZERO,
-			Vector2f.ZERO,
+			Vec3.ZERO,
+			Vec2.ZERO,
 			Objects.requireNonNull( server.overworld() ),
 			4,
 			MOD_NAME,
-			new StringTextComponent( MOD_NAME ),
+			new TextComponent( MOD_NAME ),
 			server,
 			null
 		);

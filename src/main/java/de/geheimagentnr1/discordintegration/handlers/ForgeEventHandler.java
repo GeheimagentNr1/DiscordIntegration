@@ -1,6 +1,5 @@
 package de.geheimagentnr1.discordintegration.handlers;
 
-import com.mojang.brigadier.CommandDispatcher;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.commands.DiscordCommand;
@@ -9,10 +8,9 @@ import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordComman
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordEventHandler;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.advancements.DisplayInfo;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
@@ -21,9 +19,9 @@ import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStoppedEvent;
 
 
 @Mod.EventBusSubscriber(
@@ -43,10 +41,9 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
-		CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
-		DiscordCommand.register( dispatcher );
-		MeToDiscordCommand.register( dispatcher );
-		SayToDiscordCommand.register( dispatcher );
+		DiscordCommand.register( event.getDispatcher() );
+		MeToDiscordCommand.register( event.getDispatcher() );
+		SayToDiscordCommand.register( event.getDispatcher() );
 	}
 	
 	@SubscribeEvent
@@ -99,12 +96,12 @@ public class ForgeEventHandler {
 		
 		LivingEntity entity = event.getEntityLiving();
 		
-		if( entity instanceof PlayerEntity ) {
+		if( entity instanceof Player ) {
 			if( ServerConfig.getPlayerDiedMessageEnabled() ) {
 				DiscordNet.sendDeathMessage( event, ServerConfig.getPlayerDiedMessage() );
 			}
 		} else {
-			if( entity instanceof TameableEntity && ( (TameableEntity)entity ).getOwnerUUID() != null ) {
+			if( entity instanceof TamableAnimal && ( (TamableAnimal)entity ).getOwnerUUID() != null ) {
 				if( ServerConfig.getTamedMobDiedMessageEnabled() ) {
 					DiscordNet.sendDeathMessage( event, ServerConfig.getTamedMobDiedMessage() );
 				}

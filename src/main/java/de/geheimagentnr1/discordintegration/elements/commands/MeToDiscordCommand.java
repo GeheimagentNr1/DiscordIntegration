@@ -6,30 +6,30 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.Util;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.TranslatableComponent;
 
 
 @SuppressWarnings( "SameReturnValue" )
 public class MeToDiscordCommand {
 	
 	
-	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
+	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
-		LiteralArgumentBuilder<CommandSource> meCommand = Commands.literal( "me" );
+		LiteralArgumentBuilder<CommandSourceStack> meCommand = Commands.literal( "me" );
 		meCommand.then( Commands.argument( "action", StringArgumentType.greedyString() )
 			.executes( MeToDiscordCommand::sendMeMessage ) );
 		dispatcher.register( meCommand );
 	}
 	
-	private static int sendMeMessage( CommandContext<CommandSource> context ) {
+	private static int sendMeMessage( CommandContext<CommandSourceStack> context ) {
 		
-		CommandSource source = context.getSource();
+		CommandSourceStack source = context.getSource();
 		String action = StringArgumentType.getString( context, "action" );
-		TranslationTextComponent translationTextComponent = new TranslationTextComponent(
+		TranslatableComponent translationTextComponent = new TranslatableComponent(
 			"chat.type.emote",
 			source.getDisplayName(),
 			action

@@ -1,15 +1,15 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
-import net.minecraft.command.ICommandSource;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.commands.CommandSource;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
 
 //package-private
-class DiscordCommandSource implements ICommandSource {
+class DiscordCommandSource implements CommandSource {
 	
 	
 	private String message = "";
@@ -21,7 +21,7 @@ class DiscordCommandSource implements ICommandSource {
 	}
 	
 	@Override
-	public void sendMessage( ITextComponent component, @Nonnull UUID uuid ) {
+	public void sendMessage( Component component, @Nonnull UUID uuid ) {
 		
 		message += String.format( "%s%n", component.getString() );
 	}

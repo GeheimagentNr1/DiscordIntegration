@@ -5,11 +5,12 @@ import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.minecraft.Util;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.StringTextComponent;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 
 public class DiscordEventHandler extends ListenerAdapter {
@@ -23,7 +24,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
+	public void onGuildMessageReceived( @Nonnull GuildMessageReceivedEvent event ) {
 		
 		User author = event.getAuthor();
 		if( isInitialized() && DiscordNet.feedBackAllowed( event.getChannel(), author ) ) {
@@ -71,7 +72,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 		if( ServerConfig.isTransmitBotMessages() ) {
 			if( !message.startsWith( DiscordNet.FEEDBACK_START ) || !message.endsWith( DiscordNet.FEEDBACK_END ) ) {
 				server.getPlayerList().broadcastMessage(
-					new StringTextComponent( message ),
+					new TextComponent( message ),
 					ChatType.CHAT,
 					Util.NIL_UUID
 				);
@@ -83,7 +84,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 		
 		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
 			server.getPlayerList().broadcastMessage(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"[%s] %s",
 					author.getName(),
 					message

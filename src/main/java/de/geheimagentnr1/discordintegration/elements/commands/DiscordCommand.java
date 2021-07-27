@@ -7,11 +7,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.GameRules;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
 
@@ -24,9 +24,9 @@ import java.util.List;
 public class DiscordCommand {
 	
 	
-	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
+	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
-		LiteralArgumentBuilder<CommandSource> discordCommand = Commands.literal( "discord" );
+		LiteralArgumentBuilder<CommandSourceStack> discordCommand = Commands.literal( "discord" );
 		discordCommand.then( Commands.literal( "commands" )
 			.executes( DiscordCommand::showCommands ) );
 		discordCommand.then( Commands.literal( "gamerules" )
@@ -36,15 +36,15 @@ public class DiscordCommand {
 		dispatcher.register( discordCommand );
 	}
 	
-	private static int showCommands( CommandContext<CommandSource> context ) {
+	private static int showCommands( CommandContext<CommandSourceStack> context ) {
 		
-		CommandSource source = context.getSource();
+		CommandSourceStack source = context.getSource();
 		List<? extends AbstractCommentedConfig> commands = ServerConfig.getCommands();
 		commands.sort( Comparator.comparing( CommandConfig::getDiscordCommand ) );
 		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) ) {
 				source.sendSuccess(
-					new StringTextComponent( String.format(
+					new TextComponent( String.format(
 						"%s%s - %s",
 						ServerConfig.getCommandPrefix(),
 						CommandConfig.getDiscordCommand( abstractCommentedConfig ),
@@ -57,18 +57,17 @@ public class DiscordCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showGamerules( CommandContext<CommandSource> context ) {
+	private static int showGamerules( CommandContext<CommandSourceStack> context ) {
 		
-		CommandSource source = context.getSource();
-		GameRules.visitGameRuleTypes( new GameRules.IRuleEntryVisitor() {
+		CommandSourceStack source = context.getSource();
+		GameRules.visitGameRuleTypes( new GameRules.GameRuleTypeVisitor() {
 			
 			@Override
-			public <T extends GameRules.RuleValue<T>> void visit(
-				@Nonnull GameRules.RuleKey<T> key,
-				@Nonnull GameRules.RuleType<T> type ) {
+			public <T extends GameRules.Value<T>> void visit(
+				@Nonnull GameRules.Key<T> key, @Nonnull GameRules.Type<T> type ) {
 				
 				source.sendSuccess(
-					new TranslationTextComponent(
+					new TranslatableComponent(
 						"commands.gamerule.query",
 						key.getId(),
 						source.getServer().getGameRules().getRule( key )
@@ -80,13 +79,13 @@ public class DiscordCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showMods( CommandContext<CommandSource> context ) {
+	private static int showMods( CommandContext<CommandSourceStack> context ) {
 		
-		CommandSource source = context.getSource();
+		CommandSourceStack source = context.getSource();
 		ModList.get().forEachModFile( modFile -> {
 			for( IModInfo modInfo : modFile.getModInfos() ) {
 				source.sendSuccess(
-					new StringTextComponent( String.format(
+					new TextComponent( String.format(
 						"%s (%s) - %s",
 						modInfo.getModId(),
 						modInfo.getVersion(),

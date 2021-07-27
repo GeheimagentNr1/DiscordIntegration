@@ -15,7 +15,7 @@ public class VersionHelper {
 		
 		Optional<? extends ModContainer> modContainer = ModList.get()
 			.getModContainerById( DiscordIntegration.MODID );
-		if( !modContainer.isPresent() ) {
+		if( modContainer.isEmpty() ) {
 			return false;
 		}
 		Optional<? extends IModInfo.ModVersion> dependency = modContainer.get()
