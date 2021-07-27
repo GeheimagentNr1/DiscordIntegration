@@ -91,8 +91,8 @@ public class ServerConfig {
 		SERVER_STARTED_MESSAGE_ENABLED = BUILDER.comment(
 			"Should a message be sent to the Discord chat, if the server started?" )
 			.define( "enabled", true );
-		SERVER_STARTED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server started" +
-			"." )
+		SERVER_STARTED_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if the Minecraft server started." )
 			.define( "message", "Server started" );
 		BUILDER.pop();
 		BUILDER.comment( "Options for the server stop message" )
@@ -100,8 +100,8 @@ public class ServerConfig {
 		SERVER_STOPPED_MESSAGE_ENABLED = BUILDER.comment(
 			"Should a message be sent to the Discord chat, if the server stopped?" )
 			.define( "enabled", true );
-		SERVER_STOPPED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server stopped" +
-			"." )
+		SERVER_STOPPED_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if the Minecraft server stopped." )
 			.define( "message", "Server stopped" );
 		BUILDER.pop();
 		BUILDER.comment( "Options for the server crash message" )
@@ -109,8 +109,8 @@ public class ServerConfig {
 		SERVER_CRASHED_MESSAGE_ENABLED = BUILDER.comment(
 			"Should a message be sent to the Discord chat, if the server crashed?" )
 			.define( "enabled", true );
-		SERVER_CRASHED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if the Minecraft server crashed" +
-			"." )
+		SERVER_CRASHED_MESSAGE = BUILDER.comment(
+			"Message send to the Discord chat, if the Minecraft server crashed." )
 			.define( "message", "Server crashed" );
 		BUILDER.pop();
 		BUILDER.comment( "Options for the player joined message" )
@@ -124,21 +124,20 @@ public class ServerConfig {
 		BUILDER.pop();
 		BUILDER.comment( "Options for the player left message" )
 			.push( "player_left" );
-		PLAYER_LEFT_MESSAGE_ENABLED =
-			BUILDER.comment( "Should a message be sent to the Discord chat, if a player left?" )
-				.define( "enabled", true );
+		PLAYER_LEFT_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be sent to the Discord chat, if a player left?" )
+			.define( "enabled", true );
 		PLAYER_LEFT_MESSAGE = BUILDER.comment(
 			"Message send to the Discord chat, if a player left the server. (<player name> <message>)" )
 			.define( "message", "disconnected." );
 		BUILDER.pop();
 		BUILDER.comment( "Options for the player died message" )
 			.push( "player_died" );
-		PLAYER_DIED_MESSAGE_ENABLED =
-			BUILDER.comment( "Should a message be sent to the Discord chat, if a player died?" )
-				.define( "enabled", true );
-		PLAYER_DIED_MESSAGE = BUILDER.comment(
-			"Message send to the Discord chat, if a player died. (<player name> <message>) If left empty, the default " +
-				"Minecraft message is send." )
+		PLAYER_DIED_MESSAGE_ENABLED = BUILDER.comment(
+			"Should a message be sent to the Discord chat, if a player died?" )
+			.define( "enabled", true );
+		PLAYER_DIED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if a player died. " +
+			"(<player name> <message>) If left empty, the default Minecraft message is send." )
 			.define( "message", "" );
 		BUILDER.pop();
 		BUILDER.comment( "Options for the tamed mob died message" )

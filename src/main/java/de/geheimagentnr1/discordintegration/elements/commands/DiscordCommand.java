@@ -64,7 +64,8 @@ public class DiscordCommand {
 			
 			@Override
 			public <T extends GameRules.Value<T>> void visit(
-				@Nonnull GameRules.Key<T> key, @Nonnull GameRules.Type<T> type ) {
+				@Nonnull GameRules.Key<T> key,
+				@Nonnull GameRules.Type<T> type ) {
 				
 				source.sendSuccess(
 					new TranslatableComponent(

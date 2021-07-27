@@ -35,7 +35,9 @@ class DiscordCommandHandler {
 		return false;
 	}
 	
-	private static CommandSourceStack buildSource( MinecraftServer server, DiscordCommandSource discordCommandSource ) {
+	private static CommandSourceStack buildSource(
+		MinecraftServer server,
+		DiscordCommandSource discordCommandSource ) {
 		
 		return new CommandSourceStack(
 			discordCommandSource,
