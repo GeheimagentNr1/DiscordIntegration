@@ -25,6 +25,11 @@ public class CommandConfig extends AbstractCommentedConfig {
 	
 	private static final String MINECRAFT_COMMAND_COMMENT = "Minecraft command without prefix ('/')";
 	
+	private static final String USE_PARAMETERS_NAME = "use_parameters";
+	
+	private static final String USE_PARAMETERS_COMMENT =
+		"Should everything attached to the Discord command, be attached to the Minecraft command, too?";
+	
 	private static final String ENABLED_NAME = "enabled";
 	
 	private static final String ENABLED_COMMENT = "Should the command be active?";
@@ -37,6 +42,7 @@ public class CommandConfig extends AbstractCommentedConfig {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.comment( DISCORD_COMMAND_COMMENT ).define( DISCORD_COMMAND_NAME, "" );
 		builder.comment( MINECRAFT_COMMAND_COMMENT ).define( MINECRAFT_COMMAND_NAME, "" );
+		builder.comment( USE_PARAMETERS_COMMENT ).define( USE_PARAMETERS_NAME, false );
 		builder.comment( ENABLED_COMMENT ).define( ENABLED_NAME, true );
 		builder.comment( DESCRIPTION_COMMENT ).define( DESCRIPTION_NAME, "" );
 		SPEC = builder.build();
@@ -50,18 +56,25 @@ public class CommandConfig extends AbstractCommentedConfig {
 	}
 	
 	@SuppressWarnings( "OverridableMethodCallDuringObjectConstruction" )
-	CommandConfig( String discordCommand, String minecraftCommand, boolean enabled, String description ) {
+	CommandConfig(
+		String discordCommand,
+		String minecraftCommand,
+		boolean useParameters,
+		boolean enabled,
+		String description ) {
 		
 		super( () -> {
 			HashMap<String, Object> defaultValues = new HashMap<>();
 			defaultValues.put( DISCORD_COMMAND_NAME, discordCommand );
 			defaultValues.put( MINECRAFT_COMMAND_NAME, minecraftCommand );
+			defaultValues.put( USE_PARAMETERS_NAME, useParameters );
 			defaultValues.put( ENABLED_NAME, enabled );
 			defaultValues.put( DESCRIPTION_NAME, description );
 			return defaultValues;
 		} );
 		setComment( DISCORD_COMMAND_NAME, DISCORD_COMMAND_COMMENT );
 		setComment( MINECRAFT_COMMAND_NAME, MINECRAFT_COMMAND_COMMENT );
+		setComment( USE_PARAMETERS_NAME, USE_PARAMETERS_COMMENT );
 		setComment( ENABLED_NAME, ENABLED_COMMENT );
 		setComment( DESCRIPTION_NAME, DESCRIPTION_COMMENT );
 	}
@@ -88,6 +101,7 @@ public class CommandConfig extends AbstractCommentedConfig {
 		return new CommandConfig(
 			getDiscordCommand( this ),
 			getMinecraftCommand( this ),
+			getUseParameter( this ),
 			getEnabled( this ),
 			getDescription( this )
 		);
@@ -107,6 +121,11 @@ public class CommandConfig extends AbstractCommentedConfig {
 	public static String getMinecraftCommand( AbstractCommentedConfig abstractCommentedConfig ) {
 		
 		return abstractCommentedConfig.get( MINECRAFT_COMMAND_NAME );
+	}
+	
+	public static boolean getUseParameter( AbstractCommentedConfig abstractCommentedConfig ) {
+		
+		return abstractCommentedConfig.get( USE_PARAMETERS_NAME );
 	}
 	
 	public static boolean getEnabled( AbstractCommentedConfig abstractCommentedConfig ) {

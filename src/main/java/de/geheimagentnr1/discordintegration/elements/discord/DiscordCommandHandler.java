@@ -25,9 +25,15 @@ class DiscordCommandHandler {
 		DiscordCommandSource discordCommandSource = new DiscordCommandSource();
 		CommandSourceStack source = buildSource( server, discordCommandSource );
 		for( AbstractCommentedConfig abstractCommentedConfig : ServerConfig.getCommands() ) {
-			if( CommandConfig.getEnabled( abstractCommentedConfig ) &&
-				buildDiscordCommand( abstractCommentedConfig ).equals( command ) ) {
-				server.getCommands().performCommand( source, buildMinecraftCommand( abstractCommentedConfig ) );
+			String discordCommand = buildDiscordCommand( abstractCommentedConfig );
+			if( CommandConfig.getEnabled( abstractCommentedConfig ) && (
+				discordCommand.equals( command ) ||
+					CommandConfig.getUseParameter( abstractCommentedConfig ) &&
+						command.startsWith( discordCommand + " " ) ) ) {
+				server.getCommands().performCommand(
+					source,
+					buildMinecraftCommand( abstractCommentedConfig, discordCommand, command )
+				);
 				discordCommandSource.sendMessage();
 				return true;
 			}
@@ -57,8 +63,17 @@ class DiscordCommandHandler {
 		return ServerConfig.getCommandPrefix() + CommandConfig.getDiscordCommand( abstractCommentedConfig );
 	}
 	
-	private static String buildMinecraftCommand( AbstractCommentedConfig abstractCommentedConfig ) {
+	private static String buildMinecraftCommand(
+		AbstractCommentedConfig abstractCommentedConfig,
+		String discordCommand,
+		String command ) {
 		
+		if( CommandConfig.getUseParameter( abstractCommentedConfig ) ) {
+			return "/" + CommandConfig.getMinecraftCommand( abstractCommentedConfig ) + command.replaceFirst(
+				discordCommand,
+				""
+			);
+		}
 		return "/" + CommandConfig.getMinecraftCommand( abstractCommentedConfig );
 	}
 }

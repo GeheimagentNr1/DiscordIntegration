@@ -31,6 +31,8 @@ public class ServerConfig {
 	
 	private static final ForgeConfigSpec.ConfigValue<String> COMMAND_PREFIX;
 	
+	private static final ForgeConfigSpec.BooleanValue USE_NICKNAME;
+	
 	private static final ForgeConfigSpec.IntValue MAX_CHAR_COUNT;
 	
 	private static final ForgeConfigSpec.BooleanValue SERVER_STARTED_MESSAGE_ENABLED;
@@ -81,6 +83,9 @@ public class ServerConfig {
 			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
 		COMMAND_PREFIX = BUILDER.comment( "Command prefix for Discord commands" )
 			.define( "command_prefix", "!" );
+		USE_NICKNAME = BUILDER.comment( "Shall the nickname of the Discord user be shown in the Minecraft chat as " +
+			"author name? (If not, the username of the Discord user is shown as author name.)" )
+			.define( "use_nickname", true );
 		MAX_CHAR_COUNT = BUILDER.comment( "How long should Discord messages send to Minecraft Chat be at most? " +
 			"If the value is -1, there is no limit to the length." )
 			.defineInRange( "max_char_count", -1, -1, 2000 );
@@ -181,48 +186,56 @@ public class ServerConfig {
 		commands.add( new CommandConfig(
 			"difficulty",
 			"difficulty",
+			false,
 			true,
 			"shows the difficulty of the server."
 		) );
 		commands.add( new CommandConfig(
 			"gamerules",
 			"discord gamerules",
+			false,
 			true,
 			"shows the gamerules and their values."
 		) );
 		commands.add( new CommandConfig(
 			"help",
 			"discord commands",
+			false,
 			true,
 			"shows all commands with their description."
 		) );
 		commands.add( new CommandConfig(
 			"mods",
 			"discord mods",
+			false,
 			true,
 			"shows a list of the mods on the server."
 		) );
 		commands.add( new CommandConfig(
 			"online",
 			"list",
+			false,
 			true,
 			"shows how many and which players are on the server."
 		) );
 		commands.add( new CommandConfig(
 			"seed",
 			"seed",
+			false,
 			true,
 			"shows the seed of the active world."
 		) );
 		commands.add( new CommandConfig(
 			"time",
 			"time query daytime",
+			false,
 			true,
 			"shows the current day time on the server."
 		) );
 		commands.add( new CommandConfig(
 			"tps",
 			"forge tps",
+			false,
 			true,
 			"shows the tps statistic of the server and it's dimensions."
 		) );
@@ -230,6 +243,7 @@ public class ServerConfig {
 			commands.add( new CommandConfig(
 				"dimensions",
 				"dimensions status",
+				false,
 				true,
 				"shows the access states of all dimensions."
 			) );
@@ -238,6 +252,7 @@ public class ServerConfig {
 			commands.add( new CommandConfig(
 				"mobgriefing",
 				"mobgriefing list",
+				false,
 				true,
 				"shows all mobgriefing options of the mobs."
 			) );
@@ -284,14 +299,9 @@ public class ServerConfig {
 		return COMMAND_PREFIX.get();
 	}
 	
-	public static boolean isTransmitBotMessages() {
+	public static boolean isUseNickname() {
 		
-		return TRANSMIT_BOT_MESSAGES.get();
-	}
-	
-	public static List<String> getOtherBotsCommandPrefixes() {
-		
-		return OTHER_BOTS_COMMAND_PREFIXES.get();
+		return USE_NICKNAME.get();
 	}
 	
 	public static int getMaxCharCount() {
@@ -377,6 +387,16 @@ public class ServerConfig {
 	public static String getPlayerGotAdvancementMessage() {
 		
 		return PLAYER_GOT_ADVANCEMENT_MESSAGE.get();
+	}
+	
+	public static boolean isTransmitBotMessages() {
+		
+		return TRANSMIT_BOT_MESSAGES.get();
+	}
+	
+	public static List<String> getOtherBotsCommandPrefixes() {
+		
+		return OTHER_BOTS_COMMAND_PREFIXES.get();
 	}
 	
 	public static List<? extends AbstractCommentedConfig> getCommands() {

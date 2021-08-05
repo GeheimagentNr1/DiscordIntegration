@@ -2,6 +2,7 @@ package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -27,6 +28,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	public void onGuildMessageReceived( @Nonnull GuildMessageReceivedEvent event ) {
 		
 		User author = event.getAuthor();
+		Member member = event.getMember();
 		if( isInitialized() && DiscordNet.feedBackAllowed( event.getChannel(), author ) ) {
 			String message = event.getMessage().getContentDisplay();
 			if( author.isBot() ) {
@@ -36,7 +38,11 @@ public class DiscordEventHandler extends ListenerAdapter {
 					handleCommands( author, message );
 				} else {
 					if( beginnsNotWithOtherCommandPrefix( message ) ) {
-						handleUserMessage( message, author );
+						if( ServerConfig.isUseNickname() && member != null ) {
+							handleUserMessage( member.getEffectiveName(), message );
+						} else {
+							handleUserMessage( author.getName(), message );
+						}
 					}
 				}
 			}
@@ -80,13 +86,13 @@ public class DiscordEventHandler extends ListenerAdapter {
 		}
 	}
 	
-	private void handleUserMessage( String message, User author ) {
+	private void handleUserMessage( String author, String message ) {
 		
 		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
 			server.getPlayerList().broadcastMessage(
 				new TextComponent( String.format(
 					"[%s] %s",
-					author.getName(),
+					author,
 					message
 				) ),
 				ChatType.CHAT,
@@ -97,7 +103,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 				"%n%s%nError: Message to long.%n" +
 					"Messages can only be up to %d characters long.%n" +
 					"Your message is %d characters long.",
-				author.getName(),
+				author,
 				ServerConfig.getMaxCharCount(),
 				message.length()
 			) );
