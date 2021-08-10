@@ -91,7 +91,9 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handleServerChatEvent( ServerChatEvent event ) {
 		
-		DiscordNet.sendChatMessage( event.getPlayer(), event.getMessage() );
+		if( !event.isCanceled() ) {
+			DiscordNet.sendChatMessage( event.getPlayer(), event.getMessage() );
+		}
 	}
 	
 	@SubscribeEvent
