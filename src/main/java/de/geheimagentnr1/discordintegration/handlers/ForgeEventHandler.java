@@ -17,11 +17,11 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppedEvent;
 
 
 @Mod.EventBusSubscriber(
@@ -33,7 +33,7 @@ public class ForgeEventHandler {
 	
 	
 	@SubscribeEvent
-	public static void handleServerStartingEvent( FMLServerStartingEvent event ) {
+	public static void handleServerStartingEvent( ServerStartingEvent event ) {
 		
 		DiscordEventHandler.setServer( event.getServer() );
 	}
@@ -47,7 +47,7 @@ public class ForgeEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void handleServerStartedEvent( FMLServerStartedEvent event ) {
+	public static void handleServerStartedEvent( ServerStartedEvent event ) {
 		
 		if( ServerConfig.getServerStartedMessageEnabled() ) {
 			DiscordNet.sendMessage( ServerConfig.getServerStartedMessage() );
@@ -55,7 +55,7 @@ public class ForgeEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void handleServerStoppedEvent( FMLServerStoppedEvent event ) {
+	public static void handleServerStoppedEvent( ServerStoppedEvent event ) {
 		
 		if( event.getServer().isRunning() ) {
 			if( ServerConfig.getServerCrashedMessageEnabled() ) {
