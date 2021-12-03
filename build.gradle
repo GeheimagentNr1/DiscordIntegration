@@ -170,6 +170,10 @@ dependencies {
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
     }
+    runtimeOnly("net.dv8tion:JDA:${jda_version}") {
+        exclude module: 'opus-java'
+        exclude module: 'slf4j-api'
+    }
 
     /*runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
     runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")*/
