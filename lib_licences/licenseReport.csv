@@ -90,7 +90,7 @@ Java Native Access Platform,Java Native Access Platform,5.9.0,"Timothy Wall,Matt
 Java Objective-C Bridge,A thin bridge that allows for two-way communication from Java to Objective-C.,1.0.0,Steve Hannah,https://github.com/shannah/Java-Objective-C-Bridge,2012,Apache License, Version 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,ca.weblite:java-objc-bridge:1.0.0
 javabridge,null,1.2.24,null,null,null,null,null,com.mojang:javabridge:1.2.24
 javafmllanguage,Modifactions to Minecraft to enable mod developers.,1.18.1-39.0.0,null,https://github.com/MinecraftForge/MinecraftForge,null,LGPL 2.1,https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt,net.minecraftforge:javafmllanguage:1.18.1-39.0.0
-JDA,null,4.3.0_339,null,null,null,null,null,net.dv8tion:JDA:4.3.0_339
+JDA,null,4.4.0_351,null,null,null,null,null,net.dv8tion:JDA:4.4.0_351
 JetBrains Java Annotations,A set of annotations used for code inspection support and code documentation.,23.0.0,JetBrains Team,https://github.com/JetBrains/java-annotations,null,The Apache Software License, Version 2.0,https://www.apache.org/licenses/LICENSE-2.0.txt,org.jetbrains:annotations:23.0.0
 JLine Reader,null,3.12.1,null,null,null,The BSD License,https://opensource.org/licenses/BSD-3-Clause,org.jline:jline-reader:3.12.1
 JLine Terminal,null,3.12.1,null,null,null,The BSD License,https://opensource.org/licenses/BSD-3-Clause,org.jline:jline-terminal:3.12.1
