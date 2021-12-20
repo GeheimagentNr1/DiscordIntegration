@@ -1,15 +1,25 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.elements.linking.LinkingManager;
+import de.geheimagentnr1.discordintegration.elements.linking.LinkingMessageSender;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.Util;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -35,7 +45,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 				handleBotMessage( message );
 			} else {
 				if( message.startsWith( ServerConfig.getCommandPrefix() ) ) {
-					handleCommands( author, message );
+					handleCommands( member, message );
 				} else {
 					if( beginnsNotWithOtherCommandPrefix( message ) ) {
 						if( ServerConfig.isUseNickname() && member != null ) {
@@ -64,11 +74,14 @@ public class DiscordEventHandler extends ListenerAdapter {
 		return true;
 	}
 	
-	private void handleCommands( User author, String command ) {
+	private void handleCommands( Member author, String command ) {
 		
-		if( !author.isBot() ) {
-			if( !DiscordCommandHandler.handleCommand( command, server ) ) {
-				DiscordNet.sendFeedbackMessage( String.format( "%n%s%nError: Unknown Command", author.getName() ) );
+		if( author != null && !author.getUser().isBot() ) {
+			if( !DiscordCommandHandler.handleCommand( author, command, server ) ) {
+				DiscordNet.sendFeedbackMessage( String.format(
+					"%n%s%nError: Unknown Command",
+					author.getUser().getName()
+				) );
 			}
 		}
 	}
@@ -108,5 +121,51 @@ public class DiscordEventHandler extends ListenerAdapter {
 				message.length()
 			) );
 		}
+	}
+	
+	@Override
+	public void onGuildMemberRoleAdd( @Nonnull GuildMemberRoleAddEvent event ) {
+		
+		LinkingManager.handleRoleAdded( event.getMember() );
+	}
+	
+	@Override
+	public void onGuildMemberRoleRemove( @Nonnull GuildMemberRoleRemoveEvent event ) {
+		
+		LinkingManager.handleRoleRemoved( event.getMember() );
+	}
+	
+	@Override
+	public void onRoleDelete( @Nonnull RoleDeleteEvent event ) {
+		
+		LinkingManager.init();
+	}
+	
+	@Override
+	public void onGuildMessageReactionAdd( @NotNull GuildMessageReactionAddEvent event ) {
+		
+		User user = event.getMember().getUser();
+		if(user.isBot()) {
+			return;
+		}
+		long messageId = event.getMessageIdLong();
+		TextChannel textChannel = event.getChannel();
+		MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
+		
+		switch( reactionEmote.getAsReactionCode() ) {
+			case "\u2705" -> LinkingMessageSender.onYesReaction( messageId, textChannel );
+			case "\u274C" -> LinkingMessageSender.onNoReaction( messageId, textChannel );
+		}
+		if(reactionEmote.isEmoji()) {
+			textChannel.removeReactionById( messageId, reactionEmote.getEmoji(), user ).queue();
+		} else {
+			textChannel.removeReactionById( messageId, reactionEmote.getEmote(), user ).queue();
+		}
+	}
+	
+	@Override
+	public void onGuildMemberRemove( @NotNull GuildMemberRemoveEvent event ) {
+		
+		LinkingManager.removeLinkings( event.getMember() );
 	}
 }

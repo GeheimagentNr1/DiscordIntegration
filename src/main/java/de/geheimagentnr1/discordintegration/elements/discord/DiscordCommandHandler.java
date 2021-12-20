@@ -3,6 +3,7 @@ package de.geheimagentnr1.discordintegration.elements.discord;
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
@@ -20,10 +21,10 @@ class DiscordCommandHandler {
 	private static final String MOD_NAME = ModLoadingContext.get().getActiveContainer().getModInfo().getDisplayName();
 	
 	//package-private
-	static boolean handleCommand( String command, MinecraftServer server ) {
+	static boolean handleCommand( Member member, String command, MinecraftServer server ) {
 		
 		DiscordCommandSource discordCommandSource = new DiscordCommandSource();
-		CommandSourceStack source = buildSource( server, discordCommandSource );
+		CommandSourceStack source = buildSource( server, discordCommandSource, member );
 		for( AbstractCommentedConfig abstractCommentedConfig : ServerConfig.getCommands() ) {
 			String discordCommand = buildDiscordCommand( abstractCommentedConfig );
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) && (
@@ -43,9 +44,10 @@ class DiscordCommandHandler {
 	
 	private static CommandSourceStack buildSource(
 		MinecraftServer server,
-		DiscordCommandSource discordCommandSource ) {
+		DiscordCommandSource discordCommandSource,
+		Member member ) {
 		
-		return new CommandSourceStack(
+		return new DiscordCommandSourceStack(
 			discordCommandSource,
 			Vec3.ZERO,
 			Vec2.ZERO,
@@ -54,7 +56,8 @@ class DiscordCommandHandler {
 			MOD_NAME,
 			new TextComponent( MOD_NAME ),
 			server,
-			null
+			null,
+			member
 		);
 	}
 	

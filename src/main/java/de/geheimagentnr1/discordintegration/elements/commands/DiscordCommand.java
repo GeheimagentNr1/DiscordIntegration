@@ -1,12 +1,21 @@
 package de.geheimagentnr1.discordintegration.elements.commands;
 
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.elements.commands.arguments.single_game_profile.SingleGameProfileArgument;
+import de.geheimagentnr1.discordintegration.elements.discord.DiscordCommandSourceStack;
+import de.geheimagentnr1.discordintegration.elements.linking.LinkingManager;
+import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
@@ -14,6 +23,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -22,6 +33,9 @@ import java.util.List;
 
 @SuppressWarnings( "SameReturnValue" )
 public class DiscordCommand {
+	
+	
+	private static final Logger LOGGER = LogManager.getLogger( DiscordCommand.class );
 	
 	
 	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
@@ -33,6 +47,16 @@ public class DiscordCommand {
 			.executes( DiscordCommand::showGamerules ) );
 		discordCommand.then( Commands.literal( "mods" )
 			.executes( DiscordCommand::showMods ) );
+		discordCommand.then( Commands.literal( "link" )
+			.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+				.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+					.executes( DiscordCommand::linkMinecraft ) )
+				.executes( DiscordCommand::linkDiscord ) ) );
+		discordCommand.then( Commands.literal( "unlink" )
+			.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+				.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+					.executes( DiscordCommand::unlinkMinecraft ) )
+				.executes( DiscordCommand::unlinkDiscord ) ) );
 		dispatcher.register( discordCommand );
 	}
 	
@@ -99,4 +123,119 @@ public class DiscordCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
+	private static int linkDiscord( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+		
+		CommandSourceStack source = context.getSource();
+		if( !( source instanceof DiscordCommandSourceStack discordSource ) ) {
+			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+			return -1;
+		}
+		Member member = discordSource.getMember();
+		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
+		
+		try {
+			LinkingManager.createLinking( member, gameProfile );
+			source.sendSuccess(
+				new TextComponent( String.format(
+					"Created Linking of %s for accounts %s",
+					member.getEffectiveName(),
+					gameProfile.getName()
+				) ),
+				true
+			);
+		} catch( Throwable exception ) {
+			LOGGER.error( "Linking failed", exception );
+			source.sendFailure( new TextComponent( exception.getMessage() ) );
+			return -1;
+		}
+		return Command.SINGLE_SUCCESS;
+	}
+	
+	private static int unlinkDiscord( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+		
+		CommandSourceStack source = context.getSource();
+		if( !( source instanceof DiscordCommandSourceStack discordSource ) ) {
+			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+			return -1;
+		}
+		Member member = discordSource.getMember();
+		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
+		
+		try {
+			LinkingManager.removeLinking( member, gameProfile );
+			source.sendSuccess(
+				new TextComponent( String.format(
+					"Removed Linking of %s for accounts %s",
+					member.getEffectiveName(),
+					gameProfile.getName()
+				) ),
+				true
+			);
+		} catch( Throwable exception ) {
+			LOGGER.error( "Unlinking failed", exception );
+			source.sendFailure( new TextComponent( exception.getMessage() ) );
+			return -1;
+		}
+		return Command.SINGLE_SUCCESS;
+	}
+	
+	private static int linkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+		
+		CommandSourceStack source = context.getSource();
+		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
+		long discordMemberId = LongArgumentType.getLong( context, "discordMemberId" );
+		
+		try {
+			Guild guild = DiscordNet.getGuild();
+			Member member = guild.getMemberById( discordMemberId );
+			if( member == null ) {
+				source.sendFailure( new TextComponent( "Discord Context unloadable" ) );
+				return -1;
+			}
+			LinkingManager.createLinking( member, gameProfile );
+			source.sendSuccess(
+				new TextComponent( String.format(
+					"Created Linking of %s for accounts %s",
+					member.getEffectiveName(),
+					gameProfile.getName()
+				) ),
+				true
+			);
+		} catch( Throwable exception ) {
+			LOGGER.error( "Linking failed", exception );
+			source.sendFailure( new TextComponent( exception.getMessage() ) );
+			return -1;
+		}
+		return Command.SINGLE_SUCCESS;
+	}
+	
+	private static int unlinkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+		
+		CommandSourceStack source = context.getSource();
+		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
+		long discordMemberId = LongArgumentType.getLong( context, "discordMemberId" );
+		
+		try {
+			Guild guild = DiscordNet.getGuild();
+			Member member = guild.getMemberById( discordMemberId );
+			if( member == null ) {
+				source.sendFailure( new TextComponent( "Discord Context unloadable" ) );
+				return -1;
+			}
+			LinkingManager.removeLinking( member, gameProfile );
+			source.sendSuccess(
+				new TextComponent( String.format(
+					"Removed Linking of %s for accounts %s",
+					member.getEffectiveName(),
+					gameProfile.getName()
+				) ),
+				true
+			);
+		} catch( Throwable exception ) {
+			LOGGER.error( "Unlinking failed", exception );
+			source.sendFailure( new TextComponent( exception.getMessage() ) );
+			return -1;
+		}
+		return Command.SINGLE_SUCCESS;
+	}
 }

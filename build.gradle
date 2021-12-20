@@ -161,6 +161,9 @@ dependencies {
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
     // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
 
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
     implementation("net.dv8tion:JDA:${jda_version}") {
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'

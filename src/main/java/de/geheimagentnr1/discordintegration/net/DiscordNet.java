@@ -2,8 +2,11 @@ package de.geheimagentnr1.discordintegration.net;
 
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordEventHandler;
+import de.geheimagentnr1.discordintegration.elements.linking.LinkingManager;
+import de.geheimagentnr1.discordintegration.elements.linking.LinkingMessageSender;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -16,7 +19,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -33,7 +35,11 @@ public class DiscordNet {
 	
 	private static TextChannel channel;
 	
-	private static final List<GatewayIntent> INTENTS = Collections.singletonList( GatewayIntent.GUILD_MESSAGES );
+	private static final List<GatewayIntent> INTENTS = List.of(
+		GatewayIntent.GUILD_MESSAGES,
+		GatewayIntent.GUILD_MEMBERS,
+		GatewayIntent.GUILD_MESSAGE_REACTIONS
+	);
 	
 	public static synchronized void init() {
 		
@@ -52,6 +58,8 @@ public class DiscordNet {
 			} catch( LoginException | InterruptedException exception ) {
 				LOGGER.error( "Login to Discord failed", exception );
 			}
+			LinkingMessageSender.init();
+			LinkingManager.init();
 		}
 	}
 	
@@ -151,5 +159,10 @@ public class DiscordNet {
 				LOGGER.error( "Message could not be send", exception );
 			}
 		}
+	}
+	
+	public static synchronized Guild getGuild() {
+		
+		return channel.getGuild();
 	}
 }
