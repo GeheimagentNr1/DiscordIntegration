@@ -146,6 +146,10 @@ public class DiscordCommand {
 	private static int linkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
+		if( ( source instanceof DiscordCommandSourceStack ) ) {
+			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+			return -1;
+		}
 		Member member = DiscordNet.getGuild().getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
 		if( member == null ) {
 			source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
@@ -193,6 +197,10 @@ public class DiscordCommand {
 	private static int unlinkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
+		if( ( source instanceof DiscordCommandSourceStack ) ) {
+			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+			return -1;
+		}
 		Member member = DiscordNet.getGuild().getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
 		if( member == null ) {
 			source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
