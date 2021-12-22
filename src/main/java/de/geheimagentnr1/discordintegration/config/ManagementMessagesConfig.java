@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ManagementMessagesConfig {
 	
-	
+	//TODO: Use all
 	private final MessageConfig server_started;
 	
 	private final MessageConfig server_stopped;

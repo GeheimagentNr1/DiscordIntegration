@@ -9,11 +9,11 @@ public class WhitelistConfig {
 	
 	private final ForgeConfigSpec.BooleanValue enabled;
 	
-	private final ForgeConfigSpec.BooleanValue use_role;
+	private final ForgeConfigSpec.BooleanValue use_role;//TODO: Use
 	
 	private final ForgeConfigSpec.LongValue role_id;
 	
-	private final ForgeConfigSpec.BooleanValue use_single_linking_management;
+	private final ForgeConfigSpec.BooleanValue use_single_linking_management;//TODO: Use
 	
 	private final ForgeConfigSpec.LongValue linking_management_channel_id;
 	

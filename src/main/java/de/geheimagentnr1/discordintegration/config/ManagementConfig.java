@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ManagementConfig {
 	
-	
+	//TODO: Use all
 	private final ForgeConfigSpec.BooleanValue enabled;
 	
 	private final ForgeConfigSpec.LongValue channel_id;

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 public class ChatConfig {
 	
 	
-	private final ForgeConfigSpec.BooleanValue enabled;
+	private final ForgeConfigSpec.BooleanValue enabled;//TODO: Use
 	
 	private final ForgeConfigSpec.LongValue channel_id;
 	

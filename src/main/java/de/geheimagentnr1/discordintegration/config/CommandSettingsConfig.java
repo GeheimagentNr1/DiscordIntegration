@@ -17,6 +17,10 @@ public class CommandSettingsConfig {
 	
 	private final ForgeConfigSpec.ConfigValue<String> command_prefix;
 	
+	private final ForgeConfigSpec.IntValue command_normal_user_permission_level;//TODO: Use
+	
+	private final ForgeConfigSpec.IntValue command_management_user_permission_level;//TODO: Use
+	
 	private final CommandSettingsOtherBotsConfig command_settings_other_bots_config;
 	
 	private final ForgeConfigSpec.ConfigValue<List<? extends CommandConfig>> commands;
@@ -28,6 +32,12 @@ public class CommandSettingsConfig {
 			.push( "command_settings" );
 		command_prefix = builder.comment( "Command prefix for Discord commands" )
 			.define( "command_prefix", "!" );
+		command_normal_user_permission_level = builder.comment(
+				"Permission level for Minecraft commands for users, who don't have the management role" )
+			.defineInRange( "command_normal_user_permission_level", 2, 0, 4 );
+		command_management_user_permission_level = builder.comment(
+				"Permission level for Minecraft commands for users, who do have the management role" )
+			.defineInRange( "command_management_user_permission_level", 4, 0, 4 );
 		command_settings_other_bots_config = new CommandSettingsOtherBotsConfig( builder );
 		commands = builder.comment( "Command mapping from Discord to Minecraft commands" )
 			.defineList( "commands", CommandSettingsConfig::buildDefaultCommandList, CommandConfig::isCorrect );
@@ -54,12 +64,22 @@ public class CommandSettingsConfig {
 		
 		return commands.stream()
 			.filter( CommandConfig::shouldBeInCommandList )
-			.collect( Collectors.toList());
+			.collect( Collectors.toList() );
 	}
 	
 	public String getCommandPrefix() {
 		
 		return command_prefix.get();
+	}
+	
+	public int getCommandNormalUserPermissionLevel() {
+		
+		return command_normal_user_permission_level.get();
+	}
+	
+	public int getCommandManagementUserPermissionLevel() {
+		
+		return command_management_user_permission_level.get();
 	}
 	
 	public CommandSettingsOtherBotsConfig getCommandSettingsOtherBotsConfig() {
@@ -79,7 +99,7 @@ public class CommandSettingsConfig {
 		command_settings_other_bots_config.printConfig( logger );
 		
 		List<? extends AbstractCommentedConfig> commandList = commands.get();
-		for(int i = 0; i < commandList.size(); i++ ) {
+		for( int i = 0; i < commandList.size(); i++ ) {
 			CommandConfig.printConfig(
 				logger,
 				String.format(
