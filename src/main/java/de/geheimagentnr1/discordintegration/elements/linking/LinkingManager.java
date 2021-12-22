@@ -72,7 +72,7 @@ public class LinkingManager {
 				linkings.remove( linking );
 				LinkingMessageSender.deleteMessage( linking );
 			} else {
-				if(linking.isActive()) {
+				if( linking.isActive() ) {
 					if( hasCorrectRole( member ) ) {
 						LOGGER.info( "Member {} has role", member.getEffectiveName() );
 						activateList.add( linking.getMinecraftGameProfile() );
@@ -87,12 +87,12 @@ public class LinkingManager {
 				LinkingMessageSender.updateMessage( linking );
 			}
 		}
-		for(SimpleGameProfile simpleGameProfile : deactivateList.stream()
+		for( SimpleGameProfile simpleGameProfile : deactivateList.stream()
 			.filter( simpleGameProfile -> !activateList.contains( simpleGameProfile ) )
 			.toList() ) {
 			WhitelistManager.removeFromWhitelist( simpleGameProfile );
 		}
-		for(SimpleGameProfile simpleGameProfile : activateList) {
+		for( SimpleGameProfile simpleGameProfile : activateList ) {
 			WhitelistManager.addToWhitelist( simpleGameProfile );
 		}
 	}
@@ -127,8 +127,14 @@ public class LinkingManager {
 			Linkings linkings = load();
 			LOGGER.info( "Create linking" );
 			SimpleGameProfile minecraftGameProfile = new SimpleGameProfile( gameProfile );
-			Linking linking = new Linking( member.getIdLong(), member.getUser().getName(), null, false, minecraftGameProfile );
-			Message message = LinkingMessageSender.sendMessage( member, linking);
+			Linking linking = new Linking(
+				member.getIdLong(),
+				member.getUser().getName(),
+				null,
+				false,
+				minecraftGameProfile
+			);
+			Message message = LinkingMessageSender.createOrSendMessage( member, linking );
 			linkings.add( linking );//TODO: Boolean
 			linking.setMessageId( message.getIdLong() );
 			save( linkings );
@@ -142,8 +148,14 @@ public class LinkingManager {
 			Linkings linkings = load();
 			LOGGER.info( "Remove linking" );
 			SimpleGameProfile minecraftGameProfile = new SimpleGameProfile( gameProfile );
-			Linking linking = linkings.find( new Linking( member.getIdLong(), member.getUser().getName(), null, false, minecraftGameProfile ));
-			if(linking != null) {
+			Linking linking = linkings.find( new Linking(
+				member.getIdLong(),
+				member.getUser().getName(),
+				null,
+				false,
+				minecraftGameProfile
+			) );
+			if( linking != null ) {
 				LinkingMessageSender.deleteMessage( linking );
 				if( linkings.remove( linking ) ) {
 					WhitelistManager.removeFromWhitelist( minecraftGameProfile );
@@ -194,7 +206,7 @@ public class LinkingManager {
 				LOGGER.info( "Activate linking" );
 				
 				Linking linking = linkings.find( messageId );
-				if(linking != null) {
+				if( linking != null ) {
 					linking.setActive( true );
 				}
 				save( linkings );
@@ -215,7 +227,7 @@ public class LinkingManager {
 				LOGGER.info( "Deactivate linking" );
 				
 				Linking linking = linkings.find( messageId );
-				if(linking != null) {
+				if( linking != null ) {
 					linking.setActive( false );
 				}
 				save( linkings );
@@ -234,7 +246,7 @@ public class LinkingManager {
 			if( isActive() ) {
 				Linkings linkings = load();
 				LOGGER.info( "Remove linkings" );
-				for(Linking linking : linkings.removeLinkings(member.getIdLong())) {
+				for( Linking linking : linkings.removeLinkings( member.getIdLong() ) ) {
 					LinkingMessageSender.deleteMessage( linking );
 					if( linkings.remove( linking ) ) {
 						WhitelistManager.removeFromWhitelist( linking.getMinecraftGameProfile() );

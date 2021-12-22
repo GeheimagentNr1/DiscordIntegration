@@ -8,11 +8,15 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEmoteEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.Util;
@@ -117,7 +121,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 					"Messages can only be up to %d characters long.%n" +
 					"Your message is %d characters long.",
 				author,
-				ServerConfig.getMaxCharCount(),
+				ServerConfig.CHAT_CONFIG.getMaxCharCount(),
 				message.length()
 			) );
 		}
@@ -142,10 +146,16 @@ public class DiscordEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
+	public void onTextChannelDelete( @NotNull TextChannelDeleteEvent event ) {
+		
+		//TODO:
+	}
+	
+	@Override
 	public void onGuildMessageReactionAdd( @NotNull GuildMessageReactionAddEvent event ) {
 		
 		User user = event.getMember().getUser();
-		if(user.isBot()) {
+		if( user.isBot() ) {
 			return;
 		}
 		long messageId = event.getMessageIdLong();
@@ -156,11 +166,29 @@ public class DiscordEventHandler extends ListenerAdapter {
 			case "\u2705" -> LinkingMessageSender.onYesReaction( messageId, textChannel );
 			case "\u274C" -> LinkingMessageSender.onNoReaction( messageId, textChannel );
 		}
-		if(reactionEmote.isEmoji()) {
+		if( reactionEmote.isEmoji() ) {
 			textChannel.removeReactionById( messageId, reactionEmote.getEmoji(), user ).queue();
 		} else {
 			textChannel.removeReactionById( messageId, reactionEmote.getEmote(), user ).queue();
 		}
+	}
+	
+	@Override
+	public void onGuildMessageReactionRemoveAll( @NotNull GuildMessageReactionRemoveAllEvent event ) {
+		
+		//TODO: Resend Message
+	}
+	
+	@Override
+	public void onGuildMessageReactionRemoveEmote( @NotNull GuildMessageReactionRemoveEmoteEvent event ) {
+		
+		//TODO: Resend Message
+	}
+	
+	@Override
+	public void onGuildMessageDelete( @NotNull GuildMessageDeleteEvent event ) {
+		
+		//TODO: Resend Message + Save new message Id
 	}
 	
 	@Override

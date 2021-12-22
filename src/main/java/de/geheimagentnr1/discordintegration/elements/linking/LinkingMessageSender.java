@@ -12,6 +12,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class LinkingMessageSender {
 	
 	
+	private static final String TRUE_EMOJI = "\u2705";
+	
+	private static final String FALSE_EMOJI = "\u274C";
+	
 	private static TextChannel channel;
 	
 	public static synchronized void init() {
@@ -19,11 +23,18 @@ public class LinkingMessageSender {
 		channel = DiscordNet.getGuild().getTextChannelById( ServerConfig.getLinkingManagementChannelId() );
 	}
 	
-	public static synchronized Message sendMessage( Member member, Linking linking ) {
+	public static synchronized Message createOrSendMessage( Member member, Linking linking ) {
 		
-		Message message = channel.sendMessageEmbeds( buildMessage( member, linking ) ).complete();
-		message.addReaction( "\u2705" ).complete();
-		message.addReaction( "\u274C" ).complete();
+		Message message;
+		if( channel.retrieveMessageById( linking.getMessageId() ).complete() != null ) {
+			message = channel.editMessageEmbedsById( linking.getMessageId(), buildMessage( member, linking ) )
+				.complete();
+		} else {
+			message = channel.sendMessageEmbeds( buildMessage( member, linking ) ).complete();
+		}
+		message.addReaction( TRUE_EMOJI ).complete();
+		message.addReaction( FALSE_EMOJI ).complete();
+		linking.setMessageId( message.getIdLong() );
 		return message;
 	}
 	
@@ -50,14 +61,8 @@ public class LinkingMessageSender {
 	public static synchronized void updateMessage( Linking linking ) {
 		
 		Member member = DiscordNet.getGuild().getMemberById( linking.getDiscordMemberId() );
-		if( member == null ) {
-			//TODO
-		} else {
-			Message message = channel.editMessageEmbedsById( linking.getMessageId(), buildMessage( member, linking ) )
-				.complete();
-			message.addReaction( "\u2705" ).complete();
-			message.addReaction( "\u274C" ).complete();
-		}
+		createOrSendMessage( member, linking );
+		//TODO: Save ggf. new data
 	}
 	
 	private static synchronized MessageEmbed buildMessage( Member member, Linking linking ) {
@@ -76,7 +81,7 @@ public class LinkingMessageSender {
 	
 	private static String boolToEmoji( boolean value ) {
 		
-		return value ? "\u2705" : "\u274C";
+		return value ? TRUE_EMOJI : FALSE_EMOJI;
 	}
 	
 	public static synchronized void deleteMessage( Linking linking ) {

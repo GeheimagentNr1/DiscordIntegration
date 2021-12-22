@@ -8,13 +8,12 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import de.geheimagentnr1.discordintegration.config.CommandConfig;
+import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.commands.arguments.single_game_profile.SingleGameProfileArgument;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordCommandSourceStack;
 import de.geheimagentnr1.discordintegration.elements.linking.LinkingManager;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -27,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -131,19 +131,38 @@ public class DiscordCommand {
 			return -1;
 		}
 		Member member = discordSource.getMember();
+		
+		return link( source, member, context );
+	}
+	
+	private static int linkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+		
+		CommandSourceStack source = context.getSource();
+		Member member = DiscordNet.getGuild().getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
+		if( member == null ) {
+			source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
+			return -1;
+		}
+		
+		return link( source, member, context );
+	}
+	
+	private static int link( CommandSourceStack source, Member member, CommandContext<CommandSourceStack> context )
+		throws CommandSyntaxException {
+		
 		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
 		
 		try {
 			LinkingManager.createLinking( member, gameProfile );
 			source.sendSuccess(
 				new TextComponent( String.format(
-					"Created Linking of %s for accounts %s",
+					"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",
 					member.getEffectiveName(),
 					gameProfile.getName()
 				) ),
 				true
 			);
-		} catch( Throwable exception ) {
+		} catch( IOException exception ) {
 			LOGGER.error( "Linking failed", exception );
 			source.sendFailure( new TextComponent( exception.getMessage() ) );
 			return -1;
@@ -159,79 +178,38 @@ public class DiscordCommand {
 			return -1;
 		}
 		Member member = discordSource.getMember();
-		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
 		
-		try {
-			LinkingManager.removeLinking( member, gameProfile );
-			source.sendSuccess(
-				new TextComponent( String.format(
-					"Removed Linking of %s for accounts %s",
-					member.getEffectiveName(),
-					gameProfile.getName()
-				) ),
-				true
-			);
-		} catch( Throwable exception ) {
-			LOGGER.error( "Unlinking failed", exception );
-			source.sendFailure( new TextComponent( exception.getMessage() ) );
-			return -1;
-		}
-		return Command.SINGLE_SUCCESS;
-	}
-	
-	private static int linkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
-		
-		CommandSourceStack source = context.getSource();
-		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
-		long discordMemberId = LongArgumentType.getLong( context, "discordMemberId" );
-		
-		try {
-			Guild guild = DiscordNet.getGuild();
-			Member member = guild.getMemberById( discordMemberId );
-			if( member == null ) {
-				source.sendFailure( new TextComponent( "Discord Context unloadable" ) );
-				return -1;
-			}
-			LinkingManager.createLinking( member, gameProfile );
-			source.sendSuccess(
-				new TextComponent( String.format(
-					"Created Linking of %s for accounts %s",
-					member.getEffectiveName(),
-					gameProfile.getName()
-				) ),
-				true
-			);
-		} catch( Throwable exception ) {
-			LOGGER.error( "Linking failed", exception );
-			source.sendFailure( new TextComponent( exception.getMessage() ) );
-			return -1;
-		}
-		return Command.SINGLE_SUCCESS;
+		return unlink( source, member, context );
 	}
 	
 	private static int unlinkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
+		Member member = DiscordNet.getGuild().getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
+		if( member == null ) {
+			source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
+			return -1;
+		}
+		
+		return unlink( source, member, context );
+	}
+	
+	private static int unlink( CommandSourceStack source, Member member, CommandContext<CommandSourceStack> context )
+		throws CommandSyntaxException {
+		
 		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
-		long discordMemberId = LongArgumentType.getLong( context, "discordMemberId" );
 		
 		try {
-			Guild guild = DiscordNet.getGuild();
-			Member member = guild.getMemberById( discordMemberId );
-			if( member == null ) {
-				source.sendFailure( new TextComponent( "Discord Context unloadable" ) );
-				return -1;
-			}
 			LinkingManager.removeLinking( member, gameProfile );
 			source.sendSuccess(
 				new TextComponent( String.format(
-					"Removed Linking of %s for accounts %s",
+					"Removed Linking between Discord account \"%s\" and Minecraft account \"%s\"",
 					member.getEffectiveName(),
 					gameProfile.getName()
 				) ),
 				true
 			);
-		} catch( Throwable exception ) {
+		} catch( IOException exception ) {
 			LOGGER.error( "Unlinking failed", exception );
 			source.sendFailure( new TextComponent( exception.getMessage() ) );
 			return -1;

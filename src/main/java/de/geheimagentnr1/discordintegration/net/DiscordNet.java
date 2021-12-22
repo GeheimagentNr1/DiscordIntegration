@@ -44,7 +44,7 @@ public class DiscordNet {
 	public static synchronized void init() {
 		
 		stop();
-		if( ServerConfig.getActive() ) {
+		if( ServerConfig.BOT_CONFIG.isActive() ) {
 			try {
 				jda = JDABuilder.create( ServerConfig.getBotToken(), INTENTS )
 					.addEventListeners( new DiscordEventHandler() )

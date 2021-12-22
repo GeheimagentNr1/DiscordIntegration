@@ -1,7 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
-import de.geheimagentnr1.discordintegration.config.CommandConfig;
+import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;

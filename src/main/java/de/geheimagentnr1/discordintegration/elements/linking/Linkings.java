@@ -29,7 +29,10 @@ public class Linkings {
 	
 	public Linking find( Linking linking ) {
 		
-		return linkings.stream().filter( testLinking -> testLinking.equals( linking ) ).findFirst().orElseGet( null );
+		return linkings.stream()
+			.filter( testLinking -> testLinking.equals( linking ) )
+			.findFirst()
+			.orElse( null );
 	}
 	
 	public Linking find( Long messageId ) {
@@ -37,7 +40,7 @@ public class Linkings {
 		return linkings.stream()
 			.filter( testLinking -> testLinking.getMessageId().equals( messageId ) )
 			.findFirst()
-			.orElseGet( null );
+			.orElse( null );
 	}
 	
 	public List<Linking> removeLinkings( long discordMemberId ) {
