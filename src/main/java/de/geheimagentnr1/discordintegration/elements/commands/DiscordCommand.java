@@ -63,14 +63,14 @@ public class DiscordCommand {
 	private static int showCommands( CommandContext<CommandSourceStack> context ) {
 		
 		CommandSourceStack source = context.getSource();
-		List<? extends AbstractCommentedConfig> commands = ServerConfig.getCommands();
+		List<? extends AbstractCommentedConfig> commands = ServerConfig.COMMAND_SETTINGS_CONFIG.getCommands();
 		commands.sort( Comparator.comparing( CommandConfig::getDiscordCommand ) );
 		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
-			if( CommandConfig.getEnabled( abstractCommentedConfig ) ) {
+			if( CommandConfig.isEnabled( abstractCommentedConfig ) ) {
 				source.sendSuccess(
 					new TextComponent( String.format(
 						"%s%s - %s",
-						ServerConfig.getCommandPrefix(),
+						ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix(),
 						CommandConfig.getDiscordCommand( abstractCommentedConfig ),
 						CommandConfig.getDescription( abstractCommentedConfig )
 					) ),

@@ -1,8 +1,8 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
-import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.TextComponent;
@@ -25,11 +25,11 @@ class DiscordCommandHandler {
 		
 		DiscordCommandSource discordCommandSource = new DiscordCommandSource();
 		CommandSourceStack source = buildSource( server, discordCommandSource, member );
-		for( AbstractCommentedConfig abstractCommentedConfig : ServerConfig.getCommands() ) {
+		for( AbstractCommentedConfig abstractCommentedConfig : ServerConfig.COMMAND_SETTINGS_CONFIG.getCommands() ) {
 			String discordCommand = buildDiscordCommand( abstractCommentedConfig );
-			if( CommandConfig.getEnabled( abstractCommentedConfig ) && (
+			if( CommandConfig.isEnabled( abstractCommentedConfig ) && (
 				discordCommand.equals( command ) ||
-					CommandConfig.getUseParameter( abstractCommentedConfig ) &&
+					CommandConfig.useParameters( abstractCommentedConfig ) &&
 						command.startsWith( discordCommand + " " ) ) ) {
 				server.getCommands().performCommand(
 					source,
@@ -63,7 +63,8 @@ class DiscordCommandHandler {
 	
 	private static String buildDiscordCommand( AbstractCommentedConfig abstractCommentedConfig ) {
 		
-		return ServerConfig.getCommandPrefix() + CommandConfig.getDiscordCommand( abstractCommentedConfig );
+		return ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix() +
+			CommandConfig.getDiscordCommand( abstractCommentedConfig );
 	}
 	
 	private static String buildMinecraftCommand(
@@ -71,7 +72,7 @@ class DiscordCommandHandler {
 		String discordCommand,
 		String command ) {
 		
-		if( CommandConfig.getUseParameter( abstractCommentedConfig ) ) {
+		if( CommandConfig.useParameters( abstractCommentedConfig ) ) {
 			return "/" + CommandConfig.getMinecraftCommand( abstractCommentedConfig ) + command.replaceFirst(
 				discordCommand,
 				""

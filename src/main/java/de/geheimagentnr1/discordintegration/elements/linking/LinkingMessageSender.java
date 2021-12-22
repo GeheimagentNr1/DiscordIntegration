@@ -20,7 +20,7 @@ public class LinkingMessageSender {
 	
 	public static synchronized void init() {
 		
-		channel = DiscordNet.getGuild().getTextChannelById( ServerConfig.getLinkingManagementChannelId() );
+		channel = DiscordNet.getGuild().getTextChannelById( ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId() );
 	}
 	
 	public static synchronized Message createOrSendMessage( Member member, Linking linking ) {
@@ -40,7 +40,7 @@ public class LinkingMessageSender {
 	
 	public static void onYesReaction( Long messageId, TextChannel textChannel ) {
 		
-		if( textChannel.getIdLong() == ServerConfig.getLinkingManagementChannelId() ) {
+		if( textChannel.getIdLong() == ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId() ) {
 			Linking linking = LinkingManager.activateLinking( messageId );
 			if( linking != null ) {
 				updateMessage( linking );
@@ -50,7 +50,7 @@ public class LinkingMessageSender {
 	
 	public static void onNoReaction( Long messageId, TextChannel textChannel ) {
 		
-		if( textChannel.getIdLong() == ServerConfig.getLinkingManagementChannelId() ) {
+		if( textChannel.getIdLong() == ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId() ) {
 			Linking linking = LinkingManager.deactivateLinking( messageId );
 			if( linking != null ) {
 				updateMessage( linking );

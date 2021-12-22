@@ -28,7 +28,7 @@ public class CommandSettingsOtherBotsConfig {
 		builder.pop();
 	}
 	
-	public boolean getTransmitBotMessages() {
+	public boolean transmitBotMessages() {
 		
 		return transmit_bot_messages.get();
 	}

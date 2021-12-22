@@ -37,6 +37,31 @@ public class WhitelistConfig {
 		builder.pop();
 	}
 	
+	public boolean isEnabled() {
+		
+		return enabled.get();
+	}
+	
+	public boolean useRole() {
+		
+		return use_role.get();
+	}
+	
+	public long getRoleId() {
+		
+		return role_id.get();
+	}
+	
+	public boolean useSingleLinkingManagement() {
+		
+		return use_single_linking_management.get();
+	}
+	
+	public long getLinkingManagementChannelId() {
+		
+		return linking_management_channel_id.get();
+	}
+	
 	//package-private
 	void printConfig( Logger logger ) {
 		

@@ -48,11 +48,11 @@ public class DiscordEventHandler extends ListenerAdapter {
 			if( author.isBot() ) {
 				handleBotMessage( message );
 			} else {
-				if( message.startsWith( ServerConfig.getCommandPrefix() ) ) {
+				if( message.startsWith( ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix() ) ) {
 					handleCommands( member, message );
 				} else {
 					if( beginnsNotWithOtherCommandPrefix( message ) ) {
-						if( ServerConfig.isUseNickname() && member != null ) {
+						if( ServerConfig.CHAT_CONFIG.useNickname() && member != null ) {
 							handleUserMessage( member.getEffectiveName(), message );
 						} else {
 							handleUserMessage( author.getName(), message );
@@ -70,7 +70,8 @@ public class DiscordEventHandler extends ListenerAdapter {
 	
 	private boolean beginnsNotWithOtherCommandPrefix( String message ) {
 		
-		for( String prefix : ServerConfig.getOtherBotsCommandPrefixes() ) {
+		for( String prefix : ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandSettingsOtherBotsConfig()
+			.getOtherBotsCommandPrefixes() ) {
 			if( message.startsWith( prefix ) ) {
 				return false;
 			}
@@ -92,7 +93,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	
 	private void handleBotMessage( String message ) {
 		
-		if( ServerConfig.isTransmitBotMessages() ) {
+		if( ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandSettingsOtherBotsConfig().transmitBotMessages() ) {
 			if( !message.startsWith( DiscordNet.FEEDBACK_START ) || !message.endsWith( DiscordNet.FEEDBACK_END ) ) {
 				server.getPlayerList().broadcastMessage(
 					new TextComponent( message ),
@@ -105,7 +106,8 @@ public class DiscordEventHandler extends ListenerAdapter {
 	
 	private void handleUserMessage( String author, String message ) {
 		
-		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
+		if( ServerConfig.CHAT_CONFIG.getMaxCharCount() == -1 ||
+			message.length() <= ServerConfig.CHAT_CONFIG.getMaxCharCount() ) {
 			server.getPlayerList().broadcastMessage(
 				new TextComponent( String.format(
 					"[%s] %s",

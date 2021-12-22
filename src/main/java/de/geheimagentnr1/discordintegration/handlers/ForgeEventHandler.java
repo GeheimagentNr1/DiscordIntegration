@@ -49,8 +49,8 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handleServerStartedEvent( ServerStartedEvent event ) {
 		
-		if( ServerConfig.getServerStartedMessageEnabled() ) {
-			DiscordNet.sendMessage( ServerConfig.getServerStartedMessage() );
+		if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getServerStarted().isEnabled() ) {
+			DiscordNet.sendMessage( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getServerStarted().getMessage() );
 		}
 	}
 	
@@ -58,12 +58,16 @@ public class ForgeEventHandler {
 	public static void handleServerStoppedEvent( ServerStoppedEvent event ) {
 		
 		if( event.getServer().isRunning() ) {
-			if( ServerConfig.getServerCrashedMessageEnabled() ) {
-				DiscordNet.sendMessage( ServerConfig.getServerCrashedMessage() );
+			if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getServerCrashed().isEnabled() ) {
+				DiscordNet.sendMessage( ServerConfig.CHAT_CONFIG.getChatMessagesConfig()
+					.getServerCrashed()
+					.getMessage() );
 			}
 		} else {
-			if( ServerConfig.getServerStoppedMessageEnabled() ) {
-				DiscordNet.sendMessage( ServerConfig.getServerStoppedMessage() );
+			if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getServerStopped().isEnabled() ) {
+				DiscordNet.sendMessage( ServerConfig.CHAT_CONFIG.getChatMessagesConfig()
+					.getServerStopped()
+					.getMessage() );
 			}
 		}
 		DiscordNet.stop();
@@ -72,16 +76,22 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handlePlayerLoggedInEvent( PlayerEvent.PlayerLoggedInEvent event ) {
 		
-		if( ServerConfig.getPlayerJoinedMessageEnabled() ) {
-			DiscordNet.sendPlayerMessage( event.getPlayer(), ServerConfig.getPlayerJoinedMessage() );
+		if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerJoined().isEnabled() ) {
+			DiscordNet.sendPlayerMessage(
+				event.getPlayer(),
+				ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerJoined().getMessage()
+			);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void handlePlayerLoggedOutEvent( PlayerEvent.PlayerLoggedOutEvent event ) {
 		
-		if( ServerConfig.getPlayerLeftMessageEnabled() ) {
-			DiscordNet.sendPlayerMessage( event.getPlayer(), ServerConfig.getPlayerLeftMessage() );
+		if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerLeft().isEnabled() ) {
+			DiscordNet.sendPlayerMessage(
+				event.getPlayer(),
+				ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerLeft().getMessage()
+			);
 		}
 	}
 	
@@ -99,13 +109,19 @@ public class ForgeEventHandler {
 		LivingEntity entity = event.getEntityLiving();
 		
 		if( entity instanceof Player ) {
-			if( ServerConfig.getPlayerDiedMessageEnabled() ) {
-				DiscordNet.sendDeathMessage( event, ServerConfig.getPlayerDiedMessage() );
+			if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerDied().isEnabled() ) {
+				DiscordNet.sendDeathMessage(
+					event,
+					ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerDied().getMessage()
+				);
 			}
 		} else {
 			if( entity instanceof TamableAnimal && ( (TamableAnimal)entity ).getOwnerUUID() != null ) {
-				if( ServerConfig.getTamedMobDiedMessageEnabled() ) {
-					DiscordNet.sendDeathMessage( event, ServerConfig.getTamedMobDiedMessage() );
+				if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getTamedMobDied().isEnabled() ) {
+					DiscordNet.sendDeathMessage(
+						event,
+						ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getTamedMobDied().getMessage()
+					);
 				}
 			}
 		}
@@ -117,12 +133,12 @@ public class ForgeEventHandler {
 		DisplayInfo displayInfo = event.getAdvancement().getDisplay();
 		
 		if( displayInfo != null && displayInfo.shouldAnnounceChat() &&
-			ServerConfig.getPlayerGotAdvancementMessageEnabled() ) {
+			ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerGotAdvancement().isEnabled() ) {
 			DiscordNet.sendPlayerMessage(
 				event.getPlayer(),
 				String.format(
 					"%s **%s**%n*%s*",
-					ServerConfig.getPlayerGotAdvancementMessage(),
+					ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerGotAdvancement().getMessage(),
 					displayInfo.getTitle().getString(),
 					displayInfo.getDescription().getString()
 				)

@@ -46,14 +46,14 @@ public class DiscordNet {
 		stop();
 		if( ServerConfig.BOT_CONFIG.isActive() ) {
 			try {
-				jda = JDABuilder.create( ServerConfig.getBotToken(), INTENTS )
+				jda = JDABuilder.create( ServerConfig.BOT_CONFIG.getBotToken(), INTENTS )
 					.addEventListeners( new DiscordEventHandler() )
 					.setAutoReconnect( true )
 					.build();
 				jda.awaitReady();
-				channel = jda.getTextChannelById( ServerConfig.getChannelId() );
+				channel = jda.getTextChannelById( ServerConfig.CHAT_CONFIG.getChannelId() );
 				if( channel == null ) {
-					LOGGER.error( "Discord Text Channel {} not found", ServerConfig.getChannelId() );
+					LOGGER.error( "Discord Text Channel {} not found", ServerConfig.CHAT_CONFIG.getChannelId() );
 				}
 			} catch( LoginException | InterruptedException exception ) {
 				LOGGER.error( "Login to Discord failed", exception );
@@ -84,7 +84,8 @@ public class DiscordNet {
 	
 	public static synchronized boolean feedBackAllowed( TextChannel _channel, User author ) {
 		
-		return _channel.getIdLong() == ServerConfig.getChannelId() && _channel.getIdLong() == channel.getIdLong() &&
+		return _channel.getIdLong() == ServerConfig.CHAT_CONFIG.getChannelId() &&
+			_channel.getIdLong() == channel.getIdLong() &&
 			author.getIdLong() != jda.getSelfUser().getIdLong();
 	}
 	

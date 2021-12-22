@@ -46,7 +46,7 @@ public class ChatConfig {
 		return channel_id.get();
 	}
 	
-	public boolean getUseNickname() {
+	public boolean useNickname() {
 		
 		return use_nickname.get();
 	}

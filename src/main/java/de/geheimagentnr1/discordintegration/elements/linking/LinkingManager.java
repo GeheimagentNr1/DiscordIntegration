@@ -30,7 +30,7 @@ public class LinkingManager {
 	
 	private static boolean isActive() {
 		
-		return DiscordNet.isInitialized() && ServerConfig.isDiscordWhitelistEnabled();
+		return DiscordNet.isInitialized() && ServerConfig.WHITELIST_CONFIG.isEnabled();
 	}
 	
 	private static synchronized Linkings load() throws IOException {
@@ -118,7 +118,7 @@ public class LinkingManager {
 	
 	private static synchronized boolean isCorrectRole( Role role ) {
 		
-		return role.getIdLong() == ServerConfig.getWhitelistRole();
+		return role.getIdLong() == ServerConfig.WHITELIST_CONFIG.getRoleId();
 	}
 	
 	public static synchronized void createLinking( Member member, GameProfile gameProfile ) throws IOException {
