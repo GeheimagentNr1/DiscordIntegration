@@ -20,7 +20,7 @@ public class ChatManager {
 	
 	private static TextChannel channel;
 	
-	public static synchronized void init() {
+	public static void init() {
 		
 		stop();
 		if( shouldInitialize() ) {
@@ -33,18 +33,17 @@ public class ChatManager {
 		}
 	}
 	
-	public static synchronized void stop() {
+	public static void stop() {
 		
 		channel = null;
 	}
 	
-	private static synchronized boolean shouldInitialize() {
+	private static boolean shouldInitialize() {
 		
 		return DiscordManager.isInitialized() && ServerConfig.CHAT_CONFIG.isEnabled();
 	}
 	
-	//package-private
-	static synchronized boolean isInitialized() {
+	private static boolean isInitialized() {
 		
 		return shouldInitialize() && channel != null;
 	}
@@ -80,7 +79,7 @@ public class ChatManager {
 		sendMessage( DiscordMessageBuilder.buildDeathMessage( event, customMessage ) );
 	}
 	
-	public static synchronized void sendMessage( String message ) {
+	public static void sendMessage( String message ) {
 		
 		if( isInitialized() ) {
 			DiscordMessageSender.sendMessage( channel, message );
@@ -88,7 +87,7 @@ public class ChatManager {
 	}
 	
 	//package-private
-	static synchronized void sendFeedbackMessage( String message ) {
+	static void sendFeedbackMessage( String message ) {
 		
 		if( isInitialized() ) {
 			for( String messagePart : DiscordMessageBuilder.buildFeedbackMessage( message ) ) {

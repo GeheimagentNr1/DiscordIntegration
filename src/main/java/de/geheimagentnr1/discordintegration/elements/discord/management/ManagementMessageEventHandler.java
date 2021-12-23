@@ -1,7 +1,5 @@
 package de.geheimagentnr1.discordintegration.elements.discord.management;
 
-import de.geheimagentnr1.discordintegration.config.ServerConfig;
-import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.DiscordCommandHandler;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -34,7 +32,7 @@ public class ManagementMessageEventHandler extends ListenerAdapter {
 		String message = event.getMessage().getContentDisplay();
 		
 		if( server == null ||
-			ManagementManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
+			!ManagementManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
 			author.isBot() ||
 			!DiscordCommandHandler.isCommand( message ) ) {
 			return;

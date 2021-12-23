@@ -919,12 +919,12 @@
   {
     "project": "JDA",
     "description": null,
-    "version": "4.4.0_351",
+    "version": "4.4.0_352",
     "developers": [],
     "url": null,
     "year": null,
     "licenses": [],
-    "dependency": "net.dv8tion:JDA:4.4.0_351"
+    "dependency": "net.dv8tion:JDA:4.4.0_352"
   },
   {
     "project": "JetBrains Java Annotations",

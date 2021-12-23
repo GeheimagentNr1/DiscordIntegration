@@ -10,6 +10,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.requests.ErrorResponse;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.function.Consumer;
 
@@ -24,7 +27,7 @@ public class LinkingsManagementMessageManager {
 	
 	private static TextChannel channel;
 	
-	public static synchronized void init() {
+	public static void init() {
 		
 		stop();
 		if( shouldInitialize() ) {
@@ -37,18 +40,17 @@ public class LinkingsManagementMessageManager {
 		}
 	}
 	
-	public static synchronized void stop() {
+	public static void stop() {
 		
 		channel = null;
 	}
 	
-	private static synchronized boolean shouldInitialize() {
+	private static boolean shouldInitialize() {
 		
 		return LinkingsManager.isEnabled() && ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement();
 	}
 	
-	//package-private
-	static synchronized boolean isInitialized() {
+	private static boolean isInitialized() {
 		
 		return shouldInitialize() && channel != null;
 	}
@@ -75,7 +77,7 @@ public class LinkingsManagementMessageManager {
 	}
 	
 	//package-private
-	static synchronized void sendOrEditMessage(
+	static void sendOrEditMessage(
 		Member member,
 		Linking linking,
 		Consumer<Long> messageIdHandler ) {
@@ -87,8 +89,17 @@ public class LinkingsManagementMessageManager {
 				if( messageId == null ) {
 					sendOrEditMessage( null, member, linking, messageIdHandler );
 				} else {
-					channel.retrieveMessageById( linking.getMessageId() )
-						.queue( message -> sendOrEditMessage( message, member, linking, messageIdHandler ) );
+					channel.retrieveMessageById( linking.getMessageId() ).queue(
+						message -> sendOrEditMessage( message, member, linking, messageIdHandler ),
+						throwable -> {
+							if(throwable instanceof ErrorResponseException errorResponseException &&
+								errorResponseException.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE ) {
+								sendOrEditMessage( null, member, linking, messageIdHandler );
+							} else {
+								RestAction.getDefaultFailure().accept( throwable );
+							}
+						}
+					);
 				}
 			} catch( Exception exception ) {
 				log.error(
@@ -100,7 +111,7 @@ public class LinkingsManagementMessageManager {
 		}
 	}
 	
-	private static synchronized void sendOrEditMessage(
+	private static void sendOrEditMessage(
 		Message oldMessage,
 		Member member,
 		Linking linking,
@@ -152,7 +163,7 @@ public class LinkingsManagementMessageManager {
 	}
 	
 	//package-private
-	static synchronized void deleteMessage( Linking linking ) {
+	static void deleteMessage( Linking linking ) {
 		
 		if( isInitialized() ) {
 			channel.deleteMessageById( linking.getMessageId() ).complete();

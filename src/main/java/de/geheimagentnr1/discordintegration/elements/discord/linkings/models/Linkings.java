@@ -5,7 +5,6 @@ import lombok.Data;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Data
@@ -14,9 +13,9 @@ public class Linkings {
 	
 	private HashSet<Linking> linkings;
 	
-	public boolean add( Linking linking ) {
+	public void add( Linking linking ) {
 		
-		return linkings.add( linking );
+		linkings.add( linking );
 	}
 	
 	public boolean remove( long discordMemberId ) {
@@ -24,9 +23,9 @@ public class Linkings {
 		return linkings.removeIf( linking -> linking.getDiscordMemberId() == discordMemberId );
 	}
 	
-	public boolean remove( Linking linking ) {
+	public void remove( Linking linking ) {
 		
-		return linkings.remove( linking );
+		linkings.remove( linking );
 	}
 	
 	public Optional<Linking> findLinking( Linking searchLinking ) {

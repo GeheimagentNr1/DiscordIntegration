@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class DiscordMessageSender {
 	
 	
-	public static synchronized void sendMessage( TextChannel channel, String message ) {
+	public static void sendMessage( TextChannel channel, String message ) {
 		
 		try {
 			for( int start = 0; start < message.length(); start += 2000 ) {

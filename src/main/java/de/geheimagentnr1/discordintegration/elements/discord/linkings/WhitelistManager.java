@@ -12,11 +12,12 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 
 @Slf4j
-public class WhitelistManager {
+//package-private
+class WhitelistManager {
 	
 	
 	//package-private
-	static synchronized void addToWhitelist( MinecraftGameProfile minecraftGameProfile ) {
+	static void addToWhitelist( MinecraftGameProfile minecraftGameProfile ) {
 		
 		MinecraftServer minecraftServer = ServerLifecycleHooks.getCurrentServer();
 		UserWhiteList userWhiteList = minecraftServer.getPlayerList().getWhiteList();
@@ -34,7 +35,7 @@ public class WhitelistManager {
 	}
 	
 	//package-private
-	static synchronized void removeFromWhitelist( MinecraftGameProfile minecraftGameProfile ) {
+	static void removeFromWhitelist( MinecraftGameProfile minecraftGameProfile ) {
 		
 		MinecraftServer minecraftServer = ServerLifecycleHooks.getCurrentServer();
 		UserWhiteList userWhiteList = minecraftServer.getPlayerList().getWhiteList();

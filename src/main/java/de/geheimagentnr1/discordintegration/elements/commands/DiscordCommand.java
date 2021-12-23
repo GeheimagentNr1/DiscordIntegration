@@ -149,12 +149,7 @@ public class DiscordCommand {
 		if( DiscordCommandHelper.isNotDiscordSource(source) ) {
 			return -1;
 		}
-		Guild guild = DiscordManager.getGuild();
-		if( guild == null ) {
-			DiscordCommandHelper.sendInvalidGuild( source );
-			return -1;
-		}
-		Member member = guild.getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
+		Member member = DiscordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );
 		if( member == null ) {
 			DiscordCommandHelper.sendInvalidMember( source );
 			return -1;
@@ -222,12 +217,7 @@ public class DiscordCommand {
 		if( DiscordCommandHelper.isNotDiscordSource(source) ) {
 			return -1;
 		}
-		Guild guild = DiscordManager.getGuild();
-		if( guild == null ) {
-			DiscordCommandHelper.sendInvalidGuild( source );
-			return -1;
-		}
-		Member member = guild.getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
+		Member member = DiscordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );
 		if( member == null ) {
 			DiscordCommandHelper.sendInvalidMember( source );
 			return -1;

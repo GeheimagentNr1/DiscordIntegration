@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 public class LinkingsManager {
 	
 	
-	public static synchronized boolean isEnabled() {
+	public static boolean isEnabled() {
 		
 		return DiscordManager.isInitialized() && ServerConfig.WHITELIST_CONFIG.isEnabled();
 	}
@@ -59,14 +59,14 @@ public class LinkingsManager {
 		}
 	}
 	
-	public static synchronized void updateWhitelist( Consumer<Throwable> errorHandler ) throws IOException {
+	public static void updateWhitelist( Consumer<Throwable> errorHandler ) throws IOException {
 		
 		if( isEnabled() ) {
 			updateWhitelist( LinkingsFileManager.load(), errorHandler );
 		}
 	}
 	
-	private static synchronized void updateWhitelist(
+	private static void updateWhitelist(
 		Linkings linkings,
 		Consumer<Throwable> errorHandler )
 		throws IOException {
@@ -74,7 +74,7 @@ public class LinkingsManager {
 		updateWhitelist( linkings, List.of(), errorHandler );
 	}
 	
-	private static synchronized void updateWhitelist(
+	private static void updateWhitelist(
 		Linkings linkings,
 		List<Linking> removedLinkings,
 		Consumer<Throwable> errorHandler )
@@ -140,7 +140,7 @@ public class LinkingsManager {
 			ServerConfig.WHITELIST_CONFIG.getRoleId() == role.getIdLong();
 	}
 	
-	private static synchronized void updateLinking(
+	private static void updateLinking(
 		Linking linking,
 		Consumer<Throwable> errorHandler ) throws IOException {
 		
@@ -159,7 +159,7 @@ public class LinkingsManager {
 		updateWhitelist( linkings, errorHandler );
 	}
 	
-	public static synchronized void createLinking(
+	public static void createLinking(
 		Member member,
 		GameProfile gameProfile,
 		Consumer<Boolean> successHandler,
@@ -196,7 +196,7 @@ public class LinkingsManager {
 		}
 	}
 	
-	public static synchronized void removeLinking(
+	public static void removeLinking(
 		Member member,
 		GameProfile gameProfile,
 		Consumer<Throwable> errorHandler ) throws IOException {
@@ -222,7 +222,7 @@ public class LinkingsManager {
 	}
 	
 	//package-private
-	static synchronized void resendMessage( long messageId, Consumer<Throwable> errorHandler )
+	static void resendMessage( long messageId, Consumer<Throwable> errorHandler )
 		throws IOException {
 		
 		if( isEnabled() ) {
@@ -256,7 +256,7 @@ public class LinkingsManager {
 	}
 	
 	//package-private
-	static synchronized void removeLinkings( Member member, Consumer<Throwable> errorHandler ) throws IOException {
+	static void removeLinkings( Member member, Consumer<Throwable> errorHandler ) throws IOException {
 		
 		if( isEnabled() ) {
 			Linkings linkings = LinkingsFileManager.load();
@@ -296,7 +296,6 @@ public class LinkingsManager {
 						member,
 						foundLinking,
 						newMessageId -> {
-							;
 							foundLinking.setMessageId( newMessageId );
 							try {
 								updateLinking( foundLinking, errorHandler );

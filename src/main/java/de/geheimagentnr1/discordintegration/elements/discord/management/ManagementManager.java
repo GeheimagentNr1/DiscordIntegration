@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.minecraft.world.entity.player.Player;
 
 
 @Slf4j
@@ -17,7 +18,7 @@ public class ManagementManager {
 	
 	private static TextChannel channel;
 	
-	public static synchronized void init() {
+	public static void init() {
 		
 		stop();
 		if( shouldInitialize() ) {
@@ -30,17 +31,17 @@ public class ManagementManager {
 		}
 	}
 	
-	public static synchronized void stop() {
+	public static void stop() {
 		
 		channel = null;
 	}
 	
-	private static synchronized boolean shouldInitialize() {
+	private static boolean shouldInitialize() {
 		
 		return DiscordManager.isInitialized() && ServerConfig.MANAGEMENT_CONFIG.isEnabled();
 	}
 	
-	private static synchronized boolean isInitialized() {
+	private static boolean isInitialized() {
 		
 		return shouldInitialize() && channel != null;
 	}
@@ -61,7 +62,12 @@ public class ManagementManager {
 		sendMessage( DiscordMessageBuilder.buildPlayerMessage( minecraftGameProfile.getName(), message ) );
 	}
 	
-	private static synchronized void sendMessage( String message ) {
+	public static void sendPlayerMessage( Player player, String message ) {
+		
+		sendMessage( DiscordMessageBuilder.buildPlayerMessage( player, message ) );
+	}
+	
+	public static void sendMessage( String message ) {
 		
 		if( isInitialized() ) {
 			DiscordMessageSender.sendMessage( channel, message );
@@ -69,7 +75,7 @@ public class ManagementManager {
 	}
 	
 	//package-private
-	static synchronized void sendFeedbackMessage( String message ) {
+	static void sendFeedbackMessage( String message ) {
 		
 		if( isInitialized() ) {
 			for( String messagePart : DiscordMessageBuilder.buildFeedbackMessage( message ) ) {

@@ -7,6 +7,9 @@ import de.geheimagentnr1.discordintegration.elements.commands.MeToDiscordCommand
 import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
+import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
+import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
+import lombok.extern.slf4j.Slf4j;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -22,7 +25,10 @@ import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.function.Consumer;
 
+
+@Slf4j
 @Mod.EventBusSubscriber(
 	modid = DiscordIntegration.MODID,
 	bus = Mod.EventBusSubscriber.Bus.FORGE,
@@ -48,10 +54,11 @@ public class ForgeEventHandler {
 			);
 		}
 		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getServerStarted().isEnabled() ) {
-			ChatManager.sendMessage(
+			ManagementManager.sendMessage(
 				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getServerStarted().getMessage()
 			);
 		}
+		DiscordManager.setServerStarted();
 	}
 	
 	@SubscribeEvent
@@ -64,7 +71,7 @@ public class ForgeEventHandler {
 				);
 			}
 			if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getServerCrashed().isEnabled() ) {
-				ChatManager.sendMessage(
+				ManagementManager.sendMessage(
 					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getServerCrashed().getMessage()
 				);
 			}
@@ -75,7 +82,7 @@ public class ForgeEventHandler {
 				);
 			}
 			if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getServerStopped().isEnabled() ) {
-				ChatManager.sendMessage(
+				ManagementManager.sendMessage(
 					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getServerStopped().getMessage()
 				);
 			}
@@ -93,7 +100,7 @@ public class ForgeEventHandler {
 			);
 		}
 		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerJoined().isEnabled() ) {
-			ChatManager.sendPlayerMessage(
+			ManagementManager.sendPlayerMessage(
 				event.getPlayer(),
 				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerJoined().getMessage()
 			);
@@ -110,7 +117,7 @@ public class ForgeEventHandler {
 			);
 		}
 		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerLeft().isEnabled() ) {
-			ChatManager.sendPlayerMessage(
+			ManagementManager.sendPlayerMessage(
 				event.getPlayer(),
 				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerLeft().getMessage()
 			);

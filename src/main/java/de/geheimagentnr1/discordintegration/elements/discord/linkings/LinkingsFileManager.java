@@ -13,12 +13,14 @@ import java.io.IOException;
 
 
 @Slf4j
-public class LinkingsFileManager {
+//package-private
+class LinkingsFileManager {
 	
 	
 	private static final File FILE = new File( "linking.json" );
 	
-	public static synchronized Linkings load() throws IOException {
+	//package-private
+	static Linkings load() throws IOException {
 		
 		try( FileReader fileReader = new FileReader( FILE ) ) {
 			Linkings linkings = new GsonBuilder().setPrettyPrinting().create().fromJson( fileReader, Linkings.class );
@@ -34,7 +36,8 @@ public class LinkingsFileManager {
 		}
 	}
 	
-	public static synchronized void save( Linkings linkings ) throws IOException {
+	//package-private
+	static void save( Linkings linkings ) throws IOException {
 		
 		try( FileWriter fileWriter = new FileWriter( FILE ) ) {
 			new GsonBuilder().setPrettyPrinting().create().toJson( linkings, fileWriter );

@@ -20,14 +20,6 @@ class DiscordCommandHelper {
 	}
 	
 	//package-private
-	static void sendInvalidGuild( CommandSourceStack source ) {
-		
-		source.sendFailure( new TextComponent(
-			"Guild/Discord Server does not exists or Discord context unloadable"
-		) );
-	}
-	
-	//package-private
 	static void sendInvalidMember( CommandSourceStack source ) {
 		
 		source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
