@@ -55,18 +55,24 @@ public class DiscordCommandHandler {
 		);
 		
 		for( AbstractCommentedConfig commandConfig : ServerConfig.COMMAND_SETTINGS_CONFIG.getCommands() ) {
-			if( CommandConfig.isEnabled( commandConfig ) &&
-				( !CommandConfig.isManagementCommand( commandConfig ) ||
-					//TODO: Angepasste Error Message, wenn keine Berechtigung
-					hasManagementRole ) ) {
+			if( CommandConfig.isEnabled( commandConfig ) ) {
+				
 				String discordCommand = buildDiscordCommand( commandConfig );
 				
 				if( doesCommandMatch( commandConfig, command, discordCommand ) ) {
-					server.getCommands().performCommand(
-						source,
-						buildMinecraftCommand( commandConfig, discordCommand, command )
-					);
-					discordCommandSource.sendMessage();
+					if( !CommandConfig.isManagementCommand( commandConfig ) || hasManagementRole ) {
+						server.getCommands().performCommand(
+							source,
+							buildMinecraftCommand( commandConfig, discordCommand, command )
+						);
+						discordCommandSource.sendMessage();
+					} else {
+						feedbackSender.accept( String.format(
+							"%n%s%nError: Invalid permissions, only users with the management role can use this " +
+								"command.",
+							member.getEffectiveName()
+						) );
+					}
 					return true;
 				}
 			}
