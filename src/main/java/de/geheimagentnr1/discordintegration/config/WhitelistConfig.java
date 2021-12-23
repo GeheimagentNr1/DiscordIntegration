@@ -23,7 +23,7 @@ public class WhitelistConfig {
 		builder.comment( "Settings for Whitelist Management in Discord" )
 			.push( "whitelist" );
 		enabled = builder.comment( "Should the Whitelist Management in Discord be enabled?" )
-			.define( "enabled", true );
+			.define( "enabled", false );
 		use_role = builder.comment( "Does the user has to have a specific role to be whitelisted?" )
 			.define( "use_role", true );
 		role_id = builder.comment( "Role ID of the Discord Role, that a user has to have to be whitelisted." )
