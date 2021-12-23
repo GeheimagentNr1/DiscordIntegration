@@ -105,6 +105,10 @@ public class LinkingsManagementMessageManager {
 					exception
 				);
 			}
+		} else {
+			if( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() ) {
+				messageIdHandler.accept( null );
+			}
 		}
 	}
 	

@@ -168,22 +168,42 @@ public class LinkingsManager {
 				.build();
 			
 			Linkings linkings = LinkingsFileManager.load();
-			boolean notFound = linkings.findLinking( linking ).isEmpty();
+			Optional<Linking> foundLinkingOptional = linkings.findLinking( linking );
 			
-			LinkingsManagementMessageManager.sendOrEditMessage(
-				member,
-				linking,
-				messageId -> {
-					linking.setMessageId( messageId );
-					try {
-						updateLinking( linking, errorHandler );
-						sendLinkingCreatedMessage( linking );
-						successHandler.accept( notFound );
-					} catch( Throwable exception ) {
-						errorHandler.accept( exception );
+			if( foundLinkingOptional.isPresent() ) {
+				Linking foundLinking = foundLinkingOptional.get();
+				foundLinking.setDiscordName( member.getUser().getName() );
+				foundLinking.getMinecraftGameProfile().setName( gameProfile.getName() );
+				LinkingsManagementMessageManager.sendOrEditMessage(
+					member,
+					foundLinking,
+					newMessageId -> {
+						foundLinking.setMessageId( newMessageId );
+						try {
+							updateLinking( foundLinking, errorHandler );
+							sendLinkingCreatedMessage( foundLinking );
+							successHandler.accept( false );
+						} catch( Throwable exception ) {
+							errorHandler.accept( exception );
+						}
 					}
-				}
-			);
+				);
+			} else {
+				LinkingsManagementMessageManager.sendOrEditMessage(
+					member,
+					linking,
+					messageId -> {
+						linking.setMessageId( messageId );
+						try {
+							updateLinking( linking, errorHandler );
+							sendLinkingCreatedMessage( linking );
+							successHandler.accept( true );
+						} catch( Throwable exception ) {
+							errorHandler.accept( exception );
+						}
+					}
+				);
+			}
 		}
 	}
 	
