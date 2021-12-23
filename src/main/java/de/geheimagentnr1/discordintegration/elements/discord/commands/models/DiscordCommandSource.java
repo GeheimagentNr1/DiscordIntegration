@@ -15,11 +15,16 @@ public class DiscordCommandSource implements CommandSource {
 	
 	private final Consumer<String> feedbackSender;
 	
+	private boolean messageNotSent = true;
+	
 	private String message = "";
 	
 	public void sendMessage() {
 		
-		feedbackSender.accept( message );
+		if( messageNotSent && !message.isEmpty() ) {
+			messageNotSent = false;
+			feedbackSender.accept( message );
+		}
 	}
 	
 	@Override

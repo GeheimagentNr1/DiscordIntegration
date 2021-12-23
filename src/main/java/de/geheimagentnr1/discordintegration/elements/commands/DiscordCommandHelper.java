@@ -24,4 +24,10 @@ class DiscordCommandHelper {
 		
 		source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
 	}
+	
+	//package-private
+	static void handleError( CommandSourceStack source, Throwable throwable ) {
+		
+		source.sendFailure( new TextComponent( throwable.getMessage() ) );
+	}
 }

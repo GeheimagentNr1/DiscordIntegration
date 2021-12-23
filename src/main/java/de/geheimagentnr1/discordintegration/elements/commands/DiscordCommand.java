@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 
 @SuppressWarnings( "SameReturnValue" )
@@ -71,14 +70,17 @@ public class DiscordCommand {
 		CommandSourceStack source = context.getSource();
 		List<? extends AbstractCommentedConfig> commands = ServerConfig.COMMAND_SETTINGS_CONFIG.getCommands();
 		commands.sort( Comparator.comparing( CommandConfig::getDiscordCommand ) );
-		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
-			if( CommandConfig.isEnabled( abstractCommentedConfig ) ) {
+		for( AbstractCommentedConfig commandConfig : commands ) {
+			if( CommandConfig.isEnabled( commandConfig ) ) {
 				source.sendSuccess(
 					new TextComponent( String.format(
-						"%s%s - %s",
+						"%s%s - %s%s",
 						ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix(),
-						CommandConfig.getDiscordCommand( abstractCommentedConfig ),
-						CommandConfig.getDescription( abstractCommentedConfig )
+						CommandConfig.getDiscordCommand( commandConfig ),
+						CommandConfig.getDescription( commandConfig ),
+						CommandConfig.isManagementCommand( commandConfig ) ?
+							" (Only usable by users with Management role)" :
+							""
 					) ),
 					false
 				);
@@ -166,11 +168,8 @@ public class DiscordCommand {
 			LinkingsManager.createLinking(
 				member,
 				gameProfile,
-				new Consumer<Boolean>() {
-					
-					@Override
-					public void accept( Boolean aBoolean ) {
-						
+				successful -> {
+					if( successful ) {
 						source.sendSuccess(
 							new TextComponent( String.format(
 								"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",
@@ -179,21 +178,24 @@ public class DiscordCommand {
 							) ),
 							true
 						);
+					} else {
+						
+						source.sendFailure(
+							new TextComponent( String.format(
+								"Linking between Discord account \"%s\" and Minecraft account \"%s\" already exists",
+								member.getEffectiveName(),
+								gameProfile.getName()
+							) )
+						);
+					}
+					if( source instanceof DiscordCommandSourceStack discordCommandSourceStack ) {
+						discordCommandSourceStack.getSource().sendMessage();
 					}
 				},
-				new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-						
-						log.error( "Linking failed", throwable );
-						source.sendFailure( new TextComponent( throwable.getMessage() ) );
-					}
-				}
+				throwable -> DiscordCommandHelper.handleError( source, throwable )
 			);
 		} catch( IOException exception ) {
-			log.error( "Linking failed", exception );
-			source.sendFailure( new TextComponent( exception.getMessage() ) );
+			DiscordCommandHelper.handleError( source, exception );
 			return -1;
 		}
 		return Command.SINGLE_SUCCESS;
@@ -233,15 +235,11 @@ public class DiscordCommand {
 		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
 		
 		try {
-			LinkingsManager.removeLinking( member, gameProfile, new Consumer<Throwable>() {
-				
-				@Override
-				public void accept( Throwable throwable ) {
-					
-					log.error( "Unlinking failed", throwable );
-					source.sendFailure( new TextComponent( throwable.getMessage() ) );
-				}
-			} );
+			LinkingsManager.removeLinking(
+				member,
+				gameProfile,
+				throwable -> DiscordCommandHelper.handleError( source, throwable )
+			);
 			source.sendSuccess(
 				new TextComponent( String.format(
 					"Removed Linking between Discord account \"%s\" and Minecraft account \"%s\"",
@@ -251,8 +249,7 @@ public class DiscordCommand {
 				true
 			);
 		} catch( IOException exception ) {
-			log.error( "Unlinking failed", exception );
-			source.sendFailure( new TextComponent( exception.getMessage() ) );
+			DiscordCommandHelper.handleError( source, exception );
 			return -1;
 		}
 		return Command.SINGLE_SUCCESS;

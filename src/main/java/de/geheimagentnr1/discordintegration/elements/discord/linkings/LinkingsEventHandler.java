@@ -41,28 +41,20 @@ public class LinkingsEventHandler extends ListenerAdapter {
 			if( event.getMember() == null ) {
 				log.error( "Failed to remove Linkings for discord user, who leaved the Discord server." );
 			} else {
+				Consumer<Throwable> errorHandler = throwable ->
+					log.error(
+						"Failed to remove Linkings for discord user {}, who leaved the Discord server.",
+						event.getMember().getEffectiveName(),
+						throwable
+					);
 				try {
-					LinkingsManager.removeLinkings( event.getMember(), new Consumer<Throwable>() {
-						
-						@Override
-						public void accept( Throwable throwable ) {
-							
-							log.error(
-								"Failed to remove Linkings for discord user {}, who leaved the Discord server.",
-								event.getMember().getEffectiveName()
-							);
-						}
-					} );
+					LinkingsManager.removeLinkings( event.getMember(), errorHandler );
 					log.info(
 						"Remove Linkings for discord user {}, who leaved the Discord server.",
 						event.getMember().getEffectiveName()
 					);
 				} catch( IOException exception ) {
-					log.error(
-						"Failed to remove Linkings for discord user {}, who leaved the Discord server.",
-						event.getMember().getEffectiveName(),
-						exception
-					);
+					errorHandler.accept( exception );
 				}
 			}
 		}
@@ -73,18 +65,14 @@ public class LinkingsEventHandler extends ListenerAdapter {
 		
 		if( LinkingsManager.isEnabled() &&
 			LinkingsManager.isCorrectRole( event.getRole() ) ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
+				log.error( "Failed to update Whitelist, after the Discord whitelistrole has been deleted", throwable );
 			try {
 				log.info( "Update whiteliste, because the Discord whitelist role has been deleted" );
-				LinkingsManager.updateWhitelist( new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-						
-						log.error( "Failed to update Whitelist, after the Discord whitelistrole has been deleted" );
-					}
-				} );
+				LinkingsManager.updateWhitelist( errorHandler );
 			} catch( IOException exception ) {
-				log.error( "Failed to update Whitelist, after the Discord whitelistrole has been deleted", exception );
+				errorHandler.accept( exception );
 			}
 		}
 	}
@@ -94,23 +82,8 @@ public class LinkingsEventHandler extends ListenerAdapter {
 		
 		if( LinkingsManager.isEnabled() &&
 			event.getRoles().stream().anyMatch( LinkingsManager::isCorrectRole ) ) {
-			try {
-				LinkingsManager.updateWhitelist( new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-						
-						log.error(
-							"Failed to Whitelist, after Discord user {} has been added to roles {}",
-							event.getMember().getEffectiveName(),
-							event.getRoles()
-								.stream()
-								.map( Role::getName )
-								.collect( Collectors.joining( ", " ) )
-						);
-					}
-				} );
-			} catch( IOException exception ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
 					"Failed to Whitelist, after Discord user {} has been added to roles {}",
 					event.getMember().getEffectiveName(),
@@ -118,8 +91,13 @@ public class LinkingsEventHandler extends ListenerAdapter {
 						.stream()
 						.map( Role::getName )
 						.collect( Collectors.joining( ", " ) ),
-					exception
+					throwable
 				);
+			
+			try {
+				LinkingsManager.updateWhitelist( errorHandler );
+			} catch( IOException exception ) {
+				errorHandler.accept( exception );
 			}
 		}
 	}
@@ -129,23 +107,8 @@ public class LinkingsEventHandler extends ListenerAdapter {
 		
 		if( LinkingsManager.isEnabled() &&
 			event.getRoles().stream().anyMatch( LinkingsManager::isCorrectRole ) ) {
-			try {
-				LinkingsManager.updateWhitelist( new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-						
-						log.error(
-							"Failed to Whitelist, after Discord user {} has been removed from roles {}",
-							event.getMember().getEffectiveName(),
-							event.getRoles()
-								.stream()
-								.map( Role::getName )
-								.collect( Collectors.joining( ", " ) )
-						);
-					}
-				} );
-			} catch( IOException exception ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
 					"Failed to Whitelist, after Discord user {} has been removed from roles {}",
 					event.getMember().getEffectiveName(),
@@ -153,8 +116,13 @@ public class LinkingsEventHandler extends ListenerAdapter {
 						.stream()
 						.map( Role::getName )
 						.collect( Collectors.joining( ", " ) ),
-					exception
+					throwable
 				);
+			
+			try {
+				LinkingsManager.updateWhitelist( errorHandler );
+			} catch( IOException exception ) {
+				errorHandler.accept( exception );
 			}
 		}
 	}
@@ -163,17 +131,14 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	public void onGuildMessageDelete( @Nonnull GuildMessageDeleteEvent event ) {
 		
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
+				log.error( "Failed to resend message, after message has been deleted", throwable );
+			
 			try {
-				LinkingsManager.resendMessage( event.getMessageIdLong(), new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-						
-						log.error( "Failed to resend message, after message has been deleted", throwable );
-					}
-				} );
+				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
 			} catch( IOException exception ) {
-				log.error( "Failed to resend message, after message has been deleted", exception );
+				errorHandler.accept( exception );
 			}
 		}
 	}
@@ -194,20 +159,18 @@ public class LinkingsEventHandler extends ListenerAdapter {
 			LinkingsManagementMessageManager.reactionCodeToBool( reactionEmote.getAsReactionCode() );
 		
 		if( shouldActive != null ) {
-			try {
-				LinkingsManager.changeActiveStateOfLinking( messageId, shouldActive, new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-					
-					}
-				} );
-			} catch( IOException exception ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
 					"Linking could not be {}",
 					shouldActive ? "activated" : "deactivated",
-					exception
+					throwable
 				);
+			
+			try {
+				LinkingsManager.changeActiveStateOfLinking( messageId, shouldActive, errorHandler );
+			} catch( IOException exception ) {
+				errorHandler.accept( exception );
 			}
 		}
 		if( reactionEmote.isEmoji() ) {
@@ -221,23 +184,17 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	public void onGuildMessageReactionRemoveAll( @Nonnull GuildMessageReactionRemoveAllEvent event ) {
 		
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
-			try {
-				LinkingsManager.resendMessage( event.getMessageIdLong(), new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-						
-						log.error(
-							"Failed to resend message, after all reactions have been fully removed from message",
-							throwable
-						);
-					}
-				} );
-			} catch( IOException exception ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
 					"Failed to resend message, after all reactions have been fully removed from message",
-					exception
+					throwable
 				);
+			
+			try {
+				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
+			} catch( IOException exception ) {
+				errorHandler.accept( exception );
 			}
 		}
 	}
@@ -246,20 +203,14 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	public void onGuildMessageReactionRemoveEmote( @Nonnull GuildMessageReactionRemoveEmoteEvent event ) {
 		
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
+				log.error( "Failed to resend message, after reaction has been fully removed from message", throwable );
+			
 			try {
-				LinkingsManager.resendMessage( event.getMessageIdLong(), new Consumer<Throwable>() {
-					
-					@Override
-					public void accept( Throwable throwable ) {
-						
-						log.error(
-							"Failed to resend message, after reaction has been fully removed from message",
-							throwable
-						);
-					}
-				} );
+				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
 			} catch( IOException exception ) {
-				log.error( "Failed to resend message, after reaction has been fully removed from message", exception );
+				errorHandler.accept( exception );
 			}
 		}
 	}

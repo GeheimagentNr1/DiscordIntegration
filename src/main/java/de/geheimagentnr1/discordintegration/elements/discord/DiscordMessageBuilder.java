@@ -79,7 +79,7 @@ public class DiscordMessageBuilder {
 	public static List<String> buildFeedbackMessage( String message ) {
 		
 		List<String> messages = new ArrayList<>();
-		for( int start = 0; start <= message.length(); start += 1990 ) {
+		for( int start = 0; start < message.length(); start += 1990 ) {
 			messages.add( FEEDBACK_START + message.substring( start, Math.min( message.length(), start + 1990 ) ) +
 				FEEDBACK_END );
 		}

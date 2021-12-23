@@ -56,7 +56,7 @@ public class DiscordCommandHandler {
 		
 		for( AbstractCommentedConfig commandConfig : ServerConfig.COMMAND_SETTINGS_CONFIG.getCommands() ) {
 			if( CommandConfig.isEnabled( commandConfig ) &&
-				( !CommandConfig.isManagementCommand( commandConfig ) ||
+				( !CommandConfig.isManagementCommand( commandConfig ) ||//TODO: Angepasste Error Message, wenn keine Berechtigung
 					hasManagementRole ) ) {
 				String discordCommand = buildDiscordCommand( commandConfig );
 				

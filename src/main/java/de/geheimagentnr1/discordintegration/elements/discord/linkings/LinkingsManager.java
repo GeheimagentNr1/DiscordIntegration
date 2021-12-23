@@ -232,25 +232,8 @@ public class LinkingsManager {
 			
 			if( foundLinkingOptional.isPresent() ) {
 				Linking foundLinking = foundLinkingOptional.get();
-				Member member = DiscordManager.getMember( foundLinking.getDiscordMemberId() );
 				
-				if( member == null ) {
-					updateWhitelist( linkings, errorHandler );
-				} else {
-					foundLinking.setDiscordName( member.getUser().getName() );
-					LinkingsManagementMessageManager.sendOrEditMessage(
-						member,
-						foundLinking,
-						newMessageId -> {
-							foundLinking.setMessageId( newMessageId );
-							try {
-								updateLinking( foundLinking, errorHandler );
-							} catch( Throwable exception ) {
-								errorHandler.accept( exception );
-							}
-						}
-					);
-				}
+				updateLinking( linkings, foundLinking, errorHandler );
 			}
 		}
 	}
@@ -286,26 +269,32 @@ public class LinkingsManager {
 			if( foundLinkingOptional.isPresent() ) {
 				Linking foundLinking = foundLinkingOptional.get();
 				foundLinking.setActive( shouldActive );
-				Member member = DiscordManager.getMember( foundLinking.getDiscordMemberId() );
-				
-				if( member == null ) {
-					updateWhitelist( linkings, errorHandler );
-				} else {
-					foundLinking.setDiscordName( member.getUser().getName() );
-					LinkingsManagementMessageManager.sendOrEditMessage(
-						member,
-						foundLinking,
-						newMessageId -> {
-							foundLinking.setMessageId( newMessageId );
-							try {
-								updateLinking( foundLinking, errorHandler );
-							} catch( Throwable exception ) {
-								errorHandler.accept( exception );
-							}
-						}
-					);
-				}
+				updateLinking( linkings, foundLinking, errorHandler );
 			}
+		}
+	}
+	
+	private static void updateLinking( Linkings linkings, Linking linking, Consumer<Throwable> errorHandler )
+		throws IOException {
+		
+		Member member = DiscordManager.getMember( linking.getDiscordMemberId() );
+		
+		if( member == null ) {
+			updateWhitelist( linkings, errorHandler );
+		} else {
+			linking.setDiscordName( member.getUser().getName() );
+			LinkingsManagementMessageManager.sendOrEditMessage(
+				member,
+				linking,
+				newMessageId -> {
+					linking.setMessageId( newMessageId );
+					try {
+						updateLinking( linking, errorHandler );
+					} catch( Throwable exception ) {
+						errorHandler.accept( exception );
+					}
+				}
+			);
 		}
 	}
 }
