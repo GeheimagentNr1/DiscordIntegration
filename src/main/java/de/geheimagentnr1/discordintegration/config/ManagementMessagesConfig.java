@@ -77,7 +77,7 @@ public class ManagementMessagesConfig {
 			"Should a message be sent to the Discord management channel, if the a linking is created?",
 			"Message send to the Discord management channel, if a linking is created. " +
 				"(<player name> <message> <discord user name>)",
-			"added to linking for discord user"
+			"added to linkings of discord user"
 		);
 		linking_removed = new MessageConfig(
 			builder,
@@ -86,7 +86,7 @@ public class ManagementMessagesConfig {
 			"Should a message be sent to the Discord management channel, if the a linking is removed?",
 			"Message send to the Discord management channel, if a linking is removed. " +
 				"(<player name> <message> <discord user name>)",
-			"removed from linking for discord user"
+			"removed from linkings of discord user"
 		);
 		player_whitelist_added = new MessageConfig(
 			builder,
