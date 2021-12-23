@@ -168,25 +168,22 @@ public class LinkingsManager {
 				.build();
 			
 			Linkings linkings = LinkingsFileManager.load();
+			boolean notFound = linkings.findLinking( linking ).isEmpty();
 			
-			if( linkings.findLinking( linking ).isPresent() ) {
-				successHandler.accept( false );
-			} else {
-				LinkingsManagementMessageManager.sendOrEditMessage(
-					member,
-					linking,
-					messageId -> {
-						linking.setMessageId( messageId );
-						try {
-							updateLinking( linking, errorHandler );
-							sendLinkingCreatedMessage( linking );
-							successHandler.accept( true );
-						} catch( Throwable exception ) {
-							errorHandler.accept( exception );
-						}
+			LinkingsManagementMessageManager.sendOrEditMessage(
+				member,
+				linking,
+				messageId -> {
+					linking.setMessageId( messageId );
+					try {
+						updateLinking( linking, errorHandler );
+						sendLinkingCreatedMessage( linking );
+						successHandler.accept( notFound );
+					} catch( Throwable exception ) {
+						errorHandler.accept( exception );
 					}
-				);
-			}
+				}
+			);
 		}
 	}
 	

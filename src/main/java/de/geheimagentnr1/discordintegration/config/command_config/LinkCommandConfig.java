@@ -13,7 +13,7 @@ public class LinkCommandConfig extends CommandConfig {
 		
 		super(
 			"link",
-			"discord link",
+			"discord linkings link",
 			true,
 			false,
 			false,

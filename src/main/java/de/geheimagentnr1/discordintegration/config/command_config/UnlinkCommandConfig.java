@@ -13,7 +13,7 @@ public class UnlinkCommandConfig extends CommandConfig {
 		
 		super(
 			"unlink",
-			"discord unlink",
+			"discord linkings unlink",
 			true,
 			false,
 			false,

@@ -44,23 +44,26 @@ public class DiscordCommand {
 			.executes( DiscordCommand::showGamerules ) );
 		discordCommand.then( Commands.literal( "mods" )
 			.executes( DiscordCommand::showMods ) );
-		discordCommand.then( Commands.literal( "link" )
-			.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
-				.executes( DiscordCommand::linkDiscord ) ) );
-		discordCommand.then( Commands.literal( "unlink" )
-			.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
-				.executes( DiscordCommand::unlinkDiscord ) ) );
+		discordCommand.then( Commands.literal( "linkings" )
+			.then( Commands.literal( "link" )
+				.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+					.executes( DiscordCommand::linkDiscord ) ) )
+			.then( Commands.literal( "unlink" )
+				.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+					.executes( DiscordCommand::unlinkDiscord ) ) ) );
 		
 		LiteralArgumentBuilder<CommandSourceStack> opDiscordCommand =
 			discordCommand.requires( commandSourceStack -> commandSourceStack.hasPermission( 3 ) );
-		opDiscordCommand.then( Commands.literal( "link" )
-			.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
-				.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
-					.executes( DiscordCommand::linkMinecraft ) ) ) );
-		opDiscordCommand.then( Commands.literal( "unlink" )
-			.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
-				.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
-					.executes( DiscordCommand::unlinkMinecraft ) ) ) );
+		opDiscordCommand
+			.then( Commands.literal( "linkings" )
+				.then( Commands.literal( "link" )
+					.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+						.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+							.executes( DiscordCommand::linkMinecraft ) ) ) )
+				.then( Commands.literal( "unlink" )
+					.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+						.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+							.executes( DiscordCommand::unlinkMinecraft ) ) ) ) );
 		
 		dispatcher.register( discordCommand );
 	}
