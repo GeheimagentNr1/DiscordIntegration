@@ -10,9 +10,11 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 
-@Mod.EventBusSubscriber( modid = DiscordIntegration.MODID,
+@Mod.EventBusSubscriber(
+	modid = DiscordIntegration.MODID,
 	bus = Mod.EventBusSubscriber.Bus.MOD,
-	value = Dist.DEDICATED_SERVER )
+	value = Dist.DEDICATED_SERVER
+)
 public class ModEventHandler {
 	
 	

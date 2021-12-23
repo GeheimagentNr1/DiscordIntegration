@@ -66,10 +66,7 @@ public class LinkingsManager {
 		}
 	}
 	
-	private static void updateWhitelist(
-		Linkings linkings,
-		Consumer<Throwable> errorHandler )
-		throws IOException {
+	private static void updateWhitelist( Linkings linkings, Consumer<Throwable> errorHandler ) throws IOException {
 		
 		updateWhitelist( linkings, List.of(), errorHandler );
 	}
@@ -77,8 +74,7 @@ public class LinkingsManager {
 	private static void updateWhitelist(
 		Linkings linkings,
 		List<Linking> removedLinkings,
-		Consumer<Throwable> errorHandler )
-		throws IOException {
+		Consumer<Throwable> errorHandler ) throws IOException {
 		
 		List<MinecraftGameProfile> removedMinecraftGameProfiles = removedLinkings.stream()
 			.map( Linking::getMinecraftGameProfile )
@@ -140,9 +136,7 @@ public class LinkingsManager {
 			ServerConfig.WHITELIST_CONFIG.getRoleId() == role.getIdLong();
 	}
 	
-	private static void updateLinking(
-		Linking linking,
-		Consumer<Throwable> errorHandler ) throws IOException {
+	private static void updateLinking( Linking linking, Consumer<Throwable> errorHandler ) throws IOException {
 		
 		Linkings linkings = LinkingsFileManager.load();
 		Optional<Linking> foundLinkingOptional = linkings.findLinking( linking );
@@ -196,10 +190,8 @@ public class LinkingsManager {
 		}
 	}
 	
-	public static void removeLinking(
-		Member member,
-		GameProfile gameProfile,
-		Consumer<Throwable> errorHandler ) throws IOException {
+	public static void removeLinking( Member member, GameProfile gameProfile, Consumer<Throwable> errorHandler )
+		throws IOException {
 		
 		if( isEnabled() ) {
 			Linkings linkings = LinkingsFileManager.load();
@@ -222,8 +214,7 @@ public class LinkingsManager {
 	}
 	
 	//package-private
-	static void resendMessage( long messageId, Consumer<Throwable> errorHandler )
-		throws IOException {
+	static void resendMessage( long messageId, Consumer<Throwable> errorHandler ) throws IOException {
 		
 		if( isEnabled() ) {
 			
@@ -256,10 +247,8 @@ public class LinkingsManager {
 	}
 	
 	//package-private
-	static void changeActiveStateOfLinking(
-		long messageId,
-		boolean shouldActive,
-		Consumer<Throwable> errorHandler ) throws IOException {
+	static void changeActiveStateOfLinking( long messageId, boolean shouldActive, Consumer<Throwable> errorHandler )
+		throws IOException {
 		
 		if( isEnabled() ) {
 			

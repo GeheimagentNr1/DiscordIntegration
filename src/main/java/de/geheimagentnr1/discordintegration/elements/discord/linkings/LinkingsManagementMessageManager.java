@@ -77,10 +77,7 @@ public class LinkingsManagementMessageManager {
 	}
 	
 	//package-private
-	static void sendOrEditMessage(
-		Member member,
-		Linking linking,
-		Consumer<Long> messageIdHandler ) {
+	static void sendOrEditMessage( Member member, Linking linking, Consumer<Long> messageIdHandler ) {
 		
 		if( isInitialized() ) {
 			try {

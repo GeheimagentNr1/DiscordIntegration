@@ -26,7 +26,8 @@ public class GamerulesCommandConfig extends CommandConfig {
 		String minecraftCommand,
 		boolean useParameters,
 		boolean enabled,
-		boolean managementCommand, String description ) {
+		boolean managementCommand,
+		String description ) {
 		
 		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
 	}

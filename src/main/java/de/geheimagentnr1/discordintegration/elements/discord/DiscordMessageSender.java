@@ -12,8 +12,7 @@ public class DiscordMessageSender {
 		
 		try {
 			for( int start = 0; start < message.length(); start += 2000 ) {
-				channel.sendMessage( message.substring( start, Math.min( message.length(), start + 2000 ) ) )
-					.queue();
+				channel.sendMessage( message.substring( start, Math.min( message.length(), start + 2000 ) ) ).queue();
 			}
 		} catch( Exception exception ) {
 			log.error( "Message could not be send to channel {}", channel.getIdLong(), exception );

@@ -41,12 +41,14 @@ public class LinkingsEventHandler extends ListenerAdapter {
 			if( event.getMember() == null ) {
 				log.error( "Failed to remove Linkings for discord user, who leaved the Discord server." );
 			} else {
+				
 				Consumer<Throwable> errorHandler = throwable ->
 					log.error(
 						"Failed to remove Linkings for discord user {}, who leaved the Discord server.",
 						event.getMember().getEffectiveName(),
 						throwable
 					);
+				
 				try {
 					LinkingsManager.removeLinkings( event.getMember(), errorHandler );
 					log.info(
@@ -68,6 +70,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error( "Failed to update Whitelist, after the Discord whitelistrole has been deleted", throwable );
+			
 			try {
 				log.info( "Update whiteliste, because the Discord whitelist role has been deleted" );
 				LinkingsManager.updateWhitelist( errorHandler );
