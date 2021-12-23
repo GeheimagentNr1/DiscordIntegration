@@ -1,18 +1,16 @@
 package de.geheimagentnr1.discordintegration.config;
 
-import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import lombok.extern.slf4j.Slf4j;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
+@Slf4j
 public class ServerConfig {
 	
 	
-	private static final Logger LOGGER = LogManager.getLogger( ServerConfig.class );
-	
-	private static final String MOD_NAME = ModLoadingContext.get().getActiveContainer().getModInfo().getDisplayName();
+	public static final String MOD_NAME = ModLoadingContext.get().getActiveContainer().getModInfo().getDisplayName();
 	
 	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	
@@ -42,18 +40,18 @@ public class ServerConfig {
 	public static void handleConfigEvent() {
 		
 		printConfig();
-		DiscordNet.init();
+		DiscordManager.init();
 	}
 	
 	private static void printConfig() {
 		
-		LOGGER.info( "Loading \"{}\" Server Config", MOD_NAME );
-		BOT_CONFIG.printConfig( LOGGER );
-		CHAT_CONFIG.printConfig( LOGGER );
-		MANAGEMENT_CONFIG.printConfig( LOGGER );
-		WHITELIST_CONFIG.printConfig( LOGGER );
-		COMMAND_SETTINGS_CONFIG.printConfig( LOGGER );
+		log.info( "Loading \"{}\" Server Config", MOD_NAME );
+		BOT_CONFIG.printConfig( log );
+		CHAT_CONFIG.printConfig( log );
+		MANAGEMENT_CONFIG.printConfig( log );
+		WHITELIST_CONFIG.printConfig( log );
+		COMMAND_SETTINGS_CONFIG.printConfig( log );
 		
-		LOGGER.info( "\"{}\" Server Config loaded", MOD_NAME );
+		log.info( "\"{}\" Server Config loaded", MOD_NAME );
 	}
 }

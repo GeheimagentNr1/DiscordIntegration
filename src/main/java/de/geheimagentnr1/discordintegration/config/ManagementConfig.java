@@ -1,12 +1,12 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 
 public class ManagementConfig {
 	
-	//TODO: Use all
+	
 	private final ForgeConfigSpec.BooleanValue enabled;
 	
 	private final ForgeConfigSpec.LongValue channel_id;
@@ -18,14 +18,14 @@ public class ManagementConfig {
 	//package-private
 	ManagementConfig( ForgeConfigSpec.Builder builder ) {
 		
-		builder.comment( "Chat channel settings" )
-			.push( "chat" );
-		enabled = builder.comment( "Should the Minecraft and Discord chat be linked?" )
+		builder.comment( "Management channel settings" )
+			.push( "management" );
+		enabled = builder.comment( "Should a Mangement channel be used?" )
 			.define( "enabled", false );
 		channel_id = builder.comment( "Channel ID, where the management channel should be." )
 			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
 		role_id = builder.comment( "Role ID, which discord users need to execute managment commands" )
-			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
+			.defineInRange( "role_id", 0, 0, Long.MAX_VALUE );//TODO: Check
 		management_messages_config = new ManagementMessagesConfig( builder );
 		builder.pop();
 	}

@@ -1,16 +1,15 @@
-package de.geheimagentnr1.discordintegration.elements.discord;
+package de.geheimagentnr1.discordintegration.elements.discord.commands.models;
 
+import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 public class DiscordCommandSourceStack extends CommandSourceStack {
@@ -18,20 +17,23 @@ public class DiscordCommandSourceStack extends CommandSourceStack {
 	
 	private final Member member;
 	
-	//package-private
-	DiscordCommandSourceStack(
+	public DiscordCommandSourceStack(
 		CommandSource source,
-		Vec3 worldPosition,
-		Vec2 rotation,
-		ServerLevel level,
 		int permissionLevel,
-		String textName,
-		Component displayName,
 		MinecraftServer server,
-		@Nullable Entity entity,
 		Member _member ) {
 		
-		super( source, worldPosition, rotation, level, permissionLevel, textName, displayName, server, entity );
+		super(
+			source,
+			Vec3.ZERO,
+			Vec2.ZERO,
+			Objects.requireNonNull( server.overworld() ),
+			permissionLevel,
+			ServerConfig.MOD_NAME,
+			new TextComponent( ServerConfig.MOD_NAME ),
+			server,
+			null
+		);
 		member = _member;
 	}
 	

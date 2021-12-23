@@ -7,14 +7,15 @@ import java.util.function.Supplier;
 
 
 public class LinkCommandConfig extends CommandConfig {
-
+	
+	
 	public LinkCommandConfig() {
 		
 		super(
 			"link",
 			"discord link",
 			true,
-			true,
+			false,
 			false,
 			"<Minecraft player name> links a minecraft player with the discord user using this command."
 		);

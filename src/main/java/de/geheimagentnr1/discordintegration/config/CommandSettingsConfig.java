@@ -5,7 +5,7 @@ import de.geheimagentnr1.discordintegration.config.command_config.*;
 import de.geheimagentnr1.discordintegration.config.command_config.mods.DimensionsCommandConfig;
 import de.geheimagentnr1.discordintegration.config.command_config.mods.MobgriefingCommandConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +17,11 @@ public class CommandSettingsConfig {
 	
 	private final ForgeConfigSpec.ConfigValue<String> command_prefix;
 	
-	private final ForgeConfigSpec.IntValue command_normal_user_permission_level;//TODO: Use
+	private final ForgeConfigSpec.IntValue command_normal_user_permission_level;
 	
-	private final ForgeConfigSpec.IntValue command_management_user_permission_level;//TODO: Use
+	private final ForgeConfigSpec.IntValue command_management_user_permission_level;
 	
-	private final CommandSettingsOtherBotsConfig command_settings_other_bots_config;
+	private final ForgeConfigSpec.ConfigValue<List<String>> other_bots_command_prefixes;
 	
 	private final ForgeConfigSpec.ConfigValue<List<? extends CommandConfig>> commands;
 	
@@ -38,7 +38,9 @@ public class CommandSettingsConfig {
 		command_management_user_permission_level = builder.comment(
 				"Permission level for Minecraft commands for users, who do have the management role" )
 			.defineInRange( "command_management_user_permission_level", 4, 0, 4 );
-		command_settings_other_bots_config = new CommandSettingsOtherBotsConfig( builder );
+		other_bots_command_prefixes = builder.comment( "Command prefixes of other bots. " +
+				"Messages with these prefixes are not sent to the Minecraft chat." )
+			.define( "other_bots_command_prefixes", new ArrayList<>() );
 		commands = builder.comment( "Command mapping from Discord to Minecraft commands" )
 			.defineList( "commands", CommandSettingsConfig::buildDefaultCommandList, CommandConfig::isCorrect );
 		builder.pop();
@@ -82,9 +84,9 @@ public class CommandSettingsConfig {
 		return command_management_user_permission_level.get();
 	}
 	
-	public CommandSettingsOtherBotsConfig getCommandSettingsOtherBotsConfig() {
+	public List<String> getOtherBotsCommandPrefixes() {
 		
-		return command_settings_other_bots_config;
+		return other_bots_command_prefixes.get();
 	}
 	
 	public List<? extends AbstractCommentedConfig> getCommands() {
@@ -96,7 +98,17 @@ public class CommandSettingsConfig {
 	void printConfig( Logger logger ) {
 		
 		logger.info( "{} = {}", command_prefix.getPath(), command_prefix.get() );
-		command_settings_other_bots_config.printConfig( logger );
+		logger.info(
+			"{} = {}",
+			command_normal_user_permission_level.getPath(),
+			command_normal_user_permission_level.get()
+		);
+		logger.info(
+			"{} = {}",
+			command_management_user_permission_level.getPath(),
+			command_management_user_permission_level.get()
+		);
+		logger.info( "{} = {}", other_bots_command_prefixes.getPath(), other_bots_command_prefixes.get() );
 		
 		List<? extends AbstractCommentedConfig> commandList = commands.get();
 		for( int i = 0; i < commandList.size(); i++ ) {

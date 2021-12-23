@@ -8,13 +8,14 @@ import java.util.function.Supplier;
 
 public class UnlinkCommandConfig extends CommandConfig {
 	
+	
 	public UnlinkCommandConfig() {
 		
 		super(
-			"link",
-			"discord link",
+			"unlink",
+			"discord unlink",
 			true,
-			true,
+			false,
 			false,
 			"<Minecraft player name> unlinks a minecraft player from the discord user using this command."
 		);

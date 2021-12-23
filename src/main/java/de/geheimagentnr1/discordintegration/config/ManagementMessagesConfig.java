@@ -1,12 +1,12 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 
 public class ManagementMessagesConfig {
 	
-	//TODO: Use all
+	
 	private final MessageConfig server_started;
 	
 	private final MessageConfig server_stopped;
@@ -95,7 +95,7 @@ public class ManagementMessagesConfig {
 			"Should a message be sent to the Discord management channel, if the a player is added to the whitelist, " +
 				"because of a linking?",
 			"Message send to the Discord management channel, if a player is added to the whitelist, " +
-				"because of a linking. (<discord user name>: <player name> <message>)",
+				"because of a linking. (<player name> <message>)",
 			"added to whitelist"
 		);
 		player_whitelist_removed = new MessageConfig(
@@ -105,7 +105,7 @@ public class ManagementMessagesConfig {
 			"Should a message be sent to the Discord management channel, if the a player is removed from the " +
 				"whitelist, because of a linking?",
 			"Message send to the Discord management channel, if a player is added to the whitelist, " +
-				"because of a linking. (<discord user name>: <player name> <message>)",
+				"because of a linking. (<player name> <message>)",
 			"removed from the whitelist"
 		);
 		builder.pop();

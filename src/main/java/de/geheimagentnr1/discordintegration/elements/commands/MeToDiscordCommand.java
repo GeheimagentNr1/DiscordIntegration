@@ -5,7 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -47,7 +47,7 @@ public class MeToDiscordCommand {
 				Util.NIL_UUID
 			);
 		}
-		DiscordNet.sendMeChatMessage( source, action );
+		ChatManager.sendMeChatMessage( source, action );
 		return Command.SINGLE_SUCCESS;
 	}
 }

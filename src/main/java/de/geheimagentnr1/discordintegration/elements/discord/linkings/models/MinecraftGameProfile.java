@@ -1,22 +1,25 @@
-package de.geheimagentnr1.discordintegration.elements.linking;
+package de.geheimagentnr1.discordintegration.elements.discord.linkings.models;
 
 import com.mojang.authlib.GameProfile;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 
 @Data
+@Builder
 @NoArgsConstructor
-public class SimpleGameProfile {
+@AllArgsConstructor
+@EqualsAndHashCode( onlyExplicitlyIncluded = true )
+public class MinecraftGameProfile {
 	
 	
+	@EqualsAndHashCode.Include
 	private UUID uuid;
 	
 	private String name;
 	
-	public SimpleGameProfile( GameProfile gameProfile ) {
+	public MinecraftGameProfile( GameProfile gameProfile ) {
 		
 		uuid = gameProfile.getId();
 		name = gameProfile.getName();

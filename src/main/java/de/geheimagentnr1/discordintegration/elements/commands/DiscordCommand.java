@@ -11,9 +11,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import de.geheimagentnr1.discordintegration.elements.commands.arguments.single_game_profile.SingleGameProfileArgument;
-import de.geheimagentnr1.discordintegration.elements.discord.DiscordCommandSourceStack;
-import de.geheimagentnr1.discordintegration.elements.linking.LinkingManager;
-import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSourceStack;
+import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
+import lombok.extern.slf4j.Slf4j;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -22,20 +24,17 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 @SuppressWarnings( "SameReturnValue" )
+@Slf4j
 public class DiscordCommand {
-	
-	
-	private static final Logger LOGGER = LogManager.getLogger( DiscordCommand.class );
 	
 	
 	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
@@ -143,16 +142,21 @@ public class DiscordCommand {
 		return link( source, member, context );
 	}
 	
+	@SuppressWarnings( "DuplicatedCode" )
 	private static int linkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
-		if( ( source instanceof DiscordCommandSourceStack ) ) {
-			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+		if( DiscordCommandHelper.isNotDiscordSource(source) ) {
 			return -1;
 		}
-		Member member = DiscordNet.getGuild().getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
+		Guild guild = DiscordManager.getGuild();
+		if( guild == null ) {
+			DiscordCommandHelper.sendInvalidGuild( source );
+			return -1;
+		}
+		Member member = guild.getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
 		if( member == null ) {
-			source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
+			DiscordCommandHelper.sendInvalidMember( source );
 			return -1;
 		}
 		
@@ -165,17 +169,34 @@ public class DiscordCommand {
 		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
 		
 		try {
-			LinkingManager.createLinking( member, gameProfile );
-			source.sendSuccess(
-				new TextComponent( String.format(
-					"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",
-					member.getEffectiveName(),
-					gameProfile.getName()
-				) ),
-				true
+			LinkingsManager.createLinking(
+				member,
+				gameProfile,
+				new Consumer<Boolean>() {
+					
+					@Override
+					public void accept( Boolean aBoolean ) {
+						source.sendSuccess(
+							new TextComponent( String.format(
+								"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",
+								member.getEffectiveName(),
+								gameProfile.getName()
+							) ),
+							true
+						);
+					}
+				},
+				new Consumer<Throwable>() {
+					
+					@Override
+					public void accept( Throwable throwable ) {
+						log.error( "Linking failed", throwable );
+						source.sendFailure( new TextComponent( throwable.getMessage() ) );
+					}
+				}
 			);
 		} catch( IOException exception ) {
-			LOGGER.error( "Linking failed", exception );
+			log.error( "Linking failed", exception );
 			source.sendFailure( new TextComponent( exception.getMessage() ) );
 			return -1;
 		}
@@ -194,16 +215,21 @@ public class DiscordCommand {
 		return unlink( source, member, context );
 	}
 	
+	@SuppressWarnings( "DuplicatedCode" )
 	private static int unlinkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
-		if( ( source instanceof DiscordCommandSourceStack ) ) {
-			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+		if( DiscordCommandHelper.isNotDiscordSource(source) ) {
 			return -1;
 		}
-		Member member = DiscordNet.getGuild().getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
+		Guild guild = DiscordManager.getGuild();
+		if( guild == null ) {
+			DiscordCommandHelper.sendInvalidGuild( source );
+			return -1;
+		}
+		Member member = guild.getMemberById( LongArgumentType.getLong( context, "discordMemberId" ) );
 		if( member == null ) {
-			source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
+			DiscordCommandHelper.sendInvalidMember( source );
 			return -1;
 		}
 		
@@ -216,7 +242,15 @@ public class DiscordCommand {
 		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
 		
 		try {
-			LinkingManager.removeLinking( member, gameProfile );
+			LinkingsManager.removeLinking( member, gameProfile, new Consumer<Throwable>() {
+				
+				@Override
+				public void accept( Throwable throwable ) {
+					
+					log.error( "Unlinking failed", throwable );
+					source.sendFailure( new TextComponent( throwable.getMessage() ) );
+				}
+			} );
 			source.sendSuccess(
 				new TextComponent( String.format(
 					"Removed Linking between Discord account \"%s\" and Minecraft account \"%s\"",
@@ -226,7 +260,7 @@ public class DiscordCommand {
 				true
 			);
 		} catch( IOException exception ) {
-			LOGGER.error( "Unlinking failed", exception );
+			log.error( "Unlinking failed", exception );
 			source.sendFailure( new TextComponent( exception.getMessage() ) );
 			return -1;
 		}

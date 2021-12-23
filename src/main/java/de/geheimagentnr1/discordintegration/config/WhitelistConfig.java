@@ -1,7 +1,7 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 
 public class WhitelistConfig {
@@ -9,11 +9,11 @@ public class WhitelistConfig {
 	
 	private final ForgeConfigSpec.BooleanValue enabled;
 	
-	private final ForgeConfigSpec.BooleanValue use_role;//TODO: Use
+	private final ForgeConfigSpec.BooleanValue use_role;
 	
 	private final ForgeConfigSpec.LongValue role_id;
 	
-	private final ForgeConfigSpec.BooleanValue use_single_linking_management;//TODO: Use
+	private final ForgeConfigSpec.BooleanValue use_single_linking_management;
 	
 	private final ForgeConfigSpec.LongValue linking_management_channel_id;
 	
@@ -63,6 +63,7 @@ public class WhitelistConfig {
 	}
 	
 	//package-private
+	@SuppressWarnings( "DuplicatedCode" )
 	void printConfig( Logger logger ) {
 		
 		logger.info( "{} = {}", enabled.getPath(), enabled.get() );

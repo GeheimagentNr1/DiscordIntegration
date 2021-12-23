@@ -1,7 +1,7 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 
 public class ChatMessagesConfig {
