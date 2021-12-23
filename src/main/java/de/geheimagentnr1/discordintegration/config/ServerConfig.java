@@ -1,12 +1,12 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 
 
-@Slf4j
+@Log4j2
 public class ServerConfig {
 	
 	

@@ -1,6 +1,6 @@
 package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
-@Slf4j
+@Log4j2
 public class LinkingsEventHandler extends ListenerAdapter {
 	
 	
@@ -99,6 +99,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 					
 					@Override
 					public void accept( Throwable throwable ) {
+						
 						log.error(
 							"Failed to Whitelist, after Discord user {} has been added to roles {}",
 							event.getMember().getEffectiveName(),
@@ -133,6 +134,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 					
 					@Override
 					public void accept( Throwable throwable ) {
+						
 						log.error(
 							"Failed to Whitelist, after Discord user {} has been removed from roles {}",
 							event.getMember().getEffectiveName(),
@@ -188,7 +190,8 @@ public class LinkingsEventHandler extends ListenerAdapter {
 		TextChannel channel = event.getChannel();
 		MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
 		
-		Boolean shouldActive = LinkingsManagementMessageManager.reactionCodeToBool( reactionEmote.getAsReactionCode() );
+		Boolean shouldActive =
+			LinkingsManagementMessageManager.reactionCodeToBool( reactionEmote.getAsReactionCode() );
 		
 		if( shouldActive != null ) {
 			try {

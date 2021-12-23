@@ -14,8 +14,7 @@ import de.geheimagentnr1.discordintegration.elements.commands.arguments.single_g
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSourceStack;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
-import lombok.extern.slf4j.Slf4j;
-import net.dv8tion.jda.api.entities.Guild;
+import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -33,7 +32,7 @@ import java.util.function.Consumer;
 
 
 @SuppressWarnings( "SameReturnValue" )
-@Slf4j
+@Log4j2
 public class DiscordCommand {
 	
 	
@@ -146,7 +145,7 @@ public class DiscordCommand {
 	private static int linkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
-		if( DiscordCommandHelper.isNotDiscordSource(source) ) {
+		if( DiscordCommandHelper.isNotDiscordSource( source ) ) {
 			return -1;
 		}
 		Member member = DiscordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );
@@ -171,6 +170,7 @@ public class DiscordCommand {
 					
 					@Override
 					public void accept( Boolean aBoolean ) {
+						
 						source.sendSuccess(
 							new TextComponent( String.format(
 								"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",
@@ -185,6 +185,7 @@ public class DiscordCommand {
 					
 					@Override
 					public void accept( Throwable throwable ) {
+						
 						log.error( "Linking failed", throwable );
 						source.sendFailure( new TextComponent( throwable.getMessage() ) );
 					}
@@ -214,7 +215,7 @@ public class DiscordCommand {
 	private static int unlinkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
-		if( DiscordCommandHelper.isNotDiscordSource(source) ) {
+		if( DiscordCommandHelper.isNotDiscordSource( source ) ) {
 			return -1;
 		}
 		Member member = DiscordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );

@@ -3,7 +3,7 @@ package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linking;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import java.util.function.Consumer;
 
 
-@Slf4j
+@Log4j2
 public class LinkingsManagementMessageManager {
 	
 	
@@ -71,7 +71,7 @@ public class LinkingsManagementMessageManager {
 		
 		return switch( reactionCode ) {
 			case TRUE_EMOJI -> true;
-			case FALSE_EMOJI-> false;
+			case FALSE_EMOJI -> false;
 			default -> null;
 		};
 	}
@@ -92,7 +92,7 @@ public class LinkingsManagementMessageManager {
 					channel.retrieveMessageById( linking.getMessageId() ).queue(
 						message -> sendOrEditMessage( message, member, linking, messageIdHandler ),
 						throwable -> {
-							if(throwable instanceof ErrorResponseException errorResponseException &&
+							if( throwable instanceof ErrorResponseException errorResponseException &&
 								errorResponseException.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE ) {
 								sendOrEditMessage( null, member, linking, messageIdHandler );
 							} else {

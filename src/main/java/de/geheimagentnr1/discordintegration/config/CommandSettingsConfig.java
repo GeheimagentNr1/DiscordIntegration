@@ -5,7 +5,7 @@ import de.geheimagentnr1.discordintegration.config.command_config.*;
 import de.geheimagentnr1.discordintegration.config.command_config.mods.DimensionsCommandConfig;
 import de.geheimagentnr1.discordintegration.config.command_config.mods.MobgriefingCommandConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

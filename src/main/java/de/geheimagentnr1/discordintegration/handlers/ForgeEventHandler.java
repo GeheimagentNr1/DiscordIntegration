@@ -7,9 +7,8 @@ import de.geheimagentnr1.discordintegration.elements.commands.MeToDiscordCommand
 import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
-import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -25,10 +24,8 @@ import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.function.Consumer;
 
-
-@Slf4j
+@Log4j2
 @Mod.EventBusSubscriber(
 	modid = DiscordIntegration.MODID,
 	bus = Mod.EventBusSubscriber.Bus.FORGE,

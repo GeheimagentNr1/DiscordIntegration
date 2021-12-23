@@ -4,15 +4,15 @@ import com.mojang.authlib.GameProfile;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.MinecraftGameProfile;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.UserWhiteList;
 import net.minecraft.server.players.UserWhiteListEntry;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 
-@Slf4j
 //package-private
+@Log4j2
 class WhitelistManager {
 	
 	

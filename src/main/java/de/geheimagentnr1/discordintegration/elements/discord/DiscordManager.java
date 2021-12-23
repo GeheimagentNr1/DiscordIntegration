@@ -8,7 +8,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsMa
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementMessageEventHandler;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-@Slf4j
+@Log4j2
 public class DiscordManager {
 	
 	

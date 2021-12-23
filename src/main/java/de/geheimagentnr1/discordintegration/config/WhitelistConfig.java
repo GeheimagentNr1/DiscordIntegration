@@ -1,7 +1,7 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 
 public class WhitelistConfig {

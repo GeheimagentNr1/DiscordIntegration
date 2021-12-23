@@ -1,10 +1,10 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 
-@Slf4j
+@Log4j2
 public class DiscordMessageSender {
 	
 	

@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linkings;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.io.FileReader;
@@ -12,8 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
-@Slf4j
 //package-private
+@Log4j2
 class LinkingsFileManager {
 	
 	

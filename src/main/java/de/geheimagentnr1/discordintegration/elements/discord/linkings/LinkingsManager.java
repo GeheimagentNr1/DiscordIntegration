@@ -7,7 +7,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Lin
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linkings;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.MinecraftGameProfile;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 
-@Slf4j
+@Log4j2
 public class LinkingsManager {
 	
 	

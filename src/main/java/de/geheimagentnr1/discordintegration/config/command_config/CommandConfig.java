@@ -5,7 +5,7 @@ import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
