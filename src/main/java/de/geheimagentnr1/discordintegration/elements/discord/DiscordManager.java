@@ -87,7 +87,11 @@ public class DiscordManager {
 	
 	public static synchronized boolean isInitialized() {
 		
-		return shouldInitialize() && jda != null && guild != null;
+		return shouldInitialize() &&
+			jda != null &&
+			jda.getStatus() != JDA.Status.SHUTTING_DOWN &&
+			jda.getStatus() != JDA.Status.SHUTDOWN &&
+			guild != null;
 	}
 	
 	public static synchronized JDA getJda() {
@@ -109,7 +113,9 @@ public class DiscordManager {
 			log.error( "Whitelist could not be updated on startup", throwable );
 		
 		try {
-			LinkingsManager.updateWhitelist( errorHandler );
+			log.info( "Check Discord whitelist on startup" );
+			LinkingsManager.updateWhitelist( errorHandler, true );
+			log.info( "Finished check Discord whitelist on startup" );
 		} catch( IOException exception ) {
 			errorHandler.accept( exception );
 		}

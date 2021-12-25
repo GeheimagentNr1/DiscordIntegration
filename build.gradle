@@ -164,18 +164,34 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-    implementation("net.dv8tion:JDA:${jda_version}") {
+    final def excludeForJda = {
         exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
+        exclude module: 'slf4j-api'/*
+        exclude module: 'jackson-annotations'
+        exclude module: 'jackson-core'
+        exclude module: 'jackson-databind'*/
     }
-    shadow("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
+    final def excludeForJsonPatchEssentials = {/*
+        exclude module: 'jackson-annotations'
+        exclude module: 'jackson-core'
+        exclude module: 'jackson-databind'
+        exclude module: 'jackson-datatype-jsr310'*/
     }
-    runtimeOnly("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
-    }
+
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
+    shadow 'com.fasterxml.jackson.core:jackson-core:2.13.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
+    shadow 'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+    shadow 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
+    shadow 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
+    implementation "net.dv8tion:JDA:${jda_version}", excludeForJda
+    shadow "net.dv8tion:JDA:${jda_version}", excludeForJda
+    runtimeOnly "net.dv8tion:JDA:${jda_version}", excludeForJda
+    implementation "com.mantledillusion.essentials:json-patch-essentials:${jpe_version}", excludeForJsonPatchEssentials
+    shadow "com.mantledillusion.essentials:json-patch-essentials:${jpe_version}", excludeForJsonPatchEssentials
+    runtimeOnly "com.mantledillusion.essentials:json-patch-essentials:${jpe_version}", excludeForJsonPatchEssentials
 
     /*runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
     runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")*/
@@ -195,7 +211,10 @@ shadowJar {
     relocate 'com.fasterxml.jackson.annotation', 'lib.com.fasterxml.jackson.annotation'
     relocate 'com.fasterxml.jackson.core', 'lib.com.fasterxml.jackson.core'
     relocate 'com.fasterxml.jackson.databind', 'lib.com.fasterxml.jackson.databind'
+    relocate 'com.fasterxml.jackson.datatype.jsr310', 'lib.com.fasterxml.jackson.datatype.jsr310'
+    relocate 'com.flipkart.zjsonpatch', 'lib.com.flipkart.zjsonpatch'
     relocate 'com.iwebpp.crypto', 'lib.com.iwebpp.crypto'
+    relocate 'com.mantledillusion.essentials.json.patch', 'lib.com.mantledillusion.essentials.json.patch'
     relocate 'com.neovisionaries.ws.client', 'lib.com.neovisionaries.ws.client'
     relocate 'gnu.trove', 'lib.gnu.trove'
     relocate 'javax.annotation', 'lib.javax.annotation'

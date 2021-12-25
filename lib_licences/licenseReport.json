@@ -129,14 +129,14 @@
   {
     "project": "Apache Commons Collections",
     "description": "The Apache Commons Collections package contains types that extend and augment the Java Collections Framework.",
-    "version": "4.1",
+    "version": "4.2",
     "developers": [
       "Matt Benson",
       "James Carman",
       "Stephen Colebourne",
       "Robert Burrell Donkin",
       "Morgan Delagrange",
-      "Gary D. Gregory",
+      "Gary Gregory",
       "Matthew Hawthorne",
       "Dipanjan Laha",
       "Geir Magnusson",
@@ -144,20 +144,20 @@
       "Craig McClanahan",
       "Thomas Neidhart",
       "Adrian Nistor",
-      "Phil Steitz",
       "Arun M. Thomas",
       "Rodney Waldhoff",
-      "Henri Yandell"
+      "Henri Yandell",
+      "Rob Tompkins"
     ],
     "url": "http://commons.apache.org/proper/commons-collections/",
     "year": "2001",
     "licenses": [
       {
         "license": "Apache License, Version 2.0",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.apache.commons:commons-collections4:4.1"
+    "dependency": "org.apache.commons:commons-collections4:4.2"
   },
   {
     "project": "Apache Commons Compress",
@@ -786,9 +786,26 @@
     "dependency": "com.google.j2objc:j2objc-annotations:1.3"
   },
   {
+    "project": "Jackson datatype: JSR310",
+    "description": "Add-on module to support JSR-310 (Java 8 Date \u0026 Time API) data types.",
+    "version": "2.13.1",
+    "developers": [
+      "Nick Williams"
+    ],
+    "url": null,
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1"
+  },
+  {
     "project": "Jackson-annotations",
     "description": "Core annotations used for value types, used by Jackson data binding package.",
-    "version": "2.10.1",
+    "version": "2.13.1",
     "developers": [],
     "url": "http://github.com/FasterXML/jackson",
     "year": "2008",
@@ -798,12 +815,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.fasterxml.jackson.core:jackson-annotations:2.10.1"
+    "dependency": "com.fasterxml.jackson.core:jackson-annotations:2.13.1"
   },
   {
     "project": "Jackson-core",
     "description": "Core Jackson processing abstractions (aka Streaming API), implementation for JSON",
-    "version": "2.10.1",
+    "version": "2.13.1",
     "developers": [],
     "url": "https://github.com/FasterXML/jackson-core",
     "year": "2008",
@@ -813,12 +830,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.fasterxml.jackson.core:jackson-core:2.10.1"
+    "dependency": "com.fasterxml.jackson.core:jackson-core:2.13.1"
   },
   {
     "project": "jackson-databind",
     "description": "General data-binding functionality for Jackson: works on core streaming API",
-    "version": "2.10.1",
+    "version": "2.13.1",
     "developers": [],
     "url": "http://github.com/FasterXML/jackson",
     "year": "2008",
@@ -828,7 +845,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.fasterxml.jackson.core:jackson-databind:2.10.1"
+    "dependency": "com.fasterxml.jackson.core:jackson-databind:2.13.1"
   },
   {
     "project": "Java Native Access",
@@ -989,6 +1006,21 @@
       }
     ],
     "dependency": "net.sf.jopt-simple:jopt-simple:5.0.4"
+  },
+  {
+    "project": "JSON Patch Essentials",
+    "description": "JSON Patch Essentials contain utility classes useful for capturing and applying RFC 6902 compliant JSON patches from and to Java POJOs.",
+    "version": "1.0.0",
+    "developers": [],
+    "url": "http://www.mantledillusion.com",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.mantledillusion.essentials:json-patch-essentials:1.0.0"
   },
   {
     "project": "JSR 353 (JSON Processing) Default Provider",
@@ -1448,5 +1480,22 @@
     "year": null,
     "licenses": [],
     "dependency": "net.minecraftforge:unsafe:0.2.0"
+  },
+  {
+    "project": "zjsonpatch",
+    "description": "Java Library to find / apply JSON Patches according to RFC 6902",
+    "version": "0.4.9",
+    "developers": [
+      "Gopi Vishwakarma"
+    ],
+    "url": "https://github.com/flipkart-incubator/zjsonpatch/",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.flipkart.zjsonpatch:zjsonpatch:0.4.9"
   }
 ]

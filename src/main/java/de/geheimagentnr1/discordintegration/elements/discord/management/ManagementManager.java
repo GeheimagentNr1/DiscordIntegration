@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.minecraft.world.entity.player.Player;
 
 
+@SuppressWarnings( { "SynchronizeOnThis", "NestedSynchronizedStatement" } )
 @Log4j2
 public class ManagementManager {
 	
@@ -20,18 +21,22 @@ public class ManagementManager {
 	
 	public static void init() {
 		
-		stop();
-		if( shouldInitialize() ) {
-			long channelId = ServerConfig.MANAGEMENT_CONFIG.getChannelId();
-			JDA jda = DiscordManager.getJda();
-			channel = jda.getTextChannelById( channelId );
-			if( channel == null ) {
-				log.error( "Discord Management Text Channel {} not found", channelId );
+		synchronized( DiscordManager.class ) {
+			synchronized( ManagementManager.class ) {
+				stop();
+				if( shouldInitialize() ) {
+					long channelId = ServerConfig.MANAGEMENT_CONFIG.getChannelId();
+					JDA jda = DiscordManager.getJda();
+					channel = jda.getTextChannelById( channelId );
+					if( channel == null ) {
+						log.error( "Discord Management Text Channel {} not found", channelId );
+					}
+				}
 			}
 		}
 	}
 	
-	public static void stop() {
+	public static synchronized void stop() {
 		
 		channel = null;
 	}
@@ -43,7 +48,11 @@ public class ManagementManager {
 	
 	private static boolean isInitialized() {
 		
-		return shouldInitialize() && channel != null;
+		synchronized( DiscordManager.class ) {
+			synchronized( ManagementManager.class ) {
+				return shouldInitialize() && channel != null;
+			}
+		}
 	}
 	
 	//package-private
@@ -62,6 +71,20 @@ public class ManagementManager {
 		sendMessage( DiscordMessageBuilder.buildPlayerMessage( minecraftGameProfile.getName(), message ) );
 	}
 	
+	public static void sendLinkingMessage( String discordName, String minecraftName, String message ) {
+		
+		synchronized( DiscordManager.class ) {
+			synchronized( ManagementManager.class ) {
+				if( isInitialized() ) {
+					DiscordMessageSender.sendMessage(
+						channel,
+						String.format( "**%s** %s **%s**", minecraftName, message, discordName )
+					);
+				}
+			}
+		}
+	}
+	
 	public static void sendPlayerMessage( Player player, String message ) {
 		
 		sendMessage( DiscordMessageBuilder.buildPlayerMessage( player, message ) );
@@ -69,28 +92,26 @@ public class ManagementManager {
 	
 	public static void sendMessage( String message ) {
 		
-		if( isInitialized() ) {
-			DiscordMessageSender.sendMessage( channel, message );
+		synchronized( DiscordManager.class ) {
+			synchronized( ManagementManager.class ) {
+				if( isInitialized() ) {
+					DiscordMessageSender.sendMessage( channel, message );
+				}
+			}
 		}
 	}
 	
 	//package-private
 	static void sendFeedbackMessage( String message ) {
 		
-		if( isInitialized() ) {
-			for( String messagePart : DiscordMessageBuilder.buildFeedbackMessage( message ) ) {
-				DiscordMessageSender.sendMessage( channel, messagePart );
+		synchronized( DiscordManager.class ) {
+			synchronized( ManagementManager.class ) {
+				if( isInitialized() ) {
+					for( String messagePart : DiscordMessageBuilder.buildFeedbackMessage( message ) ) {
+						DiscordMessageSender.sendMessage( channel, messagePart );
+					}
+				}
 			}
-		}
-	}
-	
-	public static void sendLinkingMessage( String discordName, String minecraftName, String message ) {
-		
-		if( isInitialized() ) {
-			DiscordMessageSender.sendMessage(
-				channel,
-				String.format( "**%s** %s **%s**", minecraftName, message, discordName )
-			);
 		}
 	}
 }

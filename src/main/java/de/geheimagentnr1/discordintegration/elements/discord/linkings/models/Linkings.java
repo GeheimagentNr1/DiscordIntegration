@@ -11,7 +11,7 @@ import java.util.Optional;
 public class Linkings {
 	
 	
-	private HashSet<Linking> linkings;
+	private HashSet<Linking> linkings = new HashSet<>();
 	
 	public void add( Linking linking ) {
 		

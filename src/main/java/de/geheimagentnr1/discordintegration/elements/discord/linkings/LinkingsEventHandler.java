@@ -1,5 +1,6 @@
 package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 
+import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.entities.Role;
@@ -13,8 +14,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEmoteEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -180,6 +183,26 @@ public class LinkingsEventHandler extends ListenerAdapter {
 			channel.removeReactionById( messageId, reactionEmote.getEmoji(), user ).queue();
 		} else {
 			channel.removeReactionById( messageId, reactionEmote.getEmote(), user ).queue();
+		}
+	}
+	
+	@Override
+	public void onGuildMessageReactionRemove( @NotNull GuildMessageReactionRemoveEvent event ) {
+		
+		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) &&
+			DiscordManager.getSelfUser().getIdLong() == event.getUserIdLong() ) {
+			
+			Consumer<Throwable> errorHandler = throwable ->
+				log.error(
+					"Failed to resend message, after a reaction have been removed from message",
+					throwable
+				);
+			
+			try {
+				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
+			} catch( IOException exception ) {
+				errorHandler.accept( exception );
+			}
 		}
 	}
 	

@@ -20,7 +20,7 @@ class LinkingsFileManager {
 	private static final File FILE = new File( "linking.json" );
 	
 	//package-private
-	static Linkings load() throws IOException {
+	static synchronized Linkings load() throws IOException {
 		
 		try( FileReader fileReader = new FileReader( FILE ) ) {
 			Linkings linkings = new GsonBuilder().setPrettyPrinting().create().fromJson( fileReader, Linkings.class );
@@ -37,7 +37,7 @@ class LinkingsFileManager {
 	}
 	
 	//package-private
-	static void save( Linkings linkings ) throws IOException {
+	static synchronized void save( Linkings linkings ) throws IOException {
 		
 		try( FileWriter fileWriter = new FileWriter( FILE ) ) {
 			new GsonBuilder().setPrettyPrinting().create().toJson( linkings, fileWriter );

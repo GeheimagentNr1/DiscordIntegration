@@ -3,6 +3,7 @@ package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linking;
+import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.LinkingMessageRequestCounter;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -17,6 +18,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import java.util.function.Consumer;
 
 
+@SuppressWarnings( { "SynchronizeOnThis", "NestedSynchronizedStatement" } )
 @Log4j2
 public class LinkingsManagementMessageManager {
 	
@@ -29,18 +31,22 @@ public class LinkingsManagementMessageManager {
 	
 	public static void init() {
 		
-		stop();
-		if( shouldInitialize() ) {
-			long channelId = ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId();
-			JDA jda = DiscordManager.getJda();
-			channel = jda.getTextChannelById( channelId );
-			if( channel == null ) {
-				log.error( "Discord Linking Management Text Channel {} not found", channelId );
+		synchronized( DiscordManager.class ) {
+			synchronized( LinkingsManagementMessageManager.class ) {
+				stop();
+				if( shouldInitialize() ) {
+					long channelId = ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId();
+					JDA jda = DiscordManager.getJda();
+					channel = jda.getTextChannelById( channelId );
+					if( channel == null ) {
+						log.error( "Discord Linking Management Text Channel {} not found", channelId );
+					}
+				}
 			}
 		}
 	}
 	
-	public static void stop() {
+	public static synchronized void stop() {
 		
 		channel = null;
 	}
@@ -52,7 +58,11 @@ public class LinkingsManagementMessageManager {
 	
 	private static boolean isInitialized() {
 		
-		return shouldInitialize() && channel != null;
+		synchronized( DiscordManager.class ) {
+			synchronized( LinkingsManagementMessageManager.class ) {
+				return shouldInitialize() && channel != null;
+			}
+		}
 	}
 	
 	//package-private
@@ -77,37 +87,73 @@ public class LinkingsManagementMessageManager {
 	}
 	
 	//package-private
-	static void sendOrEditMessage( Member member, Linking linking, Consumer<Long> messageIdHandler ) {
+	static void sendOrEditMessage(
+		Member member,
+		Linking linking,
+		boolean hasChanged,
+		Consumer<Long> messageIdHandler ) {
 		
-		if( isInitialized() ) {
-			try {
-				Long messageId = linking.getMessageId();
-				
-				if( messageId == null ) {
-					sendOrEditMessage( null, member, linking, messageIdHandler );
-				} else {
-					channel.retrieveMessageById( linking.getMessageId() ).queue(
-						message -> sendOrEditMessage( message, member, linking, messageIdHandler ),
-						throwable -> {
-							if( throwable instanceof ErrorResponseException errorResponseException &&
-								errorResponseException.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE ) {
-								sendOrEditMessage( null, member, linking, messageIdHandler );
-							} else {
-								RestAction.getDefaultFailure().accept( throwable );
-							}
-						}
+		synchronized( DiscordManager.class ) {
+			synchronized( LinkingsManagementMessageManager.class ) {
+				if( isInitialized() ) {
+					LinkingMessageRequestCounter linkingMessageRequestCounter = new LinkingMessageRequestCounter(
+						linking.getDiscordName(),
+						linking.getMinecraftGameProfile().getName()
 					);
+					
+					try {
+						Long messageId = linking.getMessageId();
+						
+						if( messageId == null ) {
+							sendOrEditMessage(
+								null,
+								member,
+								linking,
+								true,
+								messageIdHandler,
+								linkingMessageRequestCounter
+							);
+						} else {
+							linkingMessageRequestCounter.addRequest( "rm" );
+							channel.retrieveMessageById( messageId ).queue(
+								retrievedMessage -> sendOrEditMessage(
+									retrievedMessage,
+									member,
+									linking,
+									hasChanged,
+									messageIdHandler,
+									linkingMessageRequestCounter
+								),
+								throwable -> {
+									if( throwable instanceof ErrorResponseException errorResponseException &&
+										errorResponseException.getErrorResponse() ==
+											ErrorResponse.UNKNOWN_MESSAGE ) {
+										sendOrEditMessage(
+											null,
+											member,
+											linking,
+											true,
+											messageIdHandler,
+											linkingMessageRequestCounter
+										);
+									} else {
+										RestAction.getDefaultFailure().accept( throwable );
+									}
+								}
+							);
+						}
+					} catch( Exception exception ) {
+						log.error(
+							"Message could not be retrieved from Linking Management Channel {}",
+							ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId(),
+							exception
+						);
+					}
+				} else {
+					if( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() ) {
+						messageIdHandler.accept( null );
+					}
 				}
-			} catch( Exception exception ) {
-				log.error(
-					"Message could not be retrieved from Linking Management Channel {}",
-					ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId(),
-					exception
-				);
-			}
-		} else {
-			if( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() ) {
-				messageIdHandler.accept( null );
 			}
 		}
 	}
@@ -116,32 +162,71 @@ public class LinkingsManagementMessageManager {
 		Message oldMessage,
 		Member member,
 		Linking linking,
-		Consumer<Long> messageIdHandler ) {
+		boolean hasChanged,
+		Consumer<Long> messageIdHandler,
+		LinkingMessageRequestCounter linkingMessageRequestCounter ) {
 		
-		try {
-			MessageEmbed newMessage = buildMessage( member, linking );
-			if( oldMessage == null ) {
-				channel.sendMessageEmbeds( newMessage )
-					.queue( message -> handleMessageSentOrEdited( message, messageIdHandler ) );
-			} else {
-				channel.editMessageEmbedsById( linking.getMessageId(), newMessage )
-					.queue( message -> handleMessageSentOrEdited( message, messageIdHandler ) );
+		synchronized( DiscordManager.class ) {
+			synchronized( LinkingsManagementMessageManager.class ) {
+				if( isInitialized() ) {
+					try {
+						MessageEmbed newMessage = buildMessage( member, linking );
+						if( oldMessage == null ) {
+							linkingMessageRequestCounter.addRequest( "sm" );
+							channel.sendMessageEmbeds( newMessage )
+								.queue( message -> handleMessageSentOrEdited( message, messageIdHandler,
+									linkingMessageRequestCounter
+								) );
+						} else {
+							if( hasChanged ) {
+								linkingMessageRequestCounter.addRequest( "em" );
+								channel.editMessageEmbedsById( linking.getMessageId(), newMessage )
+									.queue( message -> handleMessageSentOrEdited( message, messageIdHandler,
+										linkingMessageRequestCounter
+									) );
+							} else {
+								handleMessageSentOrEdited( oldMessage, messageIdHandler,
+									linkingMessageRequestCounter );
+							}
+						}
+					} catch( Exception exception ) {
+						log.error(
+							"Message could not be send or edited to Linking Management Channel {}",
+							ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId(),
+							exception
+						);
+					}
+				}
 			}
-		} catch( Exception exception ) {
-			log.error(
-				"Message could not be send or edited to Linking Management Channel {}",
-				ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId(),
-				exception
-			);
 		}
 	}
 	
-	private static void handleMessageSentOrEdited( Message message, Consumer<Long> messageIdHandler ) {
+	private static void handleMessageSentOrEdited(
+		Message message,
+		Consumer<Long> messageIdHandler,
+		LinkingMessageRequestCounter linkingMessageRequestCounter ) {
 		
-		message.addReaction( TRUE_EMOJI ).queue();
-		message.addReaction( FALSE_EMOJI ).queue();
-		
-		messageIdHandler.accept( message.getIdLong() );
+		synchronized( DiscordManager.class ) {
+			if( isInitialized() ) {
+				if( message.getReactionByUnicode( TRUE_EMOJI ) == null ) {
+					linkingMessageRequestCounter.addRequest( "ar_t" );
+					message.addReaction( TRUE_EMOJI ).queue();
+				}
+				if( message.getReactionByUnicode( FALSE_EMOJI ) == null ) {
+					linkingMessageRequestCounter.addRequest( "ar_f" );
+					message.addReaction( FALSE_EMOJI ).queue();
+				}
+				log.debug(
+					"Run {} request for linking discord user \"{}\" and Minecraft user \"{}\" requests: {}",
+					linkingMessageRequestCounter.getCount(),
+					linkingMessageRequestCounter.getDiscordName(),
+					linkingMessageRequestCounter.getMinecraftName(),
+					linkingMessageRequestCounter.getRequestsString()
+				);
+				
+				messageIdHandler.accept( message.getIdLong() );
+			}
+		}
 	}
 	
 	private static MessageEmbed buildMessage( Member member, Linking linking ) {
@@ -167,7 +252,9 @@ public class LinkingsManagementMessageManager {
 	static void deleteMessage( Linking linking ) {
 		
 		if( isInitialized() ) {
-			channel.deleteMessageById( linking.getMessageId() ).complete();
+			synchronized( LinkingsManagementMessageManager.class ) {
+				channel.deleteMessageById( linking.getMessageId() ).complete();
+			}
 		}
 	}
 }

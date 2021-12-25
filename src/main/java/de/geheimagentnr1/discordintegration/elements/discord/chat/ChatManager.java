@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 
+@SuppressWarnings( { "SynchronizeOnThis", "NestedSynchronizedStatement" } )
 @Log4j2
 public class ChatManager {
 	
@@ -22,18 +23,22 @@ public class ChatManager {
 	
 	public static void init() {
 		
-		stop();
-		if( shouldInitialize() ) {
-			long channelId = ServerConfig.CHAT_CONFIG.getChannelId();
-			JDA jda = DiscordManager.getJda();
-			channel = jda.getTextChannelById( channelId );
-			if( channel == null ) {
-				log.error( "Discord Chat Text Channel {} not found", channelId );
+		synchronized( DiscordManager.class ) {
+			synchronized( ChatManager.class ) {
+				stop();
+				if( shouldInitialize() ) {
+					long channelId = ServerConfig.CHAT_CONFIG.getChannelId();
+					JDA jda = DiscordManager.getJda();
+					channel = jda.getTextChannelById( channelId );
+					if( channel == null ) {
+						log.error( "Discord Chat Text Channel {} not found", channelId );
+					}
+				}
 			}
 		}
 	}
 	
-	public static void stop() {
+	public static synchronized void stop() {
 		
 		channel = null;
 	}
@@ -45,7 +50,11 @@ public class ChatManager {
 	
 	private static boolean isInitialized() {
 		
-		return shouldInitialize() && channel != null;
+		synchronized( DiscordManager.class ) {
+			synchronized( ChatManager.class ) {
+				return shouldInitialize() && channel != null;
+			}
+		}
 	}
 	
 	//package-private
@@ -81,17 +90,25 @@ public class ChatManager {
 	
 	public static void sendMessage( String message ) {
 		
-		if( isInitialized() ) {
-			DiscordMessageSender.sendMessage( channel, message );
+		synchronized( DiscordManager.class ) {
+			synchronized( ChatManager.class ) {
+				if( isInitialized() ) {
+					DiscordMessageSender.sendMessage( channel, message );
+				}
+			}
 		}
 	}
 	
 	//package-private
 	static void sendFeedbackMessage( String message ) {
 		
-		if( isInitialized() ) {
-			for( String messagePart : DiscordMessageBuilder.buildFeedbackMessage( message ) ) {
-				DiscordMessageSender.sendMessage( channel, messagePart );
+		synchronized( DiscordManager.class ) {
+			synchronized( ChatManager.class ) {
+				if( isInitialized() ) {
+					for( String messagePart : DiscordMessageBuilder.buildFeedbackMessage( message ) ) {
+						DiscordMessageSender.sendMessage( channel, messagePart );
+					}
+				}
 			}
 		}
 	}
