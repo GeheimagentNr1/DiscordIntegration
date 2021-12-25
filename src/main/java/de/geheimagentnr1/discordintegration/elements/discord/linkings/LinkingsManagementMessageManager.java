@@ -174,19 +174,26 @@ public class LinkingsManagementMessageManager {
 						if( oldMessage == null ) {
 							linkingMessageRequestCounter.addRequest( "sm" );
 							channel.sendMessageEmbeds( newMessage )
-								.queue( message -> handleMessageSentOrEdited( message, messageIdHandler,
+								.queue( message -> handleMessageSentOrEdited(
+									message,
+									messageIdHandler,
 									linkingMessageRequestCounter
 								) );
 						} else {
 							if( hasChanged ) {
 								linkingMessageRequestCounter.addRequest( "em" );
 								channel.editMessageEmbedsById( linking.getMessageId(), newMessage )
-									.queue( message -> handleMessageSentOrEdited( message, messageIdHandler,
+									.queue( message -> handleMessageSentOrEdited(
+										message,
+										messageIdHandler,
 										linkingMessageRequestCounter
 									) );
 							} else {
-								handleMessageSentOrEdited( oldMessage, messageIdHandler,
-									linkingMessageRequestCounter );
+								handleMessageSentOrEdited(
+									oldMessage,
+									messageIdHandler,
+									linkingMessageRequestCounter
+								);
 							}
 						}
 					} catch( Exception exception ) {

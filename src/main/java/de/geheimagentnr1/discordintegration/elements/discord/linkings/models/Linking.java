@@ -32,7 +32,7 @@ public class Linking {
 	private MinecraftGameProfile minecraftGameProfile;
 	
 	/**
-	 * Dummy fix because {@link PatchUtil#apply} didn't worked with shadowing
+	 * Dummy fix because {@link com.mantledillusion.essentials.json.patch,PatchUtil#apply} didn't work with shadowing
 	 */
 	public static void applyPatches( Linking newlinking, Linking existingLinking, List<Patch> patches ) {
 		

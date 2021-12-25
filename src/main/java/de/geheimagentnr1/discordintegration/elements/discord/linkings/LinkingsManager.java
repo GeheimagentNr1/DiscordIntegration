@@ -61,13 +61,14 @@ public class LinkingsManager {
 		}
 	}
 	
-	public static void updateWhitelist( Consumer<Throwable> errorHandler ) throws IOException {
+	//package-private
+	static void updateWhitelist( Consumer<Throwable> errorHandler ) throws IOException {
 		
 		updateWhitelist( errorHandler, false );
 	}
 	
-	public static void updateWhitelist( Consumer<Throwable> errorHandler,
-	                                    boolean forceMessageUpdate ) throws IOException {
+	public static void updateWhitelist( Consumer<Throwable> errorHandler, boolean forceMessageUpdate )
+		throws IOException {
 		
 		if( isEnabled() ) {
 			updateWhitelist( List.of(), errorHandler, forceMessageUpdate );
