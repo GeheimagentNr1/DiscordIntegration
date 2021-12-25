@@ -115,7 +115,6 @@ public class DiscordManager {
 		try {
 			log.info( "Check Discord whitelist on startup" );
 			LinkingsManager.updateWhitelist( errorHandler, true );
-			log.info( "Finished check Discord whitelist on startup" );
 		} catch( IOException exception ) {
 			errorHandler.accept( exception );
 		}

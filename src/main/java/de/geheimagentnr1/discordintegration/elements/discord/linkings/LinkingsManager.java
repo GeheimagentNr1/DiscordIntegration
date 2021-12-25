@@ -71,6 +71,9 @@ public class LinkingsManager {
 		throws IOException {
 		
 		if( isEnabled() ) {
+			if( forceMessageUpdate ) {
+				log.info( "Start check of Discord whitelist with forced message update" );
+			}
 			updateWhitelist( List.of(), errorHandler, forceMessageUpdate );
 		}
 	}
@@ -94,7 +97,10 @@ public class LinkingsManager {
 		List<MinecraftGameProfile> activateList = new ArrayList<>();
 		List<MinecraftGameProfile> deactivateList = new ArrayList<>( removedMinecraftGameProfiles );
 		
+		int linkingCount = linkings.getLinkings().size();
+		int linkingCounter = 0;
 		for( Linking linking : linkings.getLinkings() ) {
+			linkingCounter++;
 			Member member = DiscordManager.getMember( linking.getDiscordMemberId() );
 			MinecraftGameProfile minecraftGameProfile = linking.getMinecraftGameProfile();
 			
@@ -119,6 +125,7 @@ public class LinkingsManager {
 				linking.setDiscordName( member.getUser().getName() );
 				boolean hasChanged = !snapshot.peek().isEmpty();
 				if( hasChanged || forceMessageUpdate ) {
+					int finalLinkingCounter = linkingCounter;
 					LinkingsManagementMessageManager.sendOrEditMessage(
 						member,
 						linking,
@@ -127,6 +134,16 @@ public class LinkingsManager {
 							try {
 								linking.setMessageId( messageId );
 								updateLinking( linking, snapshot.capture(), errorHandler, false );
+								if( forceMessageUpdate ) {
+									log.info(
+										"Checked message of linking {} of {} linkings.",
+										finalLinkingCounter,
+										linkingCount
+									);
+									if( finalLinkingCounter == linkingCount ) {
+										log.info( "Finished check of Discord whitelist with forced message update" );
+									}
+								}
 							} catch( Throwable throwable ) {
 								errorHandler.accept( throwable );
 							}
