@@ -73,6 +73,15 @@ public class LinkingsManager {
 		if( isEnabled() ) {
 			if( forceMessageUpdate ) {
 				log.info( "Start check of Discord whitelist with forced message update" );
+				if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+					.getWhitelistUpdateWithForcedMessageUpdateStart()
+					.isEnabled() ) {
+					ManagementManager.sendMessage(
+						ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+							.getWhitelistUpdateWithForcedMessageUpdateStart()
+							.getMessage()
+					);
+				}
 			}
 			updateWhitelist( List.of(), errorHandler, forceMessageUpdate );
 		}
@@ -142,6 +151,15 @@ public class LinkingsManager {
 									);
 									if( finalLinkingCounter == linkingCount ) {
 										log.info( "Finished check of Discord whitelist with forced message update" );
+										if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+											.getWhitelistUpdateWithForcedMessageUpdateFinished()
+											.isEnabled() ) {
+											ManagementManager.sendMessage(
+												ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+													.getWhitelistUpdateWithForcedMessageUpdateFinished()
+													.getMessage()
+											);
+										}
 									}
 								}
 							} catch( Throwable throwable ) {

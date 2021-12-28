@@ -21,6 +21,10 @@ public class ManagementMessagesConfig {
 	
 	private final MessageConfig linking_removed;
 	
+	private final MessageConfig whitelist_update_with_forced_message_update_start;
+	
+	private final MessageConfig whitelist_update_with_forced_message_update_finished;
+	
 	private final MessageConfig player_whitelist_added;
 	
 	private final MessageConfig player_whitelist_removed;
@@ -88,6 +92,26 @@ public class ManagementMessagesConfig {
 				"(<player name> <message> <discord user name>)",
 			"removed from linkings of discord user"
 		);
+		whitelist_update_with_forced_message_update_start = new MessageConfig(
+			builder,
+			"whitelist_update_with_forced_message_update_start",
+			"Options for the whitelist update with forced message update start message",
+			"Should a message be sent to the Discord management channel, if the process of the whitelist is updated " +
+				"with a forced update of all linking messges is started?",
+			"Message send to the Discord management channel, if the process of the whitelist is updated with a " +
+				"forced update of all linking messges is started.",
+			"Start whitelist update with forced message update"
+		);
+		whitelist_update_with_forced_message_update_finished = new MessageConfig(
+			builder,
+			"whitelist_update_with_forced_message_update_finished",
+			"Options for the whitelist update with forced message update finished message",
+			"Should a message be sent to the Discord management channel, if the process of the whitelist is updated " +
+				"with a forced update of all linking messges is finished?",
+			"Message send to the Discord management channel, if the process of the whitelist is updated with a " +
+				"forced update of all linking messges is finished.",
+			"Finished whitelist update with forced message update"
+		);
 		player_whitelist_added = new MessageConfig(
 			builder,
 			"player_whitelist_added",
@@ -146,6 +170,16 @@ public class ManagementMessagesConfig {
 		return linking_removed;
 	}
 	
+	public MessageConfig getWhitelistUpdateWithForcedMessageUpdateStart() {
+		
+		return whitelist_update_with_forced_message_update_start;
+	}
+	
+	public MessageConfig getWhitelistUpdateWithForcedMessageUpdateFinished() {
+		
+		return whitelist_update_with_forced_message_update_finished;
+	}
+	
 	public MessageConfig getPlayerWhitelistAdded() {
 		
 		return player_whitelist_added;
@@ -167,6 +201,8 @@ public class ManagementMessagesConfig {
 		player_left.printConfig( logger );
 		linking_created.printConfig( logger );
 		linking_removed.printConfig( logger );
+		whitelist_update_with_forced_message_update_start.printConfig( logger );
+		whitelist_update_with_forced_message_update_finished.printConfig( logger );
 		player_whitelist_added.printConfig( logger );
 		player_whitelist_removed.printConfig( logger );
 	}

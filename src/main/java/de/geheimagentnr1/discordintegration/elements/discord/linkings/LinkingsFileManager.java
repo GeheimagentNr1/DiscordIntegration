@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 
 //package-private
@@ -22,7 +23,7 @@ class LinkingsFileManager {
 	//package-private
 	static synchronized Linkings load() throws IOException {
 		
-		try( FileReader fileReader = new FileReader( FILE ) ) {
+		try( FileReader fileReader = new FileReader( FILE, StandardCharsets.UTF_8 ) ) {
 			Linkings linkings = new GsonBuilder().setPrettyPrinting().create().fromJson( fileReader, Linkings.class );
 			if( linkings == null ) {
 				linkings = new Linkings();
@@ -39,7 +40,7 @@ class LinkingsFileManager {
 	//package-private
 	static synchronized void save( Linkings linkings ) throws IOException {
 		
-		try( FileWriter fileWriter = new FileWriter( FILE ) ) {
+		try( FileWriter fileWriter = new FileWriter( FILE, StandardCharsets.UTF_8 ) ) {
 			new GsonBuilder().setPrettyPrinting().create().toJson( linkings, fileWriter );
 		}
 	}
