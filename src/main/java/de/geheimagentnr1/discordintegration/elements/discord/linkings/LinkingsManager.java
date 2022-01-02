@@ -210,7 +210,11 @@ public class LinkingsManager {
 		Optional<Linking> foundLinkingOptional = linkings.findLinking( linking );
 		if( foundLinkingOptional.isPresent() ) {
 			Linking foundLinking = foundLinkingOptional.get();
-			Linking.applyPatches( linking, foundLinking, patches );
+			if( !patches.isEmpty() ) {
+				Linking updatedLinking = Linking.applyPatches( foundLinking, patches );
+				linkings.remove( foundLinking );
+				linkings.add( updatedLinking );
+			}
 		} else {
 			linkings.add( linking );
 		}

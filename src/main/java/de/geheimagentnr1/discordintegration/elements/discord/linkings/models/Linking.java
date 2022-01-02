@@ -31,20 +31,8 @@ public class Linking {
 	@EqualsAndHashCode.Include
 	private MinecraftGameProfile minecraftGameProfile;
 	
-	/**
-	 * Dummy fix because {@link com.mantledillusion.essentials.json.patch,PatchUtil#apply} didn't work with shadowing
-	 */
-	public static void applyPatches( Linking newlinking, Linking existingLinking, List<Patch> patches ) {
+	public static Linking applyPatches( Linking existingLinking, List<Patch> patches ) {
 		
-		for( Patch patch : patches ) {
-			switch( patch.getPath() ) {
-				case "/discordName" -> existingLinking.setDiscordName( newlinking.getDiscordName() );
-				case "/hasRole" -> existingLinking.setHasRole( newlinking.isHasRole() );
-				case "/active" -> existingLinking.setActive( newlinking.isActive() );
-				case "/messageId" -> existingLinking.setMessageId( newlinking.getMessageId() );
-				case "/minecraftGameProfile/name" -> existingLinking.getMinecraftGameProfile()
-					.setName( newlinking.getMinecraftGameProfile().getName() );
-			}
-		}
+		return PatchUtil.apply( existingLinking, patches );
 	}
 }
