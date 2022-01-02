@@ -125,11 +125,6 @@ public class DiscordManager {
 		return jda.getSelfUser();
 	}
 	
-	public static boolean hasCorrectRole( Member member, long roleId ) {
-		
-		return member.getRoles().stream().anyMatch( role -> role.getIdLong() == roleId );
-	}
-	
 	public static synchronized Member getMember( Long discordMemberId ) {
 		
 		if( isInitialized() ) {
@@ -137,5 +132,15 @@ public class DiscordManager {
 		} else {
 			return null;
 		}
+	}
+	
+	public static boolean hasCorrectRole( Member member, long roleId ) {
+		
+		return member.getRoles().stream().anyMatch( role -> role.getIdLong() == roleId );
+	}
+	
+	public static String getNameFromMember( Member member ) {
+		
+		return member.getUser().getAsTag();
 	}
 }

@@ -131,7 +131,7 @@ public class LinkingsManager {
 					deactivateList.add( minecraftGameProfile );
 				}
 				linking.setHasRole( hasRole );
-				linking.setDiscordName( member.getUser().getName() );
+				linking.setDiscordName( DiscordManager.getNameFromMember( member ) );
 				boolean hasChanged = !snapshot.peek().isEmpty();
 				if( hasChanged || forceMessageUpdate ) {
 					int finalLinkingCounter = linkingCounter;
@@ -233,7 +233,7 @@ public class LinkingsManager {
 		if( isEnabled() ) {
 			Linking linking = Linking.builder()
 				.discordMemberId( member.getIdLong() )
-				.discordName( member.getUser().getName() )
+				.discordName( DiscordManager.getNameFromMember( member ) )
 				.hasRole( hasCorrectRole( member ) )
 				.active( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() )
 				.minecraftGameProfile( new MinecraftGameProfile( gameProfile ) )
@@ -245,7 +245,7 @@ public class LinkingsManager {
 			if( foundLinkingOptional.isPresent() ) {
 				Linking foundLinking = foundLinkingOptional.get();
 				PatchUtil.Snapshot snapshot = PatchUtil.take( foundLinking );
-				foundLinking.setDiscordName( member.getUser().getName() );
+				foundLinking.setDiscordName( DiscordManager.getNameFromMember( member ) );
 				foundLinking.getMinecraftGameProfile().setName( gameProfile.getName() );
 				boolean hasChanged = !snapshot.peek().isEmpty();
 				LinkingsManagementMessageManager.sendOrEditMessage(
@@ -376,7 +376,7 @@ public class LinkingsManager {
 		if( member == null ) {
 			updateWhitelist( errorHandler );
 		} else {
-			linking.setDiscordName( member.getUser().getName() );
+			linking.setDiscordName( DiscordManager.getNameFromMember( member ) );
 			boolean hasChanged = !snapshot.peek().isEmpty();
 			LinkingsManagementMessageManager.sendOrEditMessage(
 				member,

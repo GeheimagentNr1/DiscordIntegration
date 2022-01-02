@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class PatchUtilClassLoadFixer {
 	
+	
 	public static void fixPatchUtilClassLoading() {
 		
 		//Fix Class not found exception on Update whitelist
