@@ -164,34 +164,15 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-    final def excludeForJda = {
+    shadow "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
+    shadow "net.dv8tion:JDA:${jda_version}", {
         exclude module: 'opus-java'
-        exclude module: 'slf4j-api'/*
-        exclude module: 'jackson-annotations'
-        exclude module: 'jackson-core'
-        exclude module: 'jackson-databind'*/
+        exclude module: 'slf4j-api'
     }
-    final def excludeForJsonPatchEssentials = {/*
-        exclude module: 'jackson-annotations'
-        exclude module: 'jackson-core'
-        exclude module: 'jackson-databind'
-        exclude module: 'jackson-datatype-jsr310'*/
-    }
-
-    implementation "com.mantledillusion.essentials:json-patch-essentials:${jpe_version}", excludeForJsonPatchEssentials
-    shadow "com.mantledillusion.essentials:json-patch-essentials:${jpe_version}", excludeForJsonPatchEssentials
-    runtimeOnly "com.mantledillusion.essentials:json-patch-essentials:${jpe_version}", excludeForJsonPatchEssentials
-    implementation "net.dv8tion:JDA:${jda_version}", excludeForJda
-    shadow "net.dv8tion:JDA:${jda_version}", excludeForJda
-    runtimeOnly "net.dv8tion:JDA:${jda_version}", excludeForJda
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
-    shadow 'com.fasterxml.jackson.core:jackson-core:2.13.1'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
-    shadow 'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
-    shadow 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
-    shadow 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
+    shadow "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    shadow "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    shadow "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    shadow "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
 
     /*runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
     runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")*/
@@ -202,6 +183,10 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+}
+
+configurations {
+    implementation.extendsFrom(shadow)
 }
 
 shadowJar {

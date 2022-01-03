@@ -61,6 +61,20 @@ public class LinkingsManager {
 		}
 	}
 	
+	private static void sendFinishedWhitelistUpdateWithForcedMessageUpdate() {
+		
+		log.info( "Finished check of Discord whitelist with forced message update" );
+		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+			.getWhitelistUpdateWithForcedMessageUpdateFinished()
+			.isEnabled() ) {
+			ManagementManager.sendMessage(
+				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+					.getWhitelistUpdateWithForcedMessageUpdateFinished()
+					.getMessage()
+			);
+		}
+	}
+	
 	//package-private
 	static void updateWhitelist( Consumer<Throwable> errorHandler ) throws IOException {
 		
@@ -150,16 +164,7 @@ public class LinkingsManager {
 										linkingCount
 									);
 									if( finalLinkingCounter == linkingCount ) {
-										log.info( "Finished check of Discord whitelist with forced message update" );
-										if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
-											.getWhitelistUpdateWithForcedMessageUpdateFinished()
-											.isEnabled() ) {
-											ManagementManager.sendMessage(
-												ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
-													.getWhitelistUpdateWithForcedMessageUpdateFinished()
-													.getMessage()
-											);
-										}
+										sendFinishedWhitelistUpdateWithForcedMessageUpdate();
 									}
 								}
 							} catch( Throwable throwable ) {
@@ -169,6 +174,9 @@ public class LinkingsManager {
 					);
 				}
 			}
+		}
+		if( linkingCount == 0 ) {
+			sendFinishedWhitelistUpdateWithForcedMessageUpdate();
 		}
 		deactivateList.stream()
 			.filter( minecraftGameProfile -> !activateList.contains( minecraftGameProfile ) )
