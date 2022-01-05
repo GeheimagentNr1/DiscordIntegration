@@ -67,14 +67,16 @@ class WhitelistManager {
 		PlayerList playerList,
 		UserWhiteList userWhiteList ) {
 		
-		if( minecraftServer.isEnforceWhitelist() ) {
-			for( ServerPlayer serverplayer : Lists.newArrayList( playerList.getPlayers() ) ) {
-				if( !userWhiteList.isWhiteListed( serverplayer.getGameProfile() ) ) {
-					serverplayer.connection.disconnect(
-						new TranslatableComponent( "multiplayer.disconnect.not_whitelisted" )
-					);
+		minecraftServer.submitAsync( () -> {
+			if( minecraftServer.isEnforceWhitelist() ) {
+				for( ServerPlayer serverPlayer : Lists.newArrayList( playerList.getPlayers() ) ) {
+					if( !userWhiteList.isWhiteListed( serverPlayer.getGameProfile() ) ) {
+						serverPlayer.connection.disconnect(
+							new TranslatableComponent( "multiplayer.disconnect.not_whitelisted" )
+						);
+					}
 				}
 			}
-		}
+		} ).join();
 	}
 }
