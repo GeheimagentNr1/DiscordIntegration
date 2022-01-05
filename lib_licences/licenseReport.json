@@ -612,7 +612,7 @@
   {
     "project": "fmlcore",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.1-39.0.9",
+    "version": "1.18.1-39.0.10",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -622,12 +622,12 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:fmlcore:1.18.1-39.0.9"
+    "dependency": "net.minecraftforge:fmlcore:1.18.1-39.0.10"
   },
   {
     "project": "fmlloader",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.1-39.0.9",
+    "version": "1.18.1-39.0.10",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -637,17 +637,17 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:fmlloader:1.18.1-39.0.9"
+    "dependency": "net.minecraftforge:fmlloader:1.18.1-39.0.10"
   },
   {
     "project": "forge",
     "description": null,
-    "version": "1.18.1-39.0.9_mapped_official_1.18.1",
+    "version": "1.18.1-39.0.10_mapped_official_1.18.1",
     "developers": [],
     "url": null,
     "year": null,
     "licenses": [],
-    "dependency": "net.minecraftforge:forge:1.18.1-39.0.9_mapped_official_1.18.1"
+    "dependency": "net.minecraftforge:forge:1.18.1-39.0.10_mapped_official_1.18.1"
   },
   {
     "project": "Forge Service Provider Interface",
@@ -921,7 +921,7 @@
   {
     "project": "javafmllanguage",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.1-39.0.9",
+    "version": "1.18.1-39.0.10",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -931,7 +931,7 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:javafmllanguage:1.18.1-39.0.9"
+    "dependency": "net.minecraftforge:javafmllanguage:1.18.1-39.0.10"
   },
   {
     "project": "JDA",
@@ -1184,7 +1184,7 @@
   {
     "project": "mclanguage",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.1-39.0.9",
+    "version": "1.18.1-39.0.10",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -1194,7 +1194,7 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:mclanguage:1.18.1-39.0.9"
+    "dependency": "net.minecraftforge:mclanguage:1.18.1-39.0.10"
   },
   {
     "project": "MergeTool",
@@ -1231,14 +1231,14 @@
   {
     "project": "Mod Launcher",
     "description": "Common ModLauncher framework",
-    "version": "9.0.18",
+    "version": "9.0.21",
     "developers": [
       "cpw"
     ],
     "url": "https://github.com/McModLauncher/modlauncher",
     "year": null,
     "licenses": [],
-    "dependency": "cpw.mods:modlauncher:9.0.18"
+    "dependency": "cpw.mods:modlauncher:9.0.21"
   },
   {
     "project": "Netty/All-in-One",

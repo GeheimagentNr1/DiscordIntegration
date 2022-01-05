@@ -109,14 +109,16 @@ public class DiscordManager {
 	
 	private static void updateWhitelist() {
 		
-		Consumer<Throwable> errorHandler = throwable ->
-			log.error( "Whitelist could not be updated on startup", throwable );
-		
-		try {
-			log.info( "Check Discord whitelist on startup" );
-			LinkingsManager.updateWhitelist( errorHandler, true );
-		} catch( IOException exception ) {
-			errorHandler.accept( exception );
+		if( LinkingsManager.isEnabled() ) {
+			Consumer<Throwable> errorHandler = throwable ->
+				log.error( "Whitelist could not be updated on startup", throwable );
+			
+			try {
+				log.info( "Check Discord whitelist on startup" );
+				LinkingsManager.updateWhitelist( errorHandler, true );
+			} catch( IOException exception ) {
+				errorHandler.accept( exception );
+			}
 		}
 	}
 	

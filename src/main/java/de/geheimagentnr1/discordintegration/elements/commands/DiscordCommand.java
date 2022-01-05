@@ -52,8 +52,8 @@ public class DiscordCommand {
 				.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
 					.executes( DiscordCommand::unlinkDiscord ) ) ) );
 		
-		LiteralArgumentBuilder<CommandSourceStack> opDiscordCommand =
-			discordCommand.requires( commandSourceStack -> commandSourceStack.hasPermission( 3 ) );
+		LiteralArgumentBuilder<CommandSourceStack> opDiscordCommand = Commands.literal( "discord" )
+			.requires( commandSourceStack -> commandSourceStack.hasPermission( 3 ) );
 		opDiscordCommand
 			.then( Commands.literal( "linkings" )
 				.then( Commands.literal( "link" )
@@ -66,6 +66,7 @@ public class DiscordCommand {
 							.executes( DiscordCommand::unlinkMinecraft ) ) ) ) );
 		
 		dispatcher.register( discordCommand );
+		dispatcher.register( opDiscordCommand );
 	}
 	
 	private static int showCommands( CommandContext<CommandSourceStack> context ) {
