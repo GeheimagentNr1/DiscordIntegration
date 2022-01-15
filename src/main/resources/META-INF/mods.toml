@@ -58,7 +58,7 @@ Adds chat linking between Discord and Minecraft and Discord commands to request 
 [[dependencies.discordintegration]]
     modId="dimension_access_manager"
     mandatory=false
-    versionRange="[3.0.0,)"
+    versionRange="[3.0.1,)"
     ordering="BEFORE"
     side="BOTH"
 [[dependencies.discordintegration]]

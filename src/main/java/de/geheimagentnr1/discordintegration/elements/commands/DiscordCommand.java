@@ -37,14 +37,14 @@ public class DiscordCommand {
 	
 	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
-		LiteralArgumentBuilder<CommandSourceStack> discordCommand = Commands.literal( "discord" );
-		discordCommand.then( Commands.literal( "commands" )
+		LiteralArgumentBuilder<CommandSourceStack> discord = Commands.literal( "discord" );
+		discord.then( Commands.literal( "commands" )
 			.executes( DiscordCommand::showCommands ) );
-		discordCommand.then( Commands.literal( "gamerules" )
+		discord.then( Commands.literal( "gamerules" )
 			.executes( DiscordCommand::showGamerules ) );
-		discordCommand.then( Commands.literal( "mods" )
+		discord.then( Commands.literal( "mods" )
 			.executes( DiscordCommand::showMods ) );
-		discordCommand.then( Commands.literal( "linkings" )
+		discord.then( Commands.literal( "linkings" )
 			.then( Commands.literal( "link" )
 				.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
 					.executes( DiscordCommand::linkDiscord ) ) )
@@ -52,9 +52,9 @@ public class DiscordCommand {
 				.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
 					.executes( DiscordCommand::unlinkDiscord ) ) ) );
 		
-		LiteralArgumentBuilder<CommandSourceStack> opDiscordCommand = Commands.literal( "discord" )
+		LiteralArgumentBuilder<CommandSourceStack> opDiscord = Commands.literal( "discord" )
 			.requires( commandSourceStack -> commandSourceStack.hasPermission( 3 ) );
-		opDiscordCommand
+		opDiscord
 			.then( Commands.literal( "linkings" )
 				.then( Commands.literal( "link" )
 					.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
@@ -65,8 +65,8 @@ public class DiscordCommand {
 						.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
 							.executes( DiscordCommand::unlinkMinecraft ) ) ) ) );
 		
-		dispatcher.register( discordCommand );
-		dispatcher.register( opDiscordCommand );
+		dispatcher.register( discord );
+		dispatcher.register( opDiscord );
 	}
 	
 	private static int showCommands( CommandContext<CommandSourceStack> context ) {
