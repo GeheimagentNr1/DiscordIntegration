@@ -19,7 +19,7 @@ public abstract class CommandConfig extends AbstractCommentedConfig {
 	
 	private static final String DISCORD_COMMAND_NAME = "discord_command";
 	
-	private static final String DISCORD_COMMAND_COMMENT = "Dicord command without prefix";
+	private static final String DISCORD_COMMAND_COMMENT = "Discord command without prefix";
 	
 	private static final String MINECRAFT_COMMAND_NAME = "minecraft_command";
 	
