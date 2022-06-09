@@ -4,7 +4,7 @@ import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -30,7 +30,7 @@ class DiscordCommandHandler {
 				discordCommand.equals( command ) ||
 					CommandConfig.getUseParameter( abstractCommentedConfig ) &&
 						command.startsWith( discordCommand + " " ) ) ) {
-				server.getCommands().performCommand(
+				server.getCommands().performPrefixedCommand(
 					source,
 					buildMinecraftCommand( abstractCommentedConfig, discordCommand, command )
 				);
@@ -52,7 +52,7 @@ class DiscordCommandHandler {
 			Objects.requireNonNull( server.overworld() ),
 			4,
 			MOD_NAME,
-			new TextComponent( MOD_NAME ),
+			Component.literal( MOD_NAME ),
 			server,
 			null
 		);

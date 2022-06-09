@@ -108,7 +108,7 @@ public class DiscordNet {
 	
 	private static String getPlayerName( Player player ) {
 		
-		return player.getDisplayName().getString();
+		return player == null ? "Server" : player.getDisplayName().getString();
 	}
 	
 	public static void sendChatMessage( CommandSourceStack source, Component message ) {

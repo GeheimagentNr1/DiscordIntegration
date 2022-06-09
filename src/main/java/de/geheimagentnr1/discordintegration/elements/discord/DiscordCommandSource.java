@@ -5,7 +5,6 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
-import java.util.UUID;
 
 
 //package-private
@@ -21,7 +20,7 @@ class DiscordCommandSource implements CommandSource {
 	}
 	
 	@Override
-	public void sendMessage( Component component, @Nonnull UUID uuid ) {
+	public void sendSystemMessage( @Nonnull Component component ) {
 		
 		message += String.format( "%s%n", component.getString() );
 	}

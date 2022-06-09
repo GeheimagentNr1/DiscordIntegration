@@ -9,8 +9,7 @@ import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
@@ -44,7 +43,7 @@ public class DiscordCommand {
 		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) ) {
 				source.sendSuccess(
-					new TextComponent( String.format(
+					Component.literal( String.format(
 						"%s%s - %s",
 						ServerConfig.getCommandPrefix(),
 						CommandConfig.getDiscordCommand( abstractCommentedConfig ),
@@ -68,7 +67,7 @@ public class DiscordCommand {
 				@Nonnull GameRules.Type<T> type ) {
 				
 				source.sendSuccess(
-					new TranslatableComponent(
+					Component.translatable(
 						"commands.gamerule.query",
 						key.getId(),
 						source.getServer().getGameRules().getRule( key )
@@ -86,7 +85,7 @@ public class DiscordCommand {
 		ModList.get().forEachModFile( modFile -> {
 			for( IModInfo modInfo : modFile.getModInfos() ) {
 				source.sendSuccess(
-					new TextComponent( String.format(
+					Component.literal( String.format(
 						"%s (%s) - %s",
 						modInfo.getModId(),
 						modInfo.getVersion(),

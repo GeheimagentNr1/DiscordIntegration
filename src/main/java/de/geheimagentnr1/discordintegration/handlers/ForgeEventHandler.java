@@ -3,8 +3,6 @@ package de.geheimagentnr1.discordintegration.handlers;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.commands.DiscordCommand;
-import de.geheimagentnr1.discordintegration.elements.commands.MeToDiscordCommand;
-import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordEventHandler;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.advancements.DisplayInfo;
@@ -42,8 +40,6 @@ public class ForgeEventHandler {
 	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
 		DiscordCommand.register( event.getDispatcher() );
-		MeToDiscordCommand.register( event.getDispatcher() );
-		SayToDiscordCommand.register( event.getDispatcher() );
 	}
 	
 	@SubscribeEvent
