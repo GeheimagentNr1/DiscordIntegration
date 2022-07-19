@@ -69,7 +69,7 @@ public class ForgeEventHandler {
 	public static void handlePlayerLoggedInEvent( PlayerEvent.PlayerLoggedInEvent event ) {
 		
 		if( ServerConfig.getPlayerJoinedMessageEnabled() ) {
-			DiscordNet.sendPlayerMessage( event.getPlayer(), ServerConfig.getPlayerJoinedMessage() );
+			DiscordNet.sendPlayerMessage( event.getEntity(), ServerConfig.getPlayerJoinedMessage() );
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class ForgeEventHandler {
 	public static void handlePlayerLoggedOutEvent( PlayerEvent.PlayerLoggedOutEvent event ) {
 		
 		if( ServerConfig.getPlayerLeftMessageEnabled() ) {
-			DiscordNet.sendPlayerMessage( event.getPlayer(), ServerConfig.getPlayerLeftMessage() );
+			DiscordNet.sendPlayerMessage( event.getEntity(), ServerConfig.getPlayerLeftMessage() );
 		}
 	}
 	
@@ -92,7 +92,7 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public static void handleLivingDeathEvent( LivingDeathEvent event ) {
 		
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 		
 		if( entity instanceof Player ) {
 			if( ServerConfig.getPlayerDiedMessageEnabled() ) {
@@ -115,7 +115,7 @@ public class ForgeEventHandler {
 		if( displayInfo != null && displayInfo.shouldAnnounceChat() &&
 			ServerConfig.getPlayerGotAdvancementMessageEnabled() ) {
 			DiscordNet.sendPlayerMessage(
-				event.getPlayer(),
+				event.getEntity(),
 				String.format(
 					"%s **%s**%n*%s*",
 					ServerConfig.getPlayerGotAdvancementMessage(),

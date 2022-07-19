@@ -82,7 +82,7 @@ public class DiscordNet {
 	
 	public static void sendDeathMessage( LivingDeathEvent event, String customMessage ) {
 		
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 		String name = entity.getDisplayName().getString();
 		if( customMessage.isEmpty() ) {
 			sendMessage(
