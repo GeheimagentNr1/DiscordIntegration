@@ -3,6 +3,8 @@ package de.geheimagentnr1.discordintegration.handlers;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.commands.DiscordCommand;
+import de.geheimagentnr1.discordintegration.elements.commands.EmoteToDiscordCommand;
+import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordEventHandler;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.minecraft.advancements.DisplayInfo;
@@ -40,6 +42,8 @@ public class ForgeEventHandler {
 	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
 		DiscordCommand.register( event.getDispatcher() );
+		EmoteToDiscordCommand.register( event.getDispatcher() );
+		SayToDiscordCommand.register( event.getDispatcher() );
 	}
 	
 	@SubscribeEvent
@@ -82,10 +86,10 @@ public class ForgeEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void handleServerChatEvent( ServerChatEvent event ) {
+	public static void handleServerChatSubmittedEvent( ServerChatEvent.Submitted event ) {
 		
 		if( !event.isCanceled() ) {
-			DiscordNet.sendChatMessage( event.getPlayer(), event.getMessage() );
+			DiscordNet.sendChatMessage( event.getPlayer(), event.getRawText() );
 		}
 	}
 	

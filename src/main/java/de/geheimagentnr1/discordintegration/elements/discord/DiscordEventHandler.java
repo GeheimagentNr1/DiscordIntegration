@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 
@@ -78,7 +77,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 			if( !message.startsWith( DiscordNet.FEEDBACK_START ) || !message.endsWith( DiscordNet.FEEDBACK_END ) ) {
 				server.getPlayerList().broadcastSystemMessage(
 					Component.literal( message ),
-					ChatType.CHAT
+					false
 				);
 			}
 		}
@@ -93,7 +92,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 					author,
 					message
 				) ),
-				ChatType.CHAT
+				false
 			);
 		} else {
 			DiscordNet.sendFeedbackMessage( String.format(

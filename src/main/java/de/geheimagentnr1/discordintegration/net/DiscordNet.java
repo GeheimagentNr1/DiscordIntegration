@@ -116,9 +116,9 @@ public class DiscordNet {
 		sendCommandChatMessage( source, message.getString() );
 	}
 	
-	public static void sendMeChatMessage( CommandSourceStack source, String action ) {
+	public static void sendEmoteChatMessage( CommandSourceStack source, Component action ) {
 		
-		sendCommandChatMessage( source, String.format( "*%s*", action ) );
+		sendCommandChatMessage( source, String.format( "*%s*", action.getString() ) );
 	}
 	
 	private static void sendCommandChatMessage( CommandSourceStack source, String message ) {
