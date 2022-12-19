@@ -86,7 +86,7 @@ public class ForgeEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void handleServerChatSubmittedEvent( ServerChatEvent.Submitted event ) {
+	public static void handleServerChatSubmittedEvent( ServerChatEvent event ) {
 		
 		if( !event.isCanceled() ) {
 			DiscordNet.sendChatMessage( event.getPlayer(), event.getRawText() );

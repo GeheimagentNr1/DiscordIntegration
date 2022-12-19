@@ -27,15 +27,14 @@ public class SayToDiscordCommand {
 	
 	private static int sendSayMessage( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
-		MessageArgument.ChatMessage message = MessageArgument.getChatMessage( context, "message" );
 		CommandSourceStack source = context.getSource();
-		
-		message.resolve(
-			source,
-			( playerChatMessage ) -> {
+		MessageArgument.resolveChatMessage(
+			context,
+			"message",
+			playerChatMessage -> {
 				source.getServer().getPlayerList()
 					.broadcastChatMessage( playerChatMessage, source, ChatType.bind( ChatType.SAY_COMMAND, source ) );
-				DiscordNet.sendChatMessage( source, playerChatMessage.serverContent() );
+				DiscordNet.sendChatMessage( source, playerChatMessage.decoratedContent() );
 			}
 		);
 		return Command.SINGLE_SUCCESS;

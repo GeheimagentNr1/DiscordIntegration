@@ -27,18 +27,19 @@ public class EmoteToDiscordCommand {
 	
 	private static int sendMeMessage( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
-		MessageArgument.ChatMessage message = MessageArgument.getChatMessage( context, "action" );
-		CommandSourceStack source = context.getSource();
-		PlayerList playerlist = source.getServer().getPlayerList();
-		message.resolve(
-			source,
-			( playerChatMessage ) -> {
+		MessageArgument.resolveChatMessage(
+			context,
+			"action",
+			playerChatMessage -> {
+				
+				CommandSourceStack source = context.getSource();
+				PlayerList playerlist = source.getServer().getPlayerList();
 				playerlist.broadcastChatMessage(
 					playerChatMessage,
 					source,
 					ChatType.bind( ChatType.EMOTE_COMMAND, source )
 				);
-				DiscordNet.sendEmoteChatMessage( source, playerChatMessage.serverContent() );
+				DiscordNet.sendEmoteChatMessage( source, playerChatMessage.decoratedContent() );
 			}
 		);
 		return Command.SINGLE_SUCCESS;
