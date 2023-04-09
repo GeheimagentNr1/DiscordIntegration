@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 
 
@@ -47,7 +48,7 @@ public class BotConfig {
 	void printConfig( Logger logger ) {
 		
 		logger.info( "{} = {}", active.getPath(), active.get() );
-		logger.info( "{} = {}", bot_token.getPath(), bot_token.get() );
+		logger.info( "{} = {}", bot_token.getPath(), StringUtils.leftPad( "*", bot_token.get().length() ) );
 		logger.info( "{} = {}", guild_id.getPath(), guild_id.get() );
 	}
 }
