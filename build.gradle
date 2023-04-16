@@ -297,5 +297,9 @@ modrinth {
     versionName = "${mod_display_name} ${mc_version}-${version}"
     changelog = rootProject.file("CHANGELOG.md").text
     uploadFile = shadowJar
+    dependencies {
+        optional.project 'dimension-access-manager'
+        optional.project 'more-mobgriefing-options'
+    }
     debugMode = Boolean.parseBoolean("${uploadDebug}")
 }
