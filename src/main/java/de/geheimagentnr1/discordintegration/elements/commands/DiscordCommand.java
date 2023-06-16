@@ -43,7 +43,7 @@ public class DiscordCommand {
 		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) ) {
 				source.sendSuccess(
-					Component.literal( String.format(
+					() -> Component.literal( String.format(
 						"%s%s - %s",
 						ServerConfig.getCommandPrefix(),
 						CommandConfig.getDiscordCommand( abstractCommentedConfig ),
@@ -67,7 +67,7 @@ public class DiscordCommand {
 				@Nonnull GameRules.Type<T> type ) {
 				
 				source.sendSuccess(
-					Component.translatable(
+					() -> Component.translatable(
 						"commands.gamerule.query",
 						key.getId(),
 						source.getServer().getGameRules().getRule( key )
@@ -85,7 +85,7 @@ public class DiscordCommand {
 		ModList.get().forEachModFile( modFile -> {
 			for( IModInfo modInfo : modFile.getModInfos() ) {
 				source.sendSuccess(
-					Component.literal( String.format(
+					() -> Component.literal( String.format(
 						"%s (%s) - %s",
 						modInfo.getModId(),
 						modInfo.getVersion(),
