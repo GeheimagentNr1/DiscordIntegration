@@ -1,20 +1,43 @@
 package de.geheimagentnr1.discordintegration;
 
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
-import net.minecraftforge.fml.ModLoadingContext;
+import de.geheimagentnr1.discordintegration.elements.commands.ModCommandsRegisterFactory;
+import de.geheimagentnr1.discordintegration.handlers.DiscordMessageHandler;
+import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import org.jetbrains.annotations.NotNull;
 
 
-@SuppressWarnings( "UtilityClassWithPublicConstructor" )
 @Mod( DiscordIntegration.MODID )
-public class DiscordIntegration {
+public class DiscordIntegration extends AbstractMod {
 	
 	
-	public static final String MODID = "discordintegration";
+	@NotNull
+	static final String MODID = "discordintegration";
 	
-	public DiscordIntegration() {
+	@NotNull
+	@Override
+	public String getModId() {
 		
-		ModLoadingContext.get().registerConfig( ModConfig.Type.SERVER, ServerConfig.CONFIG );
+		return MODID;
+	}
+	
+	@Override
+	protected void initMod() {
+		
+		DistExecutor.safeRunWhenOn(
+			Dist.DEDICATED_SERVER,
+			() -> () -> {
+				DiscordNet discordNet = registerEventHandler( new DiscordNet( this ) );
+				ServerConfig serverConfig = registerConfig(
+					abstractMod -> new ServerConfig( abstractMod, discordNet )
+				);
+				registerEventHandler( new ModCommandsRegisterFactory( discordNet, serverConfig ) );
+				registerEventHandler( new DiscordMessageHandler( discordNet, serverConfig ) );
+			}
+		);
 	}
 }

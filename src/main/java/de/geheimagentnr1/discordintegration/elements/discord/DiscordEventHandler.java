@@ -2,41 +2,52 @@ package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 
-
+@RequiredArgsConstructor
 public class DiscordEventHandler extends ListenerAdapter {
 	
 	
-	private static MinecraftServer server;
+	@NotNull
+	private final DiscordCommandHandler discordCommandHandler = new DiscordCommandHandler();
 	
-	public static void setServer( MinecraftServer _server ) {
-		
-		server = _server;
-	}
+	@NotNull
+	private final AbstractMod abstractMod;
+	
+	@NotNull
+	private final ServerConfig serverConfig;
+	
+	@NotNull
+	private final DiscordNet discordNet;
+	
+	@Setter
+	private MinecraftServer server;
 	
 	@Override
-	public void onGuildMessageReceived( @Nonnull GuildMessageReceivedEvent event ) {
+	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
 		
 		User author = event.getAuthor();
 		Member member = event.getMember();
-		if( isInitialized() && DiscordNet.feedBackAllowed( event.getChannel(), author ) ) {
+		if( isInitialized() && discordNet.feedBackAllowed( event.getChannel(), author ) ) {
 			String message = event.getMessage().getContentDisplay();
 			if( author.isBot() ) {
 				handleBotMessage( message );
 			} else {
-				if( message.startsWith( ServerConfig.getCommandPrefix() ) ) {
+				if( message.startsWith( serverConfig.getCommandPrefix() ) ) {
 					handleCommands( author, message );
 				} else {
 					if( beginnsNotWithOtherCommandPrefix( message ) ) {
-						if( ServerConfig.isUseNickname() && member != null ) {
+						if( serverConfig.isUseNickname() && member != null ) {
 							handleUserMessage( member.getEffectiveName(), message );
 						} else {
 							handleUserMessage( author.getName(), message );
@@ -49,12 +60,12 @@ public class DiscordEventHandler extends ListenerAdapter {
 	
 	private boolean isInitialized() {
 		
-		return server != null && DiscordNet.isInitialized();
+		return server != null && discordNet.isInitialized();
 	}
 	
-	private boolean beginnsNotWithOtherCommandPrefix( String message ) {
+	private boolean beginnsNotWithOtherCommandPrefix( @NotNull String message ) {
 		
-		for( String prefix : ServerConfig.getOtherBotsCommandPrefixes() ) {
+		for( String prefix : serverConfig.getOtherBotsCommandPrefixes() ) {
 			if( message.startsWith( prefix ) ) {
 				return false;
 			}
@@ -62,18 +73,18 @@ public class DiscordEventHandler extends ListenerAdapter {
 		return true;
 	}
 	
-	private void handleCommands( User author, String command ) {
+	private void handleCommands( @NotNull User author, @NotNull String command ) {
 		
 		if( !author.isBot() ) {
-			if( !DiscordCommandHandler.handleCommand( command, server ) ) {
-				DiscordNet.sendFeedbackMessage( String.format( "%n%s%nError: Unknown Command", author.getName() ) );
+			if( !discordCommandHandler.handleCommand( command, abstractMod, serverConfig, discordNet, server ) ) {
+				discordNet.sendFeedbackMessage( String.format( "%n%s%nError: Unknown Command", author.getName() ) );
 			}
 		}
 	}
 	
-	private void handleBotMessage( String message ) {
+	private void handleBotMessage( @NotNull String message ) {
 		
-		if( ServerConfig.isTransmitBotMessages() ) {
+		if( serverConfig.isTransmitBotMessages() ) {
 			if( !message.startsWith( DiscordNet.FEEDBACK_START ) || !message.endsWith( DiscordNet.FEEDBACK_END ) ) {
 				server.getPlayerList().broadcastSystemMessage(
 					Component.literal( message ),
@@ -83,9 +94,9 @@ public class DiscordEventHandler extends ListenerAdapter {
 		}
 	}
 	
-	private void handleUserMessage( String author, String message ) {
+	private void handleUserMessage( @NotNull String author, @NotNull String message ) {
 		
-		if( ServerConfig.getMaxCharCount() == -1 || message.length() <= ServerConfig.getMaxCharCount() ) {
+		if( serverConfig.getMaxCharCount() == -1 || message.length() <= serverConfig.getMaxCharCount() ) {
 			server.getPlayerList().broadcastSystemMessage(
 				Component.literal( String.format(
 					"[%s] %s",
@@ -95,12 +106,12 @@ public class DiscordEventHandler extends ListenerAdapter {
 				false
 			);
 		} else {
-			DiscordNet.sendFeedbackMessage( String.format(
+			discordNet.sendFeedbackMessage( String.format(
 				"%n%s%nError: Message to long.%n" +
 					"Messages can only be up to %d characters long.%n" +
 					"Your message is %d characters long.",
 				author,
-				ServerConfig.getMaxCharCount(),
+				serverConfig.getMaxCharCount(),
 				message.length()
 			) );
 		}

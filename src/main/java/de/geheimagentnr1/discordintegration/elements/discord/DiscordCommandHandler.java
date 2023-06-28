@@ -3,12 +3,14 @@ package de.geheimagentnr1.discordintegration.elements.discord;
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.ModLoadingContext;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -17,15 +19,18 @@ import java.util.Objects;
 class DiscordCommandHandler {
 	
 	
-	private static final String MOD_NAME = ModLoadingContext.get().getActiveContainer().getModInfo().getDisplayName();
-	
 	//package-private
-	static boolean handleCommand( String command, MinecraftServer server ) {
+	boolean handleCommand(
+		@NotNull String command,
+		@NotNull AbstractMod abstractMod,
+		@NotNull ServerConfig serverConfig,
+		@NotNull DiscordNet discordNet,
+		@NotNull MinecraftServer server ) {
 		
-		DiscordCommandSource discordCommandSource = new DiscordCommandSource();
-		CommandSourceStack source = buildSource( server, discordCommandSource );
-		for( AbstractCommentedConfig abstractCommentedConfig : ServerConfig.getCommands() ) {
-			String discordCommand = buildDiscordCommand( abstractCommentedConfig );
+		DiscordCommandSource discordCommandSource = new DiscordCommandSource( discordNet );
+		CommandSourceStack source = buildSource( abstractMod, server, discordCommandSource );
+		for( AbstractCommentedConfig abstractCommentedConfig : serverConfig.getCommands() ) {
+			String discordCommand = buildDiscordCommand( serverConfig, abstractCommentedConfig );
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) && (
 				discordCommand.equals( command ) ||
 					CommandConfig.getUseParameter( abstractCommentedConfig ) &&
@@ -41,9 +46,11 @@ class DiscordCommandHandler {
 		return false;
 	}
 	
-	private static CommandSourceStack buildSource(
-		MinecraftServer server,
-		DiscordCommandSource discordCommandSource ) {
+	@NotNull
+	private CommandSourceStack buildSource(
+		@NotNull AbstractMod abstractMod,
+		@NotNull MinecraftServer server,
+		@NotNull DiscordCommandSource discordCommandSource ) {
 		
 		return new CommandSourceStack(
 			discordCommandSource,
@@ -51,22 +58,26 @@ class DiscordCommandHandler {
 			Vec2.ZERO,
 			Objects.requireNonNull( server.overworld() ),
 			4,
-			MOD_NAME,
-			Component.literal( MOD_NAME ),
+			abstractMod.getModName(),
+			Component.literal( abstractMod.getModName() ),
 			server,
 			null
 		);
 	}
 	
-	private static String buildDiscordCommand( AbstractCommentedConfig abstractCommentedConfig ) {
+	@NotNull
+	private String buildDiscordCommand(
+		@NotNull ServerConfig serverConfig,
+		@NotNull AbstractCommentedConfig abstractCommentedConfig ) {
 		
-		return ServerConfig.getCommandPrefix() + CommandConfig.getDiscordCommand( abstractCommentedConfig );
+		return serverConfig.getCommandPrefix() + CommandConfig.getDiscordCommand( abstractCommentedConfig );
 	}
 	
-	private static String buildMinecraftCommand(
-		AbstractCommentedConfig abstractCommentedConfig,
-		String discordCommand,
-		String command ) {
+	@NotNull
+	private String buildMinecraftCommand(
+		@NotNull AbstractCommentedConfig abstractCommentedConfig,
+		@NotNull String discordCommand,
+		@NotNull String command ) {
 		
 		if( CommandConfig.getUseParameter( abstractCommentedConfig ) ) {
 			return "/" + CommandConfig.getMinecraftCommand( abstractCommentedConfig ) + command.replaceFirst(

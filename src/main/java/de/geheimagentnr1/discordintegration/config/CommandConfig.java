@@ -6,6 +6,7 @@ import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,27 +16,38 @@ import java.util.function.Supplier;
 public class CommandConfig extends AbstractCommentedConfig {
 	
 	
+	@NotNull
 	private static final ForgeConfigSpec SPEC;
 	
+	@NotNull
 	private static final String DISCORD_COMMAND_NAME = "discord_command";
 	
+	@NotNull
 	private static final String DISCORD_COMMAND_COMMENT = "Dicord command without prefix";
 	
+	@NotNull
 	private static final String MINECRAFT_COMMAND_NAME = "minecraft_command";
 	
+	@NotNull
 	private static final String MINECRAFT_COMMAND_COMMENT = "Minecraft command without prefix ('/')";
 	
+	@NotNull
 	private static final String USE_PARAMETERS_NAME = "use_parameters";
 	
+	@NotNull
 	private static final String USE_PARAMETERS_COMMENT =
 		"Should everything attached to the Discord command, be attached to the Minecraft command, too?";
 	
+	@NotNull
 	private static final String ENABLED_NAME = "enabled";
 	
+	@NotNull
 	private static final String ENABLED_COMMENT = "Should the command be active?";
 	
+	@NotNull
 	private static final String DESCRIPTION_NAME = "description";
 	
+	@NotNull
 	private static final String DESCRIPTION_COMMENT = "Description for the help command";
 	
 	static {
@@ -49,19 +61,19 @@ public class CommandConfig extends AbstractCommentedConfig {
 	}
 	
 	private CommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
+		@NotNull UnmodifiableCommentedConfig toCopy,
+		@SuppressWarnings( "ParameterHidesMemberVariable" ) @NotNull Supplier<Map<String, Object>> mapCreator ) {
 		
 		super( toCopy, mapCreator );
 	}
 	
 	@SuppressWarnings( "OverridableMethodCallDuringObjectConstruction" )
 	CommandConfig(
-		String discordCommand,
-		String minecraftCommand,
+		@NotNull String discordCommand,
+		@NotNull String minecraftCommand,
 		boolean useParameters,
 		boolean enabled,
-		String description ) {
+		@NotNull String description ) {
 		
 		super( () -> {
 			HashMap<String, Object> defaultValues = new HashMap<>();
@@ -80,7 +92,7 @@ public class CommandConfig extends AbstractCommentedConfig {
 	}
 	
 	//package-private
-	static boolean isCorrect( Object object ) {
+	static boolean isCorrect( @NotNull Object object ) {
 		
 		if( object instanceof AbstractCommentedConfig ) {
 			return SPEC.isCorrect( (AbstractCommentedConfig)object );
@@ -89,12 +101,14 @@ public class CommandConfig extends AbstractCommentedConfig {
 	}
 	
 	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
 	public final CommandConfig clone() {
 		
 		return new CommandConfig( this, mapCreator );
 	}
 	
+	@NotNull
 	@Override
 	public CommentedConfig createSubConfig() {
 		
@@ -107,33 +121,37 @@ public class CommandConfig extends AbstractCommentedConfig {
 		);
 	}
 	
+	@NotNull
 	@Override
 	public ConfigFormat<?> configFormat() {
 		
 		return SPEC.configFormat();
 	}
 	
-	public static String getDiscordCommand( AbstractCommentedConfig abstractCommentedConfig ) {
+	@NotNull
+	public static String getDiscordCommand( @NotNull AbstractCommentedConfig abstractCommentedConfig ) {
 		
 		return abstractCommentedConfig.get( DISCORD_COMMAND_NAME );
 	}
 	
-	public static String getMinecraftCommand( AbstractCommentedConfig abstractCommentedConfig ) {
+	@NotNull
+	public static String getMinecraftCommand( @NotNull AbstractCommentedConfig abstractCommentedConfig ) {
 		
 		return abstractCommentedConfig.get( MINECRAFT_COMMAND_NAME );
 	}
 	
-	public static boolean getUseParameter( AbstractCommentedConfig abstractCommentedConfig ) {
+	public static boolean getUseParameter( @NotNull AbstractCommentedConfig abstractCommentedConfig ) {
 		
 		return abstractCommentedConfig.get( USE_PARAMETERS_NAME );
 	}
 	
-	public static boolean getEnabled( AbstractCommentedConfig abstractCommentedConfig ) {
+	public static boolean getEnabled( @NotNull AbstractCommentedConfig abstractCommentedConfig ) {
 		
 		return abstractCommentedConfig.get( ENABLED_NAME );
 	}
 	
-	public static String getDescription( AbstractCommentedConfig abstractCommentedConfig ) {
+	@NotNull
+	public static String getDescription( @NotNull AbstractCommentedConfig abstractCommentedConfig ) {
 		
 		return abstractCommentedConfig.get( DESCRIPTION_NAME );
 	}

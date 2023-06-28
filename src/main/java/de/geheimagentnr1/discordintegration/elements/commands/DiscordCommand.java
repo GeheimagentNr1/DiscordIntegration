@@ -2,50 +2,58 @@ package de.geheimagentnr1.discordintegration.elements.commands;
 
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import de.geheimagentnr1.discordintegration.config.CommandConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandInterface;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 
 @SuppressWarnings( "SameReturnValue" )
-public class DiscordCommand {
+@RequiredArgsConstructor
+public class DiscordCommand implements CommandInterface {
 	
 	
-	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
+	@NotNull
+	private final ServerConfig serverConfig;
+	
+	@NotNull
+	@Override
+	public LiteralArgumentBuilder<CommandSourceStack> build() {
 		
 		LiteralArgumentBuilder<CommandSourceStack> discordCommand = Commands.literal( "discord" );
 		discordCommand.then( Commands.literal( "commands" )
-			.executes( DiscordCommand::showCommands ) );
+			.executes( this::showCommands ) );
 		discordCommand.then( Commands.literal( "gamerules" )
-			.executes( DiscordCommand::showGamerules ) );
+			.executes( this::showGamerules ) );
 		discordCommand.then( Commands.literal( "mods" )
-			.executes( DiscordCommand::showMods ) );
-		dispatcher.register( discordCommand );
+			.executes( this::showMods ) );
+		return discordCommand;
 	}
 	
-	private static int showCommands( CommandContext<CommandSourceStack> context ) {
+	private int showCommands( @NotNull CommandContext<CommandSourceStack> context ) {
 		
 		CommandSourceStack source = context.getSource();
-		List<? extends AbstractCommentedConfig> commands = ServerConfig.getCommands();
+		List<? extends AbstractCommentedConfig> commands = new ArrayList<>(serverConfig.getCommands());
 		commands.sort( Comparator.comparing( CommandConfig::getDiscordCommand ) );
 		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) ) {
 				source.sendSuccess(
 					() -> Component.literal( String.format(
 						"%s%s - %s",
-						ServerConfig.getCommandPrefix(),
+						serverConfig.getCommandPrefix(),
 						CommandConfig.getDiscordCommand( abstractCommentedConfig ),
 						CommandConfig.getDescription( abstractCommentedConfig )
 					) ),
@@ -56,15 +64,15 @@ public class DiscordCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showGamerules( CommandContext<CommandSourceStack> context ) {
+	private int showGamerules( @NotNull CommandContext<CommandSourceStack> context ) {
 		
 		CommandSourceStack source = context.getSource();
 		GameRules.visitGameRuleTypes( new GameRules.GameRuleTypeVisitor() {
 			
 			@Override
 			public <T extends GameRules.Value<T>> void visit(
-				@Nonnull GameRules.Key<T> key,
-				@Nonnull GameRules.Type<T> type ) {
+				@NotNull GameRules.Key<T> key,
+				@NotNull GameRules.Type<T> type ) {
 				
 				source.sendSuccess(
 					() -> Component.translatable(
@@ -79,7 +87,7 @@ public class DiscordCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showMods( CommandContext<CommandSourceStack> context ) {
+	private int showMods( @NotNull CommandContext<CommandSourceStack> context ) {
 		
 		CommandSourceStack source = context.getSource();
 		ModList.get().forEachModFile( modFile -> {
@@ -97,5 +105,4 @@ public class DiscordCommand {
 		} );
 		return Command.SINGLE_SUCCESS;
 	}
-	
 }

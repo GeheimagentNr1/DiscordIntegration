@@ -1,26 +1,31 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.network.chat.Component;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 
 //package-private
+@RequiredArgsConstructor
 class DiscordCommandSource implements CommandSource {
 	
 	
+	@NotNull
+	private final DiscordNet discordNet;
+	
+	@NotNull
 	private String message = "";
 	
 	//package-private
 	void sendMessage() {
 		
-		DiscordNet.sendFeedbackMessage( message );
+		discordNet.sendFeedbackMessage( message );
 	}
 	
 	@Override
-	public void sendSystemMessage( @Nonnull Component component ) {
+	public void sendSystemMessage( @NotNull Component component ) {
 		
 		message += String.format( "%s%n", component.getString() );
 	}

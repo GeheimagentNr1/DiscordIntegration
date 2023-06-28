@@ -3,244 +3,369 @@ package de.geheimagentnr1.discordintegration.config;
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import de.geheimagentnr1.discordintegration.util.VersionHelper;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractConfig;
+import net.minecraftforge.fml.config.ModConfig;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ServerConfig {
+public class ServerConfig extends AbstractConfig {
 	
 	
-	private static final Logger LOGGER = LogManager.getLogger( ServerConfig.class );
+	@NotNull
+	private static final String ACTIVE_KEY = "active";
 	
-	private static final String MOD_NAME = ModLoadingContext.get().getActiveContainer().getModInfo().getDisplayName();
+	@NotNull
+	private static final String BOT_TOKEN_KEY = "bot_token";
 	
-	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+	@NotNull
+	private static final String CHANNEL_ID_KEY = "channel_id";
 	
-	public static final ForgeConfigSpec CONFIG;
+	@NotNull
+	private static final String COMMAND_PREFIX_KEY = "command_prefix";
 	
-	private static final ForgeConfigSpec.BooleanValue ACTIVE;
+	@NotNull
+	private static final String USE_NICKNAME_KEY = "use_nickname";
 	
-	private static final ForgeConfigSpec.ConfigValue<String> BOT_TOKEN;
+	@NotNull
+	private static final String MAX_CHAR_COUNT_KEY = "max_char_count";
 	
-	private static final ForgeConfigSpec.LongValue CHANNEL_ID;
+	@NotNull
+	private static final String MESSAGES_KEY = "messages";
 	
-	private static final ForgeConfigSpec.ConfigValue<String> COMMAND_PREFIX;
+	@NotNull
+	private static final String SERVER_STARTED_KEY = "server_started";
 	
-	private static final ForgeConfigSpec.BooleanValue USE_NICKNAME;
+	@NotNull
+	private static final List<String> SERVER_STARTED_ENABLED_KEY = List.of(
+		MESSAGES_KEY,
+		SERVER_STARTED_KEY,
+		"enabled"
+	);
 	
-	private static final ForgeConfigSpec.IntValue MAX_CHAR_COUNT;
+	@NotNull
+	private static final List<String> SERVER_STARTED_MESSAGE_KEY = List.of(
+		MESSAGES_KEY,
+		SERVER_STARTED_KEY,
+		"message"
+	);
 	
-	private static final ForgeConfigSpec.BooleanValue SERVER_STARTED_MESSAGE_ENABLED;
+	@NotNull
+	private static final String SERVER_STOPPED_KEY = "server_stopped";
 	
-	private static final ForgeConfigSpec.ConfigValue<String> SERVER_STARTED_MESSAGE;
+	@NotNull
+	private static final List<String> SERVER_STOPPED_ENABLED_KEY = List.of(
+		MESSAGES_KEY,
+		SERVER_STOPPED_KEY,
+		"enabled"
+	);
 	
-	private static final ForgeConfigSpec.BooleanValue SERVER_STOPPED_MESSAGE_ENABLED;
+	@NotNull
+	private static final List<String> SERVER_STOPPED_MESSAGE_KEY = List.of(
+		MESSAGES_KEY,
+		SERVER_STOPPED_KEY,
+		"message"
+	);
 	
-	private static final ForgeConfigSpec.ConfigValue<String> SERVER_STOPPED_MESSAGE;
+	@NotNull
+	private static final String SERVER_CRASHED_KEY = "server_crashed";
 	
-	private static final ForgeConfigSpec.BooleanValue SERVER_CRASHED_MESSAGE_ENABLED;
+	@NotNull
+	private static final List<String> SERVER_CRASHED_ENABLED_KEY = List.of(
+		MESSAGES_KEY,
+		SERVER_CRASHED_KEY,
+		"enabled"
+	);
 	
-	private static final ForgeConfigSpec.ConfigValue<String> SERVER_CRASHED_MESSAGE;
+	@NotNull
+	private static final List<String> SERVER_CRASHED_MESSAGE_KEY = List.of(
+		MESSAGES_KEY,
+		SERVER_CRASHED_KEY,
+		"message"
+	);
 	
-	private static final ForgeConfigSpec.BooleanValue PLAYER_JOINED_MESSAGE_ENABLED;
+	@NotNull
+	private static final String PLAYER_JOINED_KEY = "player_joined";
 	
-	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_JOINED_MESSAGE;
+	@NotNull
+	private static final List<String> PLAYER_JOINED_ENABLED_KEY = List.of( MESSAGES_KEY, PLAYER_JOINED_KEY, "enabled"
+	);
 	
-	private static final ForgeConfigSpec.BooleanValue PLAYER_LEFT_MESSAGE_ENABLED;
+	@NotNull
+	private static final List<String> PLAYER_JOINED_MESSAGE_KEY = List.of( MESSAGES_KEY, PLAYER_JOINED_KEY, "message"
+	);
 	
-	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_LEFT_MESSAGE;
+	@NotNull
+	private static final String PLAYER_LEFT_KEY = "player_left";
 	
-	private static final ForgeConfigSpec.BooleanValue PLAYER_DIED_MESSAGE_ENABLED;
+	@NotNull
+	private static final List<String> PLAYER_LEFT_ENABLED_KEY = List.of( MESSAGES_KEY, PLAYER_LEFT_KEY, "enabled" );
 	
-	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_DIED_MESSAGE;
+	@NotNull
+	private static final List<String> PLAYER_LEFT_MESSAGE_KEY = List.of( MESSAGES_KEY, PLAYER_LEFT_KEY, "message" );
 	
-	private static final ForgeConfigSpec.BooleanValue TAMED_MOB_DIED_MESSAGE_ENABLED;
+	@NotNull
+	private static final String PLAYER_DIED_KEY = "player_died";
 	
-	private static final ForgeConfigSpec.ConfigValue<String> TAMED_MOB_DIED_MESSAGE;
+	@NotNull
+	private static final List<String> PLAYER_DIED_ENABLED_KEY = List.of( MESSAGES_KEY, PLAYER_DIED_KEY, "enabled" );
 	
-	private static final ForgeConfigSpec.BooleanValue PLAYER_GOT_ADVANCEMENT_MESSAGE_ENABLED;
+	@NotNull
+	private static final List<String> PLAYER_DIED_MESSAGE_KEY = List.of( MESSAGES_KEY, PLAYER_DIED_KEY, "message" );
 	
-	private static final ForgeConfigSpec.ConfigValue<String> PLAYER_GOT_ADVANCEMENT_MESSAGE;
+	@NotNull
+	private static final String TAMED_MOB_DIED_KEY = "tamed_mob_died";
 	
-	private static final ForgeConfigSpec.BooleanValue TRANSMIT_BOT_MESSAGES;
+	@NotNull
+	private static final List<String> TAMED_MOB_DIED_ENABLED_KEY = List.of(
+		MESSAGES_KEY,
+		TAMED_MOB_DIED_KEY,
+		"enabled"
+	);
 	
-	private static final ForgeConfigSpec.ConfigValue<List<String>> OTHER_BOTS_COMMAND_PREFIXES;
+	@NotNull
+	private static final List<String> TAMED_MOB_DIED_MESSAGE_KEY = List.of(
+		MESSAGES_KEY,
+		TAMED_MOB_DIED_KEY,
+		"message"
+	);
 	
-	private static final ForgeConfigSpec.ConfigValue<List<? extends CommandConfig>> COMMANDS;
+	@NotNull
+	private static final String PLAYER_GOT_ADVANCEMENT_KEY = "player_got_advancement";
 	
-	static {
+	@NotNull
+	private static final List<String> PLAYER_GOT_ADVANCEMENT_ENABLED_KEY = List.of(
+		MESSAGES_KEY,
+		PLAYER_GOT_ADVANCEMENT_KEY,
+		"enabled"
+	);
+	
+	@NotNull
+	private static final List<String> PLAYER_GOT_ADVANCEMENT_MESSAGE_KEY = List.of(
+		MESSAGES_KEY,
+		PLAYER_GOT_ADVANCEMENT_KEY,
+		"message"
+	);
+	
+	@NotNull
+	private static final String OTHER_BOTS_KEY = "other_bots";
+	
+	@NotNull
+	private static final List<String> TRANSMIT_BOT_MESSAGES_KEY = List.of( OTHER_BOTS_KEY, "transmit_bot_messages" );
+	
+	@NotNull
+	private static final List<String> OTHER_BOTS_COMMAND_PREFIXES_KEY = List.of(
+		OTHER_BOTS_KEY,
+		"other_bots_command_prefixes"
+	);
+	
+	@NotNull
+	private static final String COMMANDS_KEY = "commands";
+	
+	@NotNull
+	private final DiscordNet discordNet;
+	
+	public ServerConfig( @NotNull AbstractMod _abstractMod, @NotNull DiscordNet _discordNet ) {
 		
-		ACTIVE = BUILDER.comment( "Should the Discord integration be active?" )
-			.define( "active", false );
-		BOT_TOKEN = BUILDER.comment( "Token of your Discord bot:" )
-			.define( "bot_token", "INSERT BOT TOKEN HERE" );
-		CHANNEL_ID = BUILDER.comment( "Channel ID where the bot will be working" )
-			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
-		COMMAND_PREFIX = BUILDER.comment( "Command prefix for Discord commands" )
-			.define( "command_prefix", "!" );
-		USE_NICKNAME = BUILDER.comment( "Shall the nickname of the Discord user be shown in the Minecraft chat as " +
-				"author name? (If not, the username of the Discord user is shown as author name.)" )
-			.define( "use_nickname", true );
-		MAX_CHAR_COUNT = BUILDER.comment( "How long should Discord messages send to Minecraft Chat be at most? " +
-				"If the value is -1, there is no limit to the length." )
-			.defineInRange( "max_char_count", -1, -1, 2000 );
-		BUILDER.comment( "Messages shown on Discord" )
-			.push( "messages" );
-		BUILDER.comment( "Options for the server start message" )
-			.push( "server_started" );
-		SERVER_STARTED_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if the server started?" )
-			.define( "enabled", true );
-		SERVER_STARTED_MESSAGE = BUILDER.comment(
-				"Message send to the Discord chat, if the Minecraft server started." )
-			.define( "message", "Server started" );
-		BUILDER.pop();
-		BUILDER.comment( "Options for the server stop message" )
-			.push( "server_stopped" );
-		SERVER_STOPPED_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if the server stopped?" )
-			.define( "enabled", true );
-		SERVER_STOPPED_MESSAGE = BUILDER.comment(
-				"Message send to the Discord chat, if the Minecraft server stopped." )
-			.define( "message", "Server stopped" );
-		BUILDER.pop();
-		BUILDER.comment( "Options for the server crash message" )
-			.push( "server_crashed" );
-		SERVER_CRASHED_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if the server crashed?" )
-			.define( "enabled", true );
-		SERVER_CRASHED_MESSAGE = BUILDER.comment(
-				"Message send to the Discord chat, if the Minecraft server crashed." )
-			.define( "message", "Server crashed" );
-		BUILDER.pop();
-		BUILDER.comment( "Options for the player joined message" )
-			.push( "player_joined" );
-		PLAYER_JOINED_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if a player joined?" )
-			.define( "enabled", true );
-		PLAYER_JOINED_MESSAGE = BUILDER.comment(
-				"Message send to the Discord chat, if a player joined. (<player name> <message>)" )
-			.define( "message", "joined the game." );
-		BUILDER.pop();
-		BUILDER.comment( "Options for the player left message" )
-			.push( "player_left" );
-		PLAYER_LEFT_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if a player left?" )
-			.define( "enabled", true );
-		PLAYER_LEFT_MESSAGE = BUILDER.comment(
-				"Message send to the Discord chat, if a player left the server. (<player name> <message>)" )
-			.define( "message", "disconnected." );
-		BUILDER.pop();
-		BUILDER.comment( "Options for the player died message" )
-			.push( "player_died" );
-		PLAYER_DIED_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if a player died?" )
-			.define( "enabled", true );
-		PLAYER_DIED_MESSAGE = BUILDER.comment( "Message send to the Discord chat, if a player died. " +
-				"(<player name> <message>) If left empty, the default Minecraft message is send." )
-			.define( "message", "" );
-		BUILDER.pop();
-		BUILDER.comment( "Options for the tamed mob died message" )
-			.push( "tamed_mob_died" );
-		TAMED_MOB_DIED_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if a tamed mob left?" )
-			.define( "enabled", true );
-		TAMED_MOB_DIED_MESSAGE = BUILDER.comment(
-				"Message send to the Discord chat, if a tamed mob died. (<player name> <message>) If left empty, the" +
-					" " +
-					"default Minecraft message is send." )
-			.define( "message", "" );
-		BUILDER.pop();
-		BUILDER.comment( "Options for the player got advancement message" )
-			.push( "player_got_advancement" );
-		PLAYER_GOT_ADVANCEMENT_MESSAGE_ENABLED = BUILDER.comment(
-				"Should a message be sent to the Discord chat, if a player got an advancement?" )
-			.define( "enabled", true );
-		PLAYER_GOT_ADVANCEMENT_MESSAGE = BUILDER.comment(
-				"Message send to the Discord chat, if a player got an advancement. (<player name> <message>) " +
-					"**<advancement title>**<new line>*<advancement description>*" )
-			.define( "message", "has made the advancement" );
-		BUILDER.pop();
-		BUILDER.pop();
-		BUILDER.comment( "Options how to deal with other bots" )
-			.push( "other_bots" );
-		TRANSMIT_BOT_MESSAGES = BUILDER.comment( "Should messages of other bots be sent to the Minecraft chat?" )
-			.define( "transmit_bot_messages", false );
-		OTHER_BOTS_COMMAND_PREFIXES = BUILDER.comment( "Command prefixes of other bots. " +
-				"Messages with these prefixes are not sent to the Minecraft chat." )
-			.define( "other_bots_command_prefixes", new ArrayList<>() );
-		BUILDER.pop();
-		COMMANDS = BUILDER.comment( "Command mapping from Discord to Minecraft commands" )
-			.defineList( "commands", ServerConfig::buildDefaultCommandList, CommandConfig::isCorrect );
-		
-		CONFIG = BUILDER.build();
+		super( _abstractMod );
+		discordNet = _discordNet;
 	}
 	
-	private static List<CommandConfig> buildDefaultCommandList() {
+	@NotNull
+	@Override
+	public ModConfig.Type type() {
+		
+		return ModConfig.Type.SERVER;
+	}
+	
+	@Override
+	public boolean isEarlyLoad() {
+		
+		return false;
+	}
+	
+	@Override
+	protected void registerConfigValues() {
+		
+		registerConfigValue( "Should the Discord integration be active?", ACTIVE_KEY, false );
+		registerConfigValue( "Token of your Discord bot:", BOT_TOKEN_KEY, "INSERT BOT TOKEN HERE" );
+		registerConfigValue(
+			"Channel ID where the bot will be working",
+			CHANNEL_ID_KEY,
+			( builder, path ) -> builder.defineInRange( path, 0, 0, Long.MAX_VALUE )
+		);
+		registerConfigValue( "Command prefix for Discord commands", COMMAND_PREFIX_KEY, "!" );
+		registerConfigValue(
+			"Shall the nickname of the Discord user be shown in the Minecraft chat as author name? " +
+				"(If not, the username of the Discord user is shown as author name.)",
+			USE_NICKNAME_KEY,
+			true
+		);
+		registerConfigValue(
+			"How long should Discord messages send to Minecraft Chat be at most? " +
+				"If the value is -1, there is no limit to the length.",
+			MAX_CHAR_COUNT_KEY,
+			( builder, path ) -> builder.defineInRange( path, -1, -1, 2000 )
+		);
+		push( "Messages shown on Discord", MESSAGES_KEY );
+		push( "Options for the server start message", SERVER_STARTED_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if the server started?",
+			SERVER_STARTED_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if the Minecraft server started.",
+			SERVER_STARTED_MESSAGE_KEY,
+			"Server started"
+		);
+		pop();
+		push( "Options for the server stop message", SERVER_STOPPED_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if the server stopped?",
+			SERVER_STOPPED_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if the Minecraft server stopped.",
+			SERVER_STOPPED_MESSAGE_KEY,
+			"Server stopped"
+		);
+		pop();
+		push( "Options for the server crash message", SERVER_CRASHED_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if the server crashed?",
+			SERVER_CRASHED_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if the Minecraft server crashed.",
+			SERVER_CRASHED_MESSAGE_KEY,
+			"Server crashed"
+		);
+		pop();
+		push( "Options for the player joined message", PLAYER_JOINED_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if a player joined?",
+			PLAYER_JOINED_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if a player joined. (<player name> <message>)",
+			PLAYER_JOINED_MESSAGE_KEY,
+			"joined the game."
+		);
+		pop();
+		push( "Options for the player left message", PLAYER_LEFT_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if a player left?",
+			PLAYER_LEFT_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if a player left the server. (<player name> <message>)",
+			PLAYER_LEFT_MESSAGE_KEY,
+			"disconnected."
+		);
+		pop();
+		push( "Options for the player died message", PLAYER_DIED_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if a player died?",
+			PLAYER_DIED_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if a player died. (<player name> <message>) " +
+				"If left empty, the default Minecraft message is send.",
+			PLAYER_DIED_MESSAGE_KEY,
+			""
+		);
+		pop();
+		push( "Options for the tamed mob died message", TAMED_MOB_DIED_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if a tamed mob left?",
+			TAMED_MOB_DIED_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if a tamed mob died. (<player name> <message>) " +
+				"If left empty, the default Minecraft message is send.",
+			TAMED_MOB_DIED_MESSAGE_KEY,
+			""
+		);
+		pop();
+		push( "Options for the player got advancement message", PLAYER_GOT_ADVANCEMENT_KEY );
+		registerConfigValue(
+			"Should a message be sent to the Discord chat, if a player got an advancement?",
+			PLAYER_GOT_ADVANCEMENT_ENABLED_KEY,
+			true
+		);
+		registerConfigValue(
+			"Message send to the Discord chat, if a player got an advancement. (<player name> <message>) " +
+				"**<advancement title>**<new line>*<advancement description>*",
+			PLAYER_GOT_ADVANCEMENT_MESSAGE_KEY,
+			"has made the advancement"
+		);
+		pop();
+		pop();
+		push( "Options how to deal with other bots", OTHER_BOTS_KEY );
+		registerConfigValue(
+			"Should messages of other bots be sent to the Minecraft chat?",
+			TRANSMIT_BOT_MESSAGES_KEY,
+			false
+		);
+		registerConfigValue(
+			"Command prefixes of other bots. Messages with these prefixes are not sent to the Minecraft chat.",
+			OTHER_BOTS_COMMAND_PREFIXES_KEY,
+			new ArrayList<>()
+		);
+		pop();
+		registerConfigValue(
+			"Command mapping from Discord to Minecraft commands",
+			COMMANDS_KEY,
+			( builder, path ) -> builder.defineList( path, this::buildDefaultCommandList, CommandConfig::isCorrect )
+		);
+	}
+	
+	private List<CommandConfig> buildDefaultCommandList() {
 		
 		ArrayList<CommandConfig> commands = new ArrayList<>();
-		commands.add( new CommandConfig(
-			"difficulty",
-			"difficulty",
+		commands.add( new CommandConfig( "difficulty", "difficulty",
 			false,
-			true,
-			"shows the difficulty of the server."
+			true, "shows the difficulty of the server."
 		) );
-		commands.add( new CommandConfig(
-			"gamerules",
-			"discord gamerules",
+		commands.add( new CommandConfig( "gamerules", "discord gamerules",
 			false,
-			true,
-			"shows the gamerules and their values."
+			true, "shows the gamerules and their values."
 		) );
-		commands.add( new CommandConfig(
-			"help",
-			"discord commands",
+		commands.add( new CommandConfig( "help", "discord commands",
 			false,
-			true,
-			"shows all commands with their description."
+			true, "shows all commands with their description."
 		) );
-		commands.add( new CommandConfig(
-			"mods",
-			"discord mods",
+		commands.add( new CommandConfig( "mods", "discord mods",
 			false,
-			true,
-			"shows a list of the mods on the server."
+			true, "shows a list of the mods on the server."
 		) );
-		commands.add( new CommandConfig(
-			"online",
-			"list",
+		commands.add( new CommandConfig( "online", "list",
 			false,
-			true,
-			"shows how many and which players are on the server."
+			true, "shows how many and which players are on the server."
 		) );
-		commands.add( new CommandConfig(
-			"seed",
-			"seed",
+		commands.add( new CommandConfig( "seed", "seed",
 			false,
-			true,
-			"shows the seed of the active world."
+			true, "shows the seed of the active world."
 		) );
-		commands.add( new CommandConfig(
-			"time",
-			"time query daytime",
+		commands.add( new CommandConfig( "time", "time query daytime",
 			false,
-			true,
-			"shows the current day time on the server."
+			true, "shows the current day time on the server."
 		) );
-		commands.add( new CommandConfig(
-			"tps",
-			"forge tps",
+		commands.add( new CommandConfig( "tps", "forge tps",
 			false,
-			true,
-			"shows the tps statistic of the server and it's dimensions."
+			true, "shows the tps statistic of the server and it's dimensions."
 		) );
-		if( VersionHelper.isDependecyWithVersionPresent( "dimension_access_manager" ) ) {
+		if( VersionHelper.isDependecyWithVersionPresent( abstractMod.getModId(), "dimension_access_manager" ) ) {
 			commands.add( new CommandConfig(
 				"dimensions",
 				"dimensions status",
@@ -249,7 +374,7 @@ public class ServerConfig {
 				"shows the access states of all dimensions."
 			) );
 		}
-		if( VersionHelper.isDependecyWithVersionPresent( "moremobgriefingoptions" ) ) {
+		if( VersionHelper.isDependecyWithVersionPresent( abstractMod.getModId(), "moremobgriefingoptions" ) ) {
 			commands.add( new CommandConfig(
 				"mobgriefing",
 				"mobgriefing list",
@@ -261,147 +386,146 @@ public class ServerConfig {
 		return commands;
 	}
 	
-	public static void handleConfigEvent() {
+	@Override
+	protected void handleConfigChanging() {
 		
-		printConfig();
-		DiscordNet.init();
+		discordNet.init();
 	}
 	
-	private static void printConfig() {
+	public boolean getActive() {
 		
-		LOGGER.info( "Loading \"{}\" Server Config", MOD_NAME );
-		LOGGER.info( "{} = {}", ACTIVE.getPath(), ACTIVE.get() );
-		LOGGER.info( "{} = {}", BOT_TOKEN.getPath(), BOT_TOKEN.get() );
-		LOGGER.info( "{} = {}", CHANNEL_ID.getPath(), CHANNEL_ID.get() );
-		LOGGER.info( "{} = {}", COMMAND_PREFIX.getPath(), COMMAND_PREFIX.get() );
-		LOGGER.info( "{} = {}", TRANSMIT_BOT_MESSAGES.getPath(), TRANSMIT_BOT_MESSAGES.get() );
-		LOGGER.info( "{} = {}", MAX_CHAR_COUNT.getPath(), MAX_CHAR_COUNT.get() );
-		LOGGER.info( "{} = {}", COMMANDS.getPath(), COMMANDS.get() );
-		LOGGER.info( "\"{}\" Server Config loaded", MOD_NAME );
+		return getValue( Boolean.class, ACTIVE_KEY );
 	}
 	
-	public static boolean getActive() {
+	@NotNull
+	public String getBotToken() {
 		
-		return ACTIVE.get();
+		return getValue( String.class, BOT_TOKEN_KEY );
 	}
 	
-	public static String getBotToken() {
+	public long getChannelId() {
 		
-		return BOT_TOKEN.get();
+		return getValue( Long.class, CHANNEL_ID_KEY );
 	}
 	
-	public static long getChannelId() {
+	@NotNull
+	public String getCommandPrefix() {
 		
-		return CHANNEL_ID.get();
+		return getValue( String.class, COMMAND_PREFIX_KEY );
 	}
 	
-	public static String getCommandPrefix() {
+	public boolean isUseNickname() {
 		
-		return COMMAND_PREFIX.get();
+		return getValue( Boolean.class, USE_NICKNAME_KEY );
 	}
 	
-	public static boolean isUseNickname() {
+	public int getMaxCharCount() {
 		
-		return USE_NICKNAME.get();
+		return getValue( Integer.class, MAX_CHAR_COUNT_KEY );
 	}
 	
-	public static int getMaxCharCount() {
+	public boolean getServerStartedMessageEnabled() {
 		
-		return MAX_CHAR_COUNT.get();
+		return getValue( Boolean.class, SERVER_STARTED_ENABLED_KEY );
 	}
 	
-	public static boolean getServerStartedMessageEnabled() {
+	@NotNull
+	public String getServerStartedMessage() {
 		
-		return SERVER_STARTED_MESSAGE_ENABLED.get();
+		return getValue( String.class, SERVER_STARTED_MESSAGE_KEY );
 	}
 	
-	public static String getServerStartedMessage() {
+	public boolean getServerStoppedMessageEnabled() {
 		
-		return SERVER_STARTED_MESSAGE.get();
+		return getValue( Boolean.class, SERVER_STOPPED_ENABLED_KEY );
 	}
 	
-	public static boolean getServerStoppedMessageEnabled() {
+	@NotNull
+	public String getServerStoppedMessage() {
 		
-		return SERVER_STOPPED_MESSAGE_ENABLED.get();
+		return getValue( String.class, SERVER_STOPPED_MESSAGE_KEY );
 	}
 	
-	public static String getServerStoppedMessage() {
+	public boolean getServerCrashedMessageEnabled() {
 		
-		return SERVER_STOPPED_MESSAGE.get();
+		return getValue( Boolean.class, SERVER_CRASHED_ENABLED_KEY );
 	}
 	
-	public static boolean getServerCrashedMessageEnabled() {
+	@NotNull
+	public String getServerCrashedMessage() {
 		
-		return SERVER_CRASHED_MESSAGE_ENABLED.get();
+		return getValue( String.class, SERVER_CRASHED_MESSAGE_KEY );
 	}
 	
-	public static String getServerCrashedMessage() {
+	public boolean getPlayerJoinedMessageEnabled() {
 		
-		return SERVER_CRASHED_MESSAGE.get();
+		return getValue( Boolean.class, PLAYER_JOINED_ENABLED_KEY );
 	}
 	
-	public static boolean getPlayerJoinedMessageEnabled() {
+	@NotNull
+	public String getPlayerJoinedMessage() {
 		
-		return PLAYER_JOINED_MESSAGE_ENABLED.get();
+		return getValue( String.class, PLAYER_JOINED_MESSAGE_KEY );
 	}
 	
-	public static String getPlayerJoinedMessage() {
+	public boolean getPlayerLeftMessageEnabled() {
 		
-		return PLAYER_JOINED_MESSAGE.get();
+		return getValue( Boolean.class, PLAYER_LEFT_ENABLED_KEY );
 	}
 	
-	public static boolean getPlayerLeftMessageEnabled() {
+	@NotNull
+	public String getPlayerLeftMessage() {
 		
-		return PLAYER_LEFT_MESSAGE_ENABLED.get();
+		return getValue( String.class, PLAYER_LEFT_MESSAGE_KEY );
 	}
 	
-	public static String getPlayerLeftMessage() {
+	public boolean getPlayerDiedMessageEnabled() {
 		
-		return PLAYER_LEFT_MESSAGE.get();
+		return getValue( Boolean.class, PLAYER_DIED_ENABLED_KEY );
 	}
 	
-	public static boolean getPlayerDiedMessageEnabled() {
+	@NotNull
+	public String getPlayerDiedMessage() {
 		
-		return PLAYER_DIED_MESSAGE_ENABLED.get();
+		return getValue( String.class, PLAYER_DIED_MESSAGE_KEY );
 	}
 	
-	public static String getPlayerDiedMessage() {
+	public boolean getTamedMobDiedMessageEnabled() {
 		
-		return PLAYER_DIED_MESSAGE.get();
+		return getValue( Boolean.class, TAMED_MOB_DIED_ENABLED_KEY );
 	}
 	
-	public static boolean getTamedMobDiedMessageEnabled() {
+	@NotNull
+	public String getTamedMobDiedMessage() {
 		
-		return TAMED_MOB_DIED_MESSAGE_ENABLED.get();
+		return getValue( String.class, TAMED_MOB_DIED_MESSAGE_KEY );
 	}
 	
-	public static String getTamedMobDiedMessage() {
+	public boolean getPlayerGotAdvancementMessageEnabled() {
 		
-		return TAMED_MOB_DIED_MESSAGE.get();
+		return getValue( Boolean.class, PLAYER_GOT_ADVANCEMENT_ENABLED_KEY );
 	}
 	
-	public static boolean getPlayerGotAdvancementMessageEnabled() {
+	@NotNull
+	public String getPlayerGotAdvancementMessage() {
 		
-		return PLAYER_GOT_ADVANCEMENT_MESSAGE_ENABLED.get();
+		return getValue( String.class, PLAYER_GOT_ADVANCEMENT_MESSAGE_KEY );
 	}
 	
-	public static String getPlayerGotAdvancementMessage() {
+	public boolean isTransmitBotMessages() {
 		
-		return PLAYER_GOT_ADVANCEMENT_MESSAGE.get();
+		return getValue( Boolean.class, TRANSMIT_BOT_MESSAGES_KEY );
 	}
 	
-	public static boolean isTransmitBotMessages() {
+	@NotNull
+	public List<String> getOtherBotsCommandPrefixes() {
 		
-		return TRANSMIT_BOT_MESSAGES.get();
+		return getListValue( String.class, OTHER_BOTS_COMMAND_PREFIXES_KEY );
 	}
 	
-	public static List<String> getOtherBotsCommandPrefixes() {
+	@NotNull
+	public List<? extends AbstractCommentedConfig> getCommands() {
 		
-		return OTHER_BOTS_COMMAND_PREFIXES.get();
-	}
-	
-	public static List<? extends AbstractCommentedConfig> getCommands() {
-		
-		return COMMANDS.get();
+		return getListValue( AbstractCommentedConfig.class, COMMANDS_KEY );
 	}
 }

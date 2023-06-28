@@ -1,9 +1,9 @@
 package de.geheimagentnr1.discordintegration.util;
 
-import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -11,10 +11,9 @@ import java.util.Optional;
 public class VersionHelper {
 	
 	
-	public static boolean isDependecyWithVersionPresent( String dependencyModId ) {
+	public static boolean isDependecyWithVersionPresent( @NotNull String modId, @NotNull String dependencyModId ) {
 		
-		Optional<? extends ModContainer> modContainer = ModList.get()
-			.getModContainerById( DiscordIntegration.MODID );
+		Optional<? extends ModContainer> modContainer = ModList.get().getModContainerById( modId );
 		if( modContainer.isEmpty() ) {
 			return false;
 		}

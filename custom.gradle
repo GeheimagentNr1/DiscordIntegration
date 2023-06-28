@@ -1,23 +1,12 @@
 repositories {
     maven { url 'https://jitpack.io' }
     maven {
-        name "local-test-repo"
-        url "file:../ModdingMavenRepositories"
-    }
-    mavenCentral() // for transitive dependencies
-    maven {
         name 'm2-dv8tion'
         url 'https://m2.dv8tion.net/releases'
     }
     maven {
         url = 'https://maven.skaggsm.com/releases'
     }
-}
-
-jarJar.enable()
-
-artifacts {
-    reobfJarJar
 }
 
 dependencies {
@@ -27,132 +16,71 @@ dependencies {
     }
     jarJar("net.dv8tion:JDA:[${jda_version},)") {
         jarJar.pin(it, "${jda_version}")
+        transitive = false
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
     }
     jarJar("com.fasterxml.jackson.core:jackson-core:[2.14.1,)") {
         jarJar.pin(it, "2.14.1")
+        transitive = false
     }
     jarJar("com.fasterxml.jackson.core:jackson-annotations:[2.14.1,)") {
         jarJar.pin(it, "2.14.1")
+        transitive = false
     }
     jarJar("com.fasterxml.jackson.core:jackson-databind:[2.14.1,)") {
         jarJar.pin(it, "2.14.1")
+        transitive = false
     }
     jarJar("com.neovisionaries:nv-websocket-client:[2.14,)") {
         jarJar.pin(it, "2.14")
+        transitive = false
     }
     jarJar("com.squareup.okhttp3:okhttp:[4.10.0,)") {
         jarJar.pin(it, "4.10.0")
+        transitive = false
     }
     jarJar("com.squareup.okio:okio:[3.0.0,)") {
         jarJar.pin(it, "3.0.0")
+        transitive = false
     }
     jarJar("com.squareup.okio:okio-jvm:[3.0.0,)") {
         jarJar.pin(it, "3.0.0")
+        transitive = false
     }
     jarJar("org.jetbrains.kotlin:kotlin-stdlib-common:[1.6.20,)") {
         jarJar.pin(it, "1.6.20")
+        transitive = false
     }
     jarJar("org.jetbrains.kotlin:kotlin-stdlib-jdk8:[1.5.31,)") {
         jarJar.pin(it, "1.5.31")
+        transitive = false
     }
     jarJar("org.jetbrains.kotlin:kotlin-stdlib-jdk7:[1.5.31,)") {
         jarJar.pin(it, "1.5.31")
+        transitive = false
     }
     jarJar("org.jetbrains.kotlin:kotlin-stdlib:[1.6.20,)") {
         jarJar.pin(it, "1.6.20")
+        transitive = false
     }
     jarJar("org.jetbrains.kotlin:kotlin-stdlib-common:[1.6.20,)") {
         jarJar.pin(it, "1.6.20")
+        transitive = false
     }
     jarJar("org.jetbrains:annotations:[24.0.1,)") {
         jarJar.pin(it, "24.0.1")
+        transitive = false
     }
     jarJar("net.sf.trove4j:trove4j:[3.0.3,)") {
         jarJar.pin(it, "3.0.3")
+        transitive = false
     }
     jarJar("org.apache.commons:commons-collections4:[4.4,)") {
         jarJar.pin(it, "4.4")
+        transitive = false
     }
 
     runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${minecraft_version}:${dam_version}")
     runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${minecraft_version}:${mmgo_version}")
-}
-
-/*dependencies {
-    implementation("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
-    }
-    *//*jarJar("net.dv8tion:JDA:[${jda_version},)") {
-        jarJar.pin(it, "${jda_version}")
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
-    }*//*
-    jarJar("com.fasterxml.jackson.core:jackson-core:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
-    }
-    jarJar("com.fasterxml.jackson:jackson-bom:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
-    }
-    jarJar("com.fasterxml.jackson.core:jackson-annotations:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
-    }
-    jarJar("com.fasterxml.jackson.core:jackson-databind:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
-    }
-    jarJar("com.neovisionaries:nv-websocket-client:[2.14,)") {
-        jarJar.pin(it, "2.14")
-    }
-    jarJar("com.squareup.okhttp3:okhttp:[4.10.0,)") {
-        jarJar.pin(it, "4.10.0")
-    }
-    jarJar("com.squareup.okio:okio:[3.0.0,)") {
-        jarJar.pin(it, "3.0.0")
-    }
-    jarJar("com.squareup.okio:okio-jvm:[3.0.0,)") {
-        jarJar.pin(it, "3.0.0")
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-common:[1.6.20,)") {
-        jarJar.pin(it, "1.6.20")
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-jdk8:[1.5.31,)") {
-        jarJar.pin(it, "1.5.31")
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-jdk7:[1.5.31,)") {
-        jarJar.pin(it, "1.5.31")
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib:[1.6.20,)") {
-        jarJar.pin(it, "1.6.20")
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-common:[1.6.20,)") {
-        jarJar.pin(it, "1.6.20")
-    }
-    jarJar("org.jetbrains:annotations:[24.0.1,)") {
-        jarJar.pin(it, "24.0.1")
-    }
-    jarJar("net.sf.trove4j:trove4j:[3.0.3,)") {
-        jarJar.pin(it, "3.0.3")
-    }
-    jarJar("org.apache.commons:commons-collections4:[4.4,)") {
-        jarJar.pin(it, "4.4")
-    }
-
-    runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${minecraft_version}:${dam_version}")
-    runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${minecraft_version}:${mmgo_version}")
-}*/
-
-
-tasks.jarJar.configure {
-    archiveClassifier = ""
-}
-tasks.jarJar.finalizedBy("reobfJarJar")
-
-reobf {
-    jarJar {}
-}
-
-jar {
-    archiveClassifier = "slim"
 }
