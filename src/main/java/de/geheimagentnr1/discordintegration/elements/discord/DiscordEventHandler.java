@@ -4,13 +4,13 @@ import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -30,8 +30,10 @@ public class DiscordEventHandler extends ListenerAdapter {
 	@NotNull
 	private final DiscordNet discordNet;
 	
-	@Setter
-	private MinecraftServer server;
+	private MinecraftServer server() {
+		
+		return ServerLifecycleHooks.getCurrentServer();
+	}
 	
 	@Override
 	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
@@ -60,7 +62,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	
 	private boolean isInitialized() {
 		
-		return server != null && discordNet.isInitialized();
+		return server() != null && discordNet.isInitialized();
 	}
 	
 	private boolean beginnsNotWithOtherCommandPrefix( @NotNull String message ) {
@@ -76,7 +78,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	private void handleCommands( @NotNull User author, @NotNull String command ) {
 		
 		if( !author.isBot() ) {
-			if( !discordCommandHandler.handleCommand( command, abstractMod, serverConfig, discordNet, server ) ) {
+			if( !discordCommandHandler.handleCommand( command, abstractMod, serverConfig, discordNet, server() ) ) {
 				discordNet.sendFeedbackMessage( String.format( "%n%s%nError: Unknown Command", author.getName() ) );
 			}
 		}
@@ -86,7 +88,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 		
 		if( serverConfig.isTransmitBotMessages() ) {
 			if( !message.startsWith( DiscordNet.FEEDBACK_START ) || !message.endsWith( DiscordNet.FEEDBACK_END ) ) {
-				server.getPlayerList().broadcastSystemMessage(
+				server().getPlayerList().broadcastSystemMessage(
 					Component.literal( message ),
 					false
 				);
@@ -97,7 +99,7 @@ public class DiscordEventHandler extends ListenerAdapter {
 	private void handleUserMessage( @NotNull String author, @NotNull String message ) {
 		
 		if( serverConfig.getMaxCharCount() == -1 || message.length() <= serverConfig.getMaxCharCount() ) {
-			server.getPlayerList().broadcastSystemMessage(
+			server().getPlayerList().broadcastSystemMessage(
 				Component.literal( String.format(
 					"[%s] %s",
 					author,

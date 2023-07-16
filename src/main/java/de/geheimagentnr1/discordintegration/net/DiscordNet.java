@@ -16,7 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -48,8 +47,6 @@ public class DiscordNet implements ForgeEventHandlerInterface {
 	
 	private ServerConfig serverConfig;
 	
-	private DiscordEventHandler discordEventHandler;
-	
 	private JDA jda;
 	
 	private TextChannel channel;
@@ -69,9 +66,8 @@ public class DiscordNet implements ForgeEventHandlerInterface {
 		stop();
 		if( serverConfig().getActive() ) {
 			try {
-				discordEventHandler = new DiscordEventHandler( abstractMod, serverConfig(), this );
 				jda = JDABuilder.create( serverConfig().getBotToken(), INTENTS )
-					.addEventListeners( discordEventHandler )
+					.addEventListeners( new DiscordEventHandler( abstractMod, serverConfig(), this ) )
 					.setAutoReconnect( true )
 					.build();
 				jda.awaitReady();
@@ -182,13 +178,6 @@ public class DiscordNet implements ForgeEventHandlerInterface {
 				log.error( "Message could not be send", exception );
 			}
 		}
-	}
-	
-	@SubscribeEvent
-	@Override
-	public synchronized void handleServerStartingEvent( @NotNull ServerStartingEvent event ) {
-		
-		discordEventHandler.setServer( event.getServer() );
 	}
 	
 	@SubscribeEvent( priority = EventPriority.LOWEST )
