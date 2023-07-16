@@ -46,7 +46,7 @@ public class DiscordCommand implements CommandInterface {
 	private int showCommands( @NotNull CommandContext<CommandSourceStack> context ) {
 		
 		CommandSourceStack source = context.getSource();
-		List<? extends AbstractCommentedConfig> commands = new ArrayList<>(serverConfig.getCommands());
+		List<? extends AbstractCommentedConfig> commands = new ArrayList<>( serverConfig.getCommands() );
 		commands.sort( Comparator.comparing( CommandConfig::getDiscordCommand ) );
 		for( AbstractCommentedConfig abstractCommentedConfig : commands ) {
 			if( CommandConfig.getEnabled( abstractCommentedConfig ) ) {
