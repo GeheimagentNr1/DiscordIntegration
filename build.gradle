@@ -164,6 +164,17 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
+
+    minecraftLibrary "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
+    minecraftLibrary "net.dv8tion:JDA:${jda_version}", {
+        exclude module: 'opus-java'
+        exclude module: 'slf4j-api'
+    }
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
+
     shadow "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
     shadow "net.dv8tion:JDA:${jda_version}", {
         exclude module: 'opus-java'

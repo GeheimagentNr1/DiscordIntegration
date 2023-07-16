@@ -23,6 +23,7 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 
 @Log4j2
@@ -102,6 +103,7 @@ public class ForgeEventHandler {
 				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerJoined().getMessage()
 			);
 		}
+		DiscordManager.updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() );
 	}
 	
 	@SubscribeEvent
@@ -119,6 +121,7 @@ public class ForgeEventHandler {
 				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerLeft().getMessage()
 			);
 		}
+		DiscordManager.updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() - 1 );
 	}
 	
 	@SubscribeEvent

@@ -176,7 +176,7 @@ public class DiscordCommand {
 					if( successful ) {
 						source.sendSuccess(
 							new TextComponent( String.format(
-								"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",
+								"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",//TODO
 								DiscordManager.getNameFromMember( member ),
 								gameProfile.getName()
 							) ),
@@ -185,7 +185,7 @@ public class DiscordCommand {
 					} else {
 						source.sendFailure(
 							new TextComponent( String.format(
-								"Linking between Discord account \"%s\" and Minecraft account \"%s\" already exists",
+								"Linking between Discord account \"%s\" and Minecraft account \"%s\" already exists",//TODO
 								DiscordManager.getNameFromMember( member ),
 								gameProfile.getName()
 							) )
@@ -245,7 +245,7 @@ public class DiscordCommand {
 			);
 			source.sendSuccess(
 				new TextComponent( String.format(
-					"Removed Linking between Discord account \"%s\" and Minecraft account \"%s\"",
+					"Removed Linking between Discord account \"%s\" and Minecraft account \"%s\"",//TODO
 					DiscordManager.getNameFromMember( member ),
 					gameProfile.getName()
 				) ),

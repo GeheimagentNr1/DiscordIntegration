@@ -30,7 +30,7 @@ public class ChatConfig {
 			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
 		use_nickname = builder.comment( "Shall the nickname of the Discord user be shown in the Minecraft chat as " +
 				"author name? (If not, the username of the Discord user is shown as author name.)" )
-			.define( "use_nickname", true );
+			.define( "use_nickname", true );//TODO: Config for Message format instead of use_nickname
 		max_char_count = builder.comment( "How long should Discord messages send to Minecraft Chat be at most? " +
 				"If the value is -1, there is no limit to the length." )
 			.defineInRange( "max_char_count", -1, -1, 2000 );

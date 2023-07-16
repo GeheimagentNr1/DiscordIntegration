@@ -355,7 +355,7 @@
   {
     "project": "asm",
     "description": "ASM, a very small and fast Java bytecode manipulation framework",
-    "version": "9.2",
+    "version": "9.5",
     "developers": [
       "Eric Bruneton",
       "Eugene Kuleshov",
@@ -369,7 +369,7 @@
         "license_url": "https://asm.ow2.io/license.html"
       }
     ],
-    "dependency": "org.ow2.asm:asm:9.2"
+    "dependency": "org.ow2.asm:asm:9.5"
   },
   {
     "project": "asm-analysis",
@@ -393,7 +393,7 @@
   {
     "project": "asm-commons",
     "description": "Usefull class adapters based on ASM, a very small and fast Java bytecode manipulation framework",
-    "version": "9.2",
+    "version": "9.5",
     "developers": [
       "Eric Bruneton",
       "Eugene Kuleshov",
@@ -407,12 +407,12 @@
         "license_url": "https://asm.ow2.io/license.html"
       }
     ],
-    "dependency": "org.ow2.asm:asm-commons:9.2"
+    "dependency": "org.ow2.asm:asm-commons:9.5"
   },
   {
     "project": "asm-tree",
     "description": "Tree API of ASM, a very small and fast Java bytecode manipulation framework",
-    "version": "9.2",
+    "version": "9.5",
     "developers": [
       "Eric Bruneton",
       "Eugene Kuleshov",
@@ -426,7 +426,7 @@
         "license_url": "https://asm.ow2.io/license.html"
       }
     ],
-    "dependency": "org.ow2.asm:asm-tree:9.2"
+    "dependency": "org.ow2.asm:asm-tree:9.5"
   },
   {
     "project": "asm-util",
@@ -1379,14 +1379,14 @@
   {
     "project": "Secure Modular Jar handler",
     "description": "Making the Java modular system provide security information",
-    "version": "1.0.5",
+    "version": "1.0.8",
     "developers": [
       "cpw"
     ],
     "url": "https://github.com/McModLauncher/securejarhandler",
     "year": null,
     "licenses": [],
-    "dependency": "cpw.mods:securejarhandler:1.0.5"
+    "dependency": "cpw.mods:securejarhandler:1.0.8"
   },
   {
     "project": "SLF4J API Module",

@@ -26,10 +26,10 @@ Apache HttpCore,Apache HttpComponents Core (blocking I/O),4.4.14,null,http://hc.
 Apache Log4j API,The Apache Log4j API,2.17.1,null,null,null,Apache License, Version 2.0,https://www.apache.org/licenses/LICENSE-2.0.txt,org.apache.logging.log4j:log4j-api:2.17.1
 Apache Log4j Core,The Apache Log4j Implementation,2.17.1,null,null,null,Apache License, Version 2.0,https://www.apache.org/licenses/LICENSE-2.0.txt,org.apache.logging.log4j:log4j-core:2.17.1
 Apache Log4j SLF4J 1.8+ Binding,The Apache Log4j SLF4J 1.8 API binding to Log4j 2 Core,2.15.0,null,null,null,Apache License, Version 2.0,https://www.apache.org/licenses/LICENSE-2.0.txt,org.apache.logging.log4j:log4j-slf4j18-impl:2.15.0
-asm,ASM, a very small and fast Java bytecode manipulation framework,9.2,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm:9.2
+asm,ASM, a very small and fast Java bytecode manipulation framework,9.5,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm:9.5
 asm-analysis,Static code analysis API of ASM, a very small and fast Java bytecode manipulation framework,9.2,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm-analysis:9.2
-asm-commons,Usefull class adapters based on ASM, a very small and fast Java bytecode manipulation framework,9.2,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm-commons:9.2
-asm-tree,Tree API of ASM, a very small and fast Java bytecode manipulation framework,9.2,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm-tree:9.2
+asm-commons,Usefull class adapters based on ASM, a very small and fast Java bytecode manipulation framework,9.5,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm-commons:9.5
+asm-tree,Tree API of ASM, a very small and fast Java bytecode manipulation framework,9.5,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm-tree:9.5
 asm-util,Utilities for ASM, a very small and fast Java bytecode manipulation framework,9.2,"Eric Bruneton,Eugene Kuleshov,Remi Forax",http://asm.ow2.io/,2000,BSD-3-Clause,https://asm.ow2.io/license.html,org.ow2.asm:asm-util:9.2
 authlib,null,3.2.38,null,null,null,null,null,com.mojang:authlib:3.2.38
 blocklist,null,1.0.6,null,null,null,null,null,com.mojang:blocklist:1.0.6
@@ -121,7 +121,7 @@ oshi-core,null,5.8.2,null,null,null,MIT License,https://opensource.org/licenses/
 patchy,null,2.1.6,null,null,null,null,null,com.mojang:patchy:2.1.6
 Plexus Common Utilities,A collection of various utility classes to ease working with strings, files, command lines, XML and
     more.,3.2.1,null,null,null,Apache License, Version 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,org.codehaus.plexus:plexus-utils:3.2.1
-Secure Modular Jar handler,Making the Java modular system provide security information,1.0.5,cpw,https://github.com/McModLauncher/securejarhandler,null,null,null,cpw.mods:securejarhandler:1.0.5
+Secure Modular Jar handler,Making the Java modular system provide security information,1.0.8,cpw,https://github.com/McModLauncher/securejarhandler,null,null,null,cpw.mods:securejarhandler:1.0.8
 SLF4J API Module,The slf4j API,1.8.0-beta4,null,http://www.slf4j.org,null,MIT License,http://www.opensource.org/licenses/mit-license.php,org.slf4j:slf4j-api:1.8.0-beta4
 SRG Utils,Library for managing java obfusication mappings in various formats.,0.4.3,LexManos,https://github.com/MinecraftForge/SrgUtils,null,LGPLv2.1,https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt,net.minecraftforge:srgutils:0.4.3
 StringTemplate 4,StringTemplate is a java template engine for generating source code,

@@ -56,44 +56,54 @@ public class ChatMessagesConfig {
 			builder,
 			"player_joined",
 			"Options for the player joined message",
-			"Should a message be sent to the Discord chat, if a player joined?",
-			"Message send to the Discord chat, if a player joined. (<player name> <message>)",
-			"joined the game."
+			"Should a message be sent to the Discord management channel, if a player joined?",
+			"Message send to the Discord management channel, if a player joined. " +
+				"(Avaiable parameters: %player% = Player name)",
+			"**%player%** joined the game."
 		);
 		player_left = new MessageConfig(
 			builder,
 			"player_left",
 			"Options for the player left message",
-			"Should a message be sent to the Discord chat, if a player left?",
-			"Message send to the Discord chat, if a player left the server. (<player name> <message>)",
-			"disconnected."
+			"Should a message be sent to the Discord management channel, if a player left?",
+			"Message send to the Discord management channel, if a player left the server. " +
+				"(Avaiable parameters: %player% = Player name)",
+			"**%player%** disconnected."
 		);
 		player_died = new MessageConfig(
 			builder,
 			"player_died",
 			"Options for the player died message",
 			"Should a message be sent to the Discord chat, if a player died?",
-			"Message send to the Discord chat, if a player died. (<player name> <message>) " +
-				"If left empty, the default Minecraft message is send.",
-			""
+			"Message send to the Discord chat, if a player died. " +
+				"(Avaiable parameters: %player% = Player name, " +
+				"%default_message% = Default death message shown in the chat with bold player name)",
+			"%default_message%"
 		);
 		tamed_mob_died = new MessageConfig(
 			builder,
 			"tamed_mob_died",
 			"Options for the tamed mob died message",
 			"Should a message be sent to the Discord chat, if a tamed mob left?",
-			"Message send to the Discord chat, if a tamed mob died. (<player name> <message>)" +
-				" If left empty, the default Minecraft message is send.",
-			""
+			"Message send to the Discord chat, if a tamed mob died. " +
+				"(Avaiable parameters: %tamed_mob% = Tamed mob name, " +
+				"%default_message% = Default death message shown in the chat with bold tamed mob name)",
+			"%default_message%"
 		);
 		player_got_advancement = new MessageConfig(
 			builder,
 			"player_got_advancement",
 			"Options for the player got advancement message",
 			"Should a message be sent to the Discord chat, if a player got an advancement?",
-			"Message send to the Discord chat, if a player got an advancement. (<player name> <message>) " +
-				"**<advancement title>**<new line>*<advancement description>*",
-			"has made the advancement"
+			"Message send to the Discord chat, if a player got an advancement. " +
+				"**<advancement title>**<new line>*<advancement description>*" +
+				"(Avaiable parameters: %player% = Player name, " +
+				"%advancement_title% = Advancement title, " +
+				"%advancement_description% = Advancement description, " +
+				"%n = New line)",
+			"**%player%** has made the advancement%n" +
+				"**%advancement_title%**%n" +
+				"*%advancement_description%*"
 		);
 		builder.pop();
 	}

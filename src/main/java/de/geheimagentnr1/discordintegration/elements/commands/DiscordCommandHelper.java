@@ -22,7 +22,7 @@ class DiscordCommandHelper {
 	//package-private
 	static void sendInvalidMember( CommandSourceStack source ) {
 		
-		source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );
+		source.sendFailure( new TextComponent( "Discord Member does not exists or Discord context unloadable" ) );//TODO
 	}
 	
 	//package-private

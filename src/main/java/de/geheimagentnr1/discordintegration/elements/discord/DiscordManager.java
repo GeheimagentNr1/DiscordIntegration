@@ -11,10 +11,12 @@ import de.geheimagentnr1.discordintegration.elements.discord.management.Manageme
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,6 +64,7 @@ public class DiscordManager {
 						updateWhitelist();
 					}
 				}
+				updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() );
 			} catch( Exception exception ) {
 				log.error( "Login to Discord failed", exception );
 			}
@@ -105,6 +108,17 @@ public class DiscordManager {
 			serverStarted = true;
 			updateWhitelist();
 		}
+	}
+	
+	public static void updatePresence( int playerCount ) {
+		
+		jda.getPresence().setPresence(
+			Activity.playing( String.format(
+				"Minecraft with %d players",//TODO
+				playerCount
+			) ),
+			false
+		);
 	}
 	
 	private static void updateWhitelist() {

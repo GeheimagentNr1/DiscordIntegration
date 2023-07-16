@@ -63,16 +63,18 @@ public class ManagementMessagesConfig {
 			"player_joined",
 			"Options for the player joined message",
 			"Should a message be sent to the Discord management channel, if a player joined?",
-			"Message send to the Discord management channel, if a player joined. (<player name> <message>)",
-			"joined the game."
+			"Message send to the Discord management channel, if a player joined. " +
+				"(Avaiable parameters: %player% = Player name)",
+			"**%player%** joined the game."
 		);
 		player_left = new MessageConfig(
 			builder,
 			"player_left",
 			"Options for the player left message",
 			"Should a message be sent to the Discord management channel, if a player left?",
-			"Message send to the Discord management channel, if a player left the server. (<player name> <message>)",
-			"disconnected."
+			"Message send to the Discord management channel, if a player left the server. " +
+				"(Avaiable parameters: %player% = Player name)",
+			"**%player%** disconnected."
 		);
 		linking_created = new MessageConfig(
 			builder,
@@ -80,8 +82,9 @@ public class ManagementMessagesConfig {
 			"Options for the linking created message",
 			"Should a message be sent to the Discord management channel, if the a linking is created?",
 			"Message send to the Discord management channel, if a linking is created. " +
-				"(<player name> <message> <discord user name>)",
-			"added to linkings of discord user"
+				"(Avaiable parameters: %player% = Player name, %username% = Discord Username, " +
+				"%nickname% = Discord Nickname)",
+			"**%player%** added to linkings of discord user **%username%**"
 		);
 		linking_removed = new MessageConfig(
 			builder,
@@ -89,8 +92,9 @@ public class ManagementMessagesConfig {
 			"Options for the linking removed message",
 			"Should a message be sent to the Discord management channel, if the a linking is removed?",
 			"Message send to the Discord management channel, if a linking is removed. " +
-				"(<player name> <message> <discord user name>)",
-			"removed from linkings of discord user"
+				"(Avaiable parameters: %player% = Player name, %username% = Discord Username, " +
+				"%nickname% = Discord Nickname)",
+			"**%player%** removed from linkings of discord user **%username%**"
 		);
 		whitelist_update_with_forced_message_update_start = new MessageConfig(
 			builder,
@@ -119,8 +123,8 @@ public class ManagementMessagesConfig {
 			"Should a message be sent to the Discord management channel, if the a player is added to the whitelist, " +
 				"because of a linking?",
 			"Message send to the Discord management channel, if a player is added to the whitelist, " +
-				"because of a linking. (<player name> <message>)",
-			"added to whitelist"
+				"because of a linking. (Avaiable parameters: %player% = Player name)",
+			"**%player%** added to whitelist"
 		);
 		player_whitelist_removed = new MessageConfig(
 			builder,
@@ -129,8 +133,8 @@ public class ManagementMessagesConfig {
 			"Should a message be sent to the Discord management channel, if the a player is removed from the " +
 				"whitelist, because of a linking?",
 			"Message send to the Discord management channel, if a player is added to the whitelist, " +
-				"because of a linking. (<player name> <message>)",
-			"removed from the whitelist"
+				"because of a linking. (Avaiable parameters: %player% = Player name)",
+			"**%player%** removed from the whitelist"
 		);
 		builder.pop();
 	}
