@@ -8,6 +8,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsMa
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementMessageEventHandler;
+import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -20,6 +21,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 
@@ -110,15 +112,26 @@ public class DiscordManager {
 		}
 	}
 	
-	public static void updatePresence( int playerCount ) {
+	public static void updatePresence( int onlinePlayerCount ) {
 		
-		jda.getPresence().setPresence(
-			Activity.playing( String.format(
-				"Minecraft with %d players",//TODO
-				playerCount
-			) ),
-			false
-		);
+		if( ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().isShow() ) {
+			jda.getPresence().setPresence(
+				Activity.playing(
+					MessageUtil.replaceParameters(
+						ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().getMessage(),
+						Map.of(
+							"online_player_count",
+							String.valueOf( onlinePlayerCount ),
+							"max_player_count",
+							String.valueOf( ServerLifecycleHooks.getCurrentServer().getMaxPlayers() )
+						)
+					)
+				),
+				false
+			);
+		} else {
+			jda.getPresence().setPresence( (Activity)null, false );
+		}
 	}
 	
 	private static void updateWhitelist() {
@@ -155,7 +168,7 @@ public class DiscordManager {
 		return member.getRoles().stream().anyMatch( role -> role.getIdLong() == roleId );
 	}
 	
-	public static String getNameFromMember( Member member ) {
+	public static String getMemberAsTag( Member member ) {
 		
 		return member.getUser().getAsTag();
 	}

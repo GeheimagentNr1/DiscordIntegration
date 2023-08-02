@@ -17,7 +17,7 @@ public class TpsCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows the tps statistic of the server and it's dimensions."
+			"shows the tps statistic of the server and its dimensions."
 		);
 	}
 	

@@ -20,11 +20,11 @@ public class ManagementConfig {
 		
 		builder.comment( "Management channel settings" )
 			.push( "management" );
-		enabled = builder.comment( "Should a Mangement channel be used?" )
+		enabled = builder.comment( "Should a management channel be used?" )
 			.define( "enabled", false );
 		channel_id = builder.comment( "Channel ID, where the management channel should be." )
 			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
-		role_id = builder.comment( "Role ID, which discord users need to execute managment commands" )
+		role_id = builder.comment( "Role ID, which Discord users need to execute management commands" )
 			.defineInRange( "role_id", 0, 0, Long.MAX_VALUE );
 		management_messages_config = new ManagementMessagesConfig( builder );
 		builder.pop();

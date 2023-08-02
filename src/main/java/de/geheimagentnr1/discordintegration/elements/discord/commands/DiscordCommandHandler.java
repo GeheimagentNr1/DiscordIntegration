@@ -3,13 +3,16 @@ package de.geheimagentnr1.discordintegration.elements.discord.commands;
 import com.electronwill.nightconfig.core.AbstractCommentedConfig;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
+import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSource;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSourceStack;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
+import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 
@@ -27,13 +30,16 @@ public class DiscordCommandHandler {
 		MinecraftServer server,
 		Consumer<String> feedbackSender ) {
 		
-		if( member != null ) {
-			if( !executeCommand( member, command, server, feedbackSender ) ) {
-				feedbackSender.accept( String.format(
-					"%n%s%nError: Unknown Command",
-					member.getEffectiveName()
-				) );
-			}
+		if( !executeCommand( member, command, server, feedbackSender ) ) {
+			feedbackSender.accept( MessageUtil.replaceParameters(
+				ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+					.getUnknownCommandErrorMessage(),
+				Map.of(
+					"username", DiscordManager.getMemberAsTag( member ),
+					"nickname", member.getEffectiveName(),
+					"new_line", System.lineSeparator()
+				)
+			) );
 		}
 	}
 	
@@ -67,10 +73,14 @@ public class DiscordCommandHandler {
 						);
 						discordCommandSource.sendMessage();
 					} else {
-						feedbackSender.accept( String.format(
-							"%n%s%nError: Invalid permissions, only users with the management role can use this " +
-								"command.",
-							member.getEffectiveName()
+						feedbackSender.accept( MessageUtil.replaceParameters(
+							ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+								.getInvalidPermissionsErrorMessage(),
+							Map.of(
+								"username", DiscordManager.getMemberAsTag( member ),
+								"nickname", member.getEffectiveName(),
+								"new_line", System.lineSeparator()
+							)
 						) );
 					}
 					return true;

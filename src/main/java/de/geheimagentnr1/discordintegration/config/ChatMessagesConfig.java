@@ -33,7 +33,7 @@ public class ChatMessagesConfig {
 			"server_started",
 			"Options for the server start message",
 			"Should a message be sent to the Discord chat, if the server started?",
-			"Message send to the Discord chat, if the Minecraft server started.",
+			"Message sent to the Discord chat, if the Minecraft server started.",
 			"Server started"
 		);
 		server_stopped = new MessageConfig(
@@ -41,7 +41,7 @@ public class ChatMessagesConfig {
 			"server_stopped",
 			"Options for the server stop message",
 			"Should a message be sent to the Discord chat, if the server stopped?",
-			"Message send to the Discord chat, if the Minecraft server stopped.",
+			"Message sent to the Discord chat, if the Minecraft server stopped.",
 			"Server stopped"
 		);
 		server_crashed = new MessageConfig(
@@ -49,25 +49,25 @@ public class ChatMessagesConfig {
 			"server_crashed",
 			"Options for the server crash message",
 			"Should a message be sent to the Discord chat, if the server crashed?",
-			"Message send to the Discord chat, if the Minecraft server crashed.",
+			"Message sent to the Discord chat, if the Minecraft server crashed.",
 			"Server crashed"
 		);
 		player_joined = new MessageConfig(
 			builder,
 			"player_joined",
 			"Options for the player joined message",
-			"Should a message be sent to the Discord management channel, if a player joined?",
-			"Message send to the Discord management channel, if a player joined. " +
-				"(Avaiable parameters: %player% = Player name)",
+			"Should a message be sent to the Discord chat, if a player joined?",
+			"Message sent to the Discord chat, if a player joined. " +
+				"(Available parameters: %player% = Player name)",
 			"**%player%** joined the game."
 		);
 		player_left = new MessageConfig(
 			builder,
 			"player_left",
 			"Options for the player left message",
-			"Should a message be sent to the Discord management channel, if a player left?",
-			"Message send to the Discord management channel, if a player left the server. " +
-				"(Avaiable parameters: %player% = Player name)",
+			"Should a message be sent to the Discord chat, if a player left?",
+			"Message sent to the Discord chat, if a player left the server. " +
+				"(Available parameters: %player% = Player name)",
 			"**%player%** disconnected."
 		);
 		player_died = new MessageConfig(
@@ -75,8 +75,8 @@ public class ChatMessagesConfig {
 			"player_died",
 			"Options for the player died message",
 			"Should a message be sent to the Discord chat, if a player died?",
-			"Message send to the Discord chat, if a player died. " +
-				"(Avaiable parameters: %player% = Player name, " +
+			"Message sent to the Discord chat, if a player died. " +
+				"(Available parameters: %player% = Player name, " +
 				"%default_message% = Default death message shown in the chat with bold player name)",
 			"%default_message%"
 		);
@@ -85,8 +85,8 @@ public class ChatMessagesConfig {
 			"tamed_mob_died",
 			"Options for the tamed mob died message",
 			"Should a message be sent to the Discord chat, if a tamed mob left?",
-			"Message send to the Discord chat, if a tamed mob died. " +
-				"(Avaiable parameters: %tamed_mob% = Tamed mob name, " +
+			"Message sent to the Discord chat, if a tamed mob died. " +
+				"(Available parameters: %tamed_mob% = Tamed mob name, " +
 				"%default_message% = Default death message shown in the chat with bold tamed mob name)",
 			"%default_message%"
 		);
@@ -95,14 +95,14 @@ public class ChatMessagesConfig {
 			"player_got_advancement",
 			"Options for the player got advancement message",
 			"Should a message be sent to the Discord chat, if a player got an advancement?",
-			"Message send to the Discord chat, if a player got an advancement. " +
+			"Message sent to the Discord chat, if a player got an advancement. " +
 				"**<advancement title>**<new line>*<advancement description>*" +
-				"(Avaiable parameters: %player% = Player name, " +
+				"(Available parameters: %player% = Player name, " +
 				"%advancement_title% = Advancement title, " +
 				"%advancement_description% = Advancement description, " +
-				"%n = New line)",
-			"**%player%** has made the advancement%n" +
-				"**%advancement_title%**%n" +
+				"%new_line% = New line)",
+			"**%player%** has made the advancement%new_line%" +
+				"**%advancement_title%**%new_line%" +
 				"*%advancement_description%*"
 		);
 		builder.pop();

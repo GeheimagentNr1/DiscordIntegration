@@ -10,8 +10,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 
 @SuppressWarnings( { "SynchronizeOnThis", "NestedSynchronizedStatement" } )
@@ -70,22 +68,16 @@ public class ChatManager {
 	
 	public static void sendChatMessage( CommandSourceStack source, Component message ) {
 		
-		sendMessage( DiscordMessageBuilder.buildChatMessage( source, message ) );
+		if( !ServerConfig.CHAT_CONFIG.suppressServerMessages() ||
+			!"Server".equals( source.getTextName() ) ||
+			source.getEntity() != null ) {
+			sendMessage( DiscordMessageBuilder.buildChatMessage( source, message ) );
+		}
 	}
 	
 	public static void sendChatMessage( ServerPlayer player, String message ) {
 		
 		sendMessage( DiscordMessageBuilder.buildChatMessage( player, message ) );
-	}
-	
-	public static void sendPlayerMessage( Player player, String message ) {
-		
-		sendMessage( DiscordMessageBuilder.buildPlayerMessage( player, message ) );
-	}
-	
-	public static void sendDeathMessage( LivingDeathEvent event, String customMessage ) {
-		
-		sendMessage( DiscordMessageBuilder.buildDeathMessage( event, customMessage ) );
 	}
 	
 	public static void sendMessage( String message ) {

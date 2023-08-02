@@ -20,16 +20,17 @@ public class WhitelistConfig {
 	//package-private
 	WhitelistConfig( ForgeConfigSpec.Builder builder ) {
 		
-		builder.comment( "Settings for Whitelist Management in Discord" )
+		builder.comment( "Settings for whitelist management in Discord" )
 			.push( "whitelist" );
-		enabled = builder.comment( "Should the Whitelist Management in Discord be enabled?" )
+		enabled = builder.comment( "Should the whitelist management in Discord be enabled?" )
 			.define( "enabled", false );
-		use_role = builder.comment( "Does the user has to have a specific role to be whitelisted?" )
+		use_role = builder.comment( "Does the user have to have a specific role to be whitelisted?" )
 			.define( "use_role", true );
-		role_id = builder.comment( "Role ID of the Discord Role, that a user has to have to be whitelisted." )
+		role_id = builder.comment( "Role ID of the Discord role, that a user have to have to be whitelisted." )
 			.defineInRange( "role_id", 0, 0, Long.MAX_VALUE );
 		use_single_linking_management = builder.comment(
-				"Does every linking has to be seperatly activated, before the Minecraft account is been whitelisted?" )
+				"Does every linking has to be separately activated, before the Minecraft account is being " +
+					"whitelisted?" )
 			.define( "use_single_linking_management", true );
 		linking_management_channel_id = builder.comment(
 				"Channel ID of the channel, where the activation of the linkings are handled." )

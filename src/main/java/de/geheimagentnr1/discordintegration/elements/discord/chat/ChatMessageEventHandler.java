@@ -1,15 +1,19 @@
 package de.geheimagentnr1.discordintegration.elements.discord.chat;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordMessageBuilder;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.DiscordCommandHandler;
+import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.Util;
+import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
@@ -17,6 +21,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 
 
 public class ChatMessageEventHandler extends ListenerAdapter {
@@ -48,14 +53,12 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 		if( author.isBot() ) {
 			handleBotMessage( message, server );
 		} else {
-			if( DiscordCommandHandler.isCommand( message ) ) {
-				DiscordCommandHandler.handleCommand( member, message, server, ChatManager::sendFeedbackMessage );
-			} else {
-				if( beginnsNotWithOtherCommandPrefix( message ) ) {
-					if( ServerConfig.CHAT_CONFIG.useNickname() && member != null ) {
-						handleUserMessage( member.getEffectiveName(), message, server );
-					} else {
-						handleUserMessage( author.getName(), message, server );
+			if( member != null ) {
+				if( DiscordCommandHandler.isCommand( message ) ) {
+					DiscordCommandHandler.handleCommand( member, message, server, ChatManager::sendFeedbackMessage );
+				} else {
+					if( beginnsNotWithOtherCommandPrefix( message ) ) {
+						handleUserMessage( member, message, server );
 					}
 				}
 			}
@@ -81,28 +84,57 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 		}
 	}
 	
-	private void handleUserMessage( String author, String message, MinecraftServer server ) {
+	private void handleUserMessage( Member member, String message, MinecraftServer server ) {
 		
 		if( ServerConfig.CHAT_CONFIG.getMaxCharCount() == -1 ||
 			message.length() <= ServerConfig.CHAT_CONFIG.getMaxCharCount() ) {
-			server.getPlayerList().broadcastMessage(
-				new TextComponent( String.format(
-					"[%s] %s",
-					author,
-					message
-				) ),
-				ChatType.CHAT,
-				Util.NIL_UUID
+			String buildMessage = MessageUtil.replaceParameters(
+				ServerConfig.CHAT_CONFIG.getMessageFormatDiscordToMinecraft(),
+				Map.of(
+					"username", DiscordManager.getMemberAsTag( member ),
+					"nickname", member.getEffectiveName(),
+					"message", message
+				)
 			);
+			if( ServerConfig.CHAT_CONFIG.useRawMessageFormatDiscordToMinecraft() ) {
+				try {
+					server.getPlayerList().broadcastMessage(
+						ComponentArgument.textComponent().parse( new StringReader( buildMessage ) ),
+						ChatType.CHAT,
+						Util.NIL_UUID
+					);
+				} catch( CommandSyntaxException e ) {
+					ChatManager.sendFeedbackMessage(
+						MessageUtil.replaceParameters(
+							ServerConfig.CHAT_CONFIG.getInvalidRawMessageFormatForDiscordToMinecraftErrorMessage(),
+							Map.of(
+								"username", DiscordManager.getMemberAsTag( member ),
+								"nickname", member.getEffectiveName(),
+								"new_line", System.lineSeparator()
+							)
+						)
+					);
+				}
+			} else {
+				server.getPlayerList().broadcastMessage(
+					new TextComponent( buildMessage ),
+					ChatType.CHAT,
+					Util.NIL_UUID
+				);
+			}
 		} else {
-			ChatManager.sendFeedbackMessage( String.format(
-				"%n%s%nError: Message to long.%n" +
-					"Messages can only be up to %d characters long.%n" +
-					"Your message is %d characters long.",
-				author,
-				ServerConfig.CHAT_CONFIG.getMaxCharCount(),
-				message.length()
-			) );
+			ChatManager.sendFeedbackMessage(
+				MessageUtil.replaceParameters(
+					ServerConfig.CHAT_CONFIG.getMaxCharCountErrorMessage(),
+					Map.of(
+						"username", DiscordManager.getMemberAsTag( member ),
+						"nickname", member.getEffectiveName(),
+						"max_char_count", String.valueOf( ServerConfig.CHAT_CONFIG.getMaxCharCount() ),
+						"actual_message_char_count", String.valueOf( message.length() ),
+						"new_line", System.lineSeparator()
+					)
+				)
+			);
 		}
 	}
 }

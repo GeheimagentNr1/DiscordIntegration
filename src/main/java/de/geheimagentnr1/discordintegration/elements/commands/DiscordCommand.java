@@ -10,14 +10,15 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
-import de.geheimagentnr1.discordintegration.elements.commands.arguments.single_game_profile.SingleGameProfileArgument;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSourceStack;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
+import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
@@ -26,8 +27,10 @@ import net.minecraftforge.forgespi.language.IModInfo;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 
 @SuppressWarnings( "SameReturnValue" )
@@ -46,10 +49,10 @@ public class DiscordCommand {
 			.executes( DiscordCommand::showMods ) );
 		discord.then( Commands.literal( "linkings" )
 			.then( Commands.literal( "link" )
-				.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+				.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
 					.executes( DiscordCommand::linkDiscord ) ) )
 			.then( Commands.literal( "unlink" )
-				.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+				.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
 					.executes( DiscordCommand::unlinkDiscord ) ) ) );
 		
 		LiteralArgumentBuilder<CommandSourceStack> opDiscord = Commands.literal( "discord" )
@@ -57,11 +60,11 @@ public class DiscordCommand {
 		opDiscord
 			.then( Commands.literal( "linkings" )
 				.then( Commands.literal( "link" )
-					.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+					.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
 						.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
 							.executes( DiscordCommand::linkMinecraft ) ) ) )
 				.then( Commands.literal( "unlink" )
-					.then( Commands.argument( "player", SingleGameProfileArgument.gameProfile() )
+					.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
 						.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
 							.executes( DiscordCommand::unlinkMinecraft ) ) ) ) );
 		
@@ -83,7 +86,8 @@ public class DiscordCommand {
 						CommandConfig.getDiscordCommand( commandConfig ),
 						CommandConfig.getDescription( commandConfig ),
 						CommandConfig.isManagementCommand( commandConfig ) ?
-							" (Only usable by users with Management role)" :
+							" (" + ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+								.getOnlyManagementCommandHintMessage() + ")" :
 							""
 					) ),
 					false
@@ -139,7 +143,7 @@ public class DiscordCommand {
 		
 		CommandSourceStack source = context.getSource();
 		if( !( source instanceof DiscordCommandSourceStack discordSource ) ) {
-			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+			DiscordCommandHelper.sendInvalidCommandConfigurationErrorMessage( source );
 			return -1;
 		}
 		Member member = discordSource.getMember();
@@ -151,7 +155,7 @@ public class DiscordCommand {
 	private static int linkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
-		if( DiscordCommandHelper.isNotDiscordSource( source ) ) {
+		if( DiscordCommandHelper.isDiscordSource( source ) ) {
 			return -1;
 		}
 		Member member = DiscordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );
@@ -166,7 +170,7 @@ public class DiscordCommand {
 	private static int link( CommandSourceStack source, Member member, CommandContext<CommandSourceStack> context )
 		throws CommandSyntaxException {
 		
-		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
+		GameProfile gameProfile = getGameProfileFromArgument( context );
 		
 		try {
 			LinkingsManager.createLinking(
@@ -175,19 +179,27 @@ public class DiscordCommand {
 				successful -> {
 					if( successful ) {
 						source.sendSuccess(
-							new TextComponent( String.format(
-								"Created Linking between Discord account \"%s\" and Minecraft account \"%s\"",//TODO
-								DiscordManager.getNameFromMember( member ),
-								gameProfile.getName()
+							new TextComponent( MessageUtil.replaceParameters(
+								ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+									.getLinkCreatedResultMessage(),
+								Map.of(
+									"username", DiscordManager.getMemberAsTag( member ),
+									"nickname", member.getEffectiveName(),
+									"player", gameProfile.getName()
+								)
 							) ),
 							true
 						);
 					} else {
 						source.sendFailure(
-							new TextComponent( String.format(
-								"Linking between Discord account \"%s\" and Minecraft account \"%s\" already exists",//TODO
-								DiscordManager.getNameFromMember( member ),
-								gameProfile.getName()
+							new TextComponent( MessageUtil.replaceParameters(
+								ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+									.getLinkAlreadyExistsResultMessage(),
+								Map.of(
+									"username", DiscordManager.getMemberAsTag( member ),
+									"nickname", member.getEffectiveName(),
+									"player", gameProfile.getName()
+								)
 							) )
 						);
 					}
@@ -204,11 +216,23 @@ public class DiscordCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
+	private static GameProfile getGameProfileFromArgument( CommandContext<CommandSourceStack> context )
+		throws CommandSyntaxException {
+		
+		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( context, "player" );
+		if( gameProfiles.size() != 1 ) {
+			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
+		}
+		return gameProfiles.stream()
+			.findFirst()
+			.orElseThrow( GameProfileArgument.ERROR_UNKNOWN_PLAYER::create );
+	}
+	
 	private static int unlinkDiscord( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
 		if( !( source instanceof DiscordCommandSourceStack discordSource ) ) {
-			source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+			DiscordCommandHelper.sendInvalidCommandConfigurationErrorMessage( source );
 			return -1;
 		}
 		Member member = discordSource.getMember();
@@ -220,7 +244,7 @@ public class DiscordCommand {
 	private static int unlinkMinecraft( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
-		if( DiscordCommandHelper.isNotDiscordSource( source ) ) {
+		if( DiscordCommandHelper.isDiscordSource( source ) ) {
 			return -1;
 		}
 		Member member = DiscordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );
@@ -235,7 +259,7 @@ public class DiscordCommand {
 	private static int unlink( CommandSourceStack source, Member member, CommandContext<CommandSourceStack> context )
 		throws CommandSyntaxException {
 		
-		GameProfile gameProfile = SingleGameProfileArgument.getGameProfile( context, "player" );
+		GameProfile gameProfile = getGameProfileFromArgument( context );
 		
 		try {
 			LinkingsManager.removeLinking(
@@ -244,10 +268,14 @@ public class DiscordCommand {
 				throwable -> DiscordCommandHelper.handleError( source, throwable )
 			);
 			source.sendSuccess(
-				new TextComponent( String.format(
-					"Removed Linking between Discord account \"%s\" and Minecraft account \"%s\"",//TODO
-					DiscordManager.getNameFromMember( member ),
-					gameProfile.getName()
+				new TextComponent( MessageUtil.replaceParameters(
+					ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+						.getLinkRemovedResultMessage(),
+					Map.of(
+						"username", DiscordManager.getMemberAsTag( member ),
+						"nickname", member.getEffectiveName(),
+						"player", gameProfile.getName()
+					)
 				) ),
 				true
 			);

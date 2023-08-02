@@ -6,8 +6,10 @@ import de.geheimagentnr1.discordintegration.elements.commands.DiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.commands.MeToDiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.commands.SayToDiscordCommand;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import de.geheimagentnr1.discordintegration.elements.discord.DiscordMessageBuilder;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
+import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +26,8 @@ import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
+
+import java.util.Map;
 
 
 @Log4j2
@@ -92,15 +96,23 @@ public class ForgeEventHandler {
 	public static void handlePlayerLoggedInEvent( PlayerEvent.PlayerLoggedInEvent event ) {
 		
 		if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerJoined().isEnabled() ) {
-			ChatManager.sendPlayerMessage(
-				event.getPlayer(),
-				ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerJoined().getMessage()
+			ChatManager.sendMessage(
+				MessageUtil.replaceParameters(
+					ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerJoined().getMessage(),
+					Map.of(
+						"player", DiscordMessageBuilder.getEntityName( event.getPlayer() )
+					)
+				)
 			);
 		}
 		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerJoined().isEnabled() ) {
-			ManagementManager.sendPlayerMessage(
-				event.getPlayer(),
-				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerJoined().getMessage()
+			ManagementManager.sendMessage(
+				MessageUtil.replaceParameters(
+					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerJoined().getMessage(),
+					Map.of(
+						"player", DiscordMessageBuilder.getEntityName( event.getPlayer() )
+					)
+				)
 			);
 		}
 		DiscordManager.updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() );
@@ -110,15 +122,23 @@ public class ForgeEventHandler {
 	public static void handlePlayerLoggedOutEvent( PlayerEvent.PlayerLoggedOutEvent event ) {
 		
 		if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerLeft().isEnabled() ) {
-			ChatManager.sendPlayerMessage(
-				event.getPlayer(),
-				ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerLeft().getMessage()
+			ChatManager.sendMessage(
+				MessageUtil.replaceParameters(
+					ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerLeft().getMessage(),
+					Map.of(
+						"player", DiscordMessageBuilder.getEntityName( event.getPlayer() )
+					)
+				)
 			);
 		}
 		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerLeft().isEnabled() ) {
-			ManagementManager.sendPlayerMessage(
-				event.getPlayer(),
-				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerLeft().getMessage()
+			ManagementManager.sendMessage(
+				MessageUtil.replaceParameters(
+					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerLeft().getMessage(),
+					Map.of(
+						"player", DiscordMessageBuilder.getEntityName( event.getPlayer() )
+					)
+				)
 			);
 		}
 		DiscordManager.updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() - 1 );
@@ -136,20 +156,32 @@ public class ForgeEventHandler {
 	public static void handleLivingDeathEvent( LivingDeathEvent event ) {
 		
 		LivingEntity entity = event.getEntityLiving();
+		String name = DiscordMessageBuilder.getEntityName( entity );
+		String default_message = DiscordMessageBuilder.buildDeathMessage( event, entity, name );
 		
 		if( entity instanceof Player ) {
 			if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerDied().isEnabled() ) {
-				ChatManager.sendDeathMessage(
-					event,
-					ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerDied().getMessage()
+				ChatManager.sendMessage(
+					MessageUtil.replaceParameters(
+						ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerDied().getMessage(),
+						Map.of(
+							"player", name,
+							"default_message", default_message
+						)
+					)
 				);
 			}
 		} else {
 			if( entity instanceof TamableAnimal && ( (TamableAnimal)entity ).getOwnerUUID() != null ) {
 				if( ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getTamedMobDied().isEnabled() ) {
-					ChatManager.sendDeathMessage(
-						event,
-						ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getTamedMobDied().getMessage()
+					ChatManager.sendMessage(
+						MessageUtil.replaceParameters(
+							ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getTamedMobDied().getMessage(),
+							Map.of(
+								"tamed_mob", name,
+								"default_message", default_message
+							)
+						)
 					);
 				}
 			}
@@ -163,13 +195,15 @@ public class ForgeEventHandler {
 		
 		if( displayInfo != null && displayInfo.shouldAnnounceChat() &&
 			ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerGotAdvancement().isEnabled() ) {
-			ChatManager.sendPlayerMessage(
-				event.getPlayer(),
-				String.format(
-					"%s **%s**%n*%s*",
+			ChatManager.sendMessage(
+				MessageUtil.replaceParameters(
 					ServerConfig.CHAT_CONFIG.getChatMessagesConfig().getPlayerGotAdvancement().getMessage(),
-					displayInfo.getTitle().getString(),
-					displayInfo.getDescription().getString()
+					Map.of(
+						"player", DiscordMessageBuilder.getEntityName( event.getPlayer() ),
+						"advancement_title", displayInfo.getTitle().getString(),
+						"advancement_description", displayInfo.getDescription().getString(),
+						"new_line", System.lineSeparator()
+					)
 				)
 			);
 		}

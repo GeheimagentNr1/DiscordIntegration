@@ -37,7 +37,7 @@ public abstract class CommandConfig extends AbstractCommentedConfig {
 	private static final String MANAGEMENT_COMMAND_NAME = "management_command";
 	
 	private static final String MANAGEMENT_COMMAND_COMMENT =
-		"Should this command only be usable by discord users with the management role?";
+		"Should this command only be usable by Discord users with the management role?";
 	
 	private static final String DESCRIPTION_NAME = "description";
 	

@@ -39,7 +39,7 @@ public class ManagementMessagesConfig {
 			"server_started",
 			"Options for the server start message",
 			"Should a message be sent to the Discord management channel, if the server started?",
-			"Message send to the Discord management channel, if the Minecraft server started.",
+			"Message sent to the Discord management channel, if the Minecraft server started.",
 			"Server started"
 		);
 		server_stopped = new MessageConfig(
@@ -47,7 +47,7 @@ public class ManagementMessagesConfig {
 			"server_stopped",
 			"Options for the server stop message",
 			"Should a message be sent to the Discord management channel, if the server stopped?",
-			"Message send to the Discord management channel, if the Minecraft server stopped.",
+			"Message sent to the Discord management channel, if the Minecraft server stopped.",
 			"Server stopped"
 		);
 		server_crashed = new MessageConfig(
@@ -55,7 +55,7 @@ public class ManagementMessagesConfig {
 			"server_crashed",
 			"Options for the server crash message",
 			"Should a message be sent to the Discord management channel, if the server crashed?",
-			"Message send to the Discord management channel, if the Minecraft server crashed.",
+			"Message sent to the Discord management channel, if the Minecraft server crashed.",
 			"Server crashed"
 		);
 		player_joined = new MessageConfig(
@@ -63,8 +63,8 @@ public class ManagementMessagesConfig {
 			"player_joined",
 			"Options for the player joined message",
 			"Should a message be sent to the Discord management channel, if a player joined?",
-			"Message send to the Discord management channel, if a player joined. " +
-				"(Avaiable parameters: %player% = Player name)",
+			"Message sent to the Discord management channel, if a player joined. " +
+				"(Available parameters: %player% = Player name)",
 			"**%player%** joined the game."
 		);
 		player_left = new MessageConfig(
@@ -72,8 +72,8 @@ public class ManagementMessagesConfig {
 			"player_left",
 			"Options for the player left message",
 			"Should a message be sent to the Discord management channel, if a player left?",
-			"Message send to the Discord management channel, if a player left the server. " +
-				"(Avaiable parameters: %player% = Player name)",
+			"Message sent to the Discord management channel, if a player left the server. " +
+				"(Available parameters: %player% = Player name)",
 			"**%player%** disconnected."
 		);
 		linking_created = new MessageConfig(
@@ -81,9 +81,9 @@ public class ManagementMessagesConfig {
 			"linking_created",
 			"Options for the linking created message",
 			"Should a message be sent to the Discord management channel, if the a linking is created?",
-			"Message send to the Discord management channel, if a linking is created. " +
-				"(Avaiable parameters: %player% = Player name, %username% = Discord Username, " +
-				"%nickname% = Discord Nickname)",
+			"Message sent to the Discord management channel, if a linking is created. " +
+				"(Available parameters: %player% = Player name, %username% = Discord username, " +
+				"%nickname% = Discord nickname)",
 			"**%player%** added to linkings of discord user **%username%**"
 		);
 		linking_removed = new MessageConfig(
@@ -91,49 +91,49 @@ public class ManagementMessagesConfig {
 			"linking_removed",
 			"Options for the linking removed message",
 			"Should a message be sent to the Discord management channel, if the a linking is removed?",
-			"Message send to the Discord management channel, if a linking is removed. " +
-				"(Avaiable parameters: %player% = Player name, %username% = Discord Username, " +
-				"%nickname% = Discord Nickname)",
+			"Message sent to the Discord management channel, if a linking is removed. " +
+				"(Available parameters: %player% = Player name, %username% = Discord username, " +
+				"%nickname% = Discord nickname)",
 			"**%player%** removed from linkings of discord user **%username%**"
 		);
 		whitelist_update_with_forced_message_update_start = new MessageConfig(
 			builder,
 			"whitelist_update_with_forced_message_update_start",
 			"Options for the whitelist update with forced message update start message",
-			"Should a message be sent to the Discord management channel, if the process of the whitelist is updated " +
-				"with a forced update of all linking messges is started?",
-			"Message send to the Discord management channel, if the process of the whitelist is updated with a " +
-				"forced update of all linking messges is started.",
+			"Should a message be sent to the Discord management channel, if the process of updating the whitelist  " +
+				"with a forced update of all linking messages is started?",
+			"Message sent to the Discord management channel, if the process of updating the whitelist  with a " +
+				"forced update of all linking messages is started.",
 			"Start whitelist update with forced message update"
 		);
 		whitelist_update_with_forced_message_update_finished = new MessageConfig(
 			builder,
 			"whitelist_update_with_forced_message_update_finished",
 			"Options for the whitelist update with forced message update finished message",
-			"Should a message be sent to the Discord management channel, if the process of the whitelist is updated " +
-				"with a forced update of all linking messges is finished?",
-			"Message send to the Discord management channel, if the process of the whitelist is updated with a " +
-				"forced update of all linking messges is finished.",
+			"Should a message be sent to the Discord management channel, if the process of updating the whitelist  " +
+				"with a forced update of all linking messages is finished?",
+			"Message sent to the Discord management channel, if the process of updating the whitelist  with a " +
+				"forced update of all linking messages is finished.",
 			"Finished whitelist update with forced message update"
 		);
 		player_whitelist_added = new MessageConfig(
 			builder,
 			"player_whitelist_added",
 			"Options for the player to whitelist added message",
-			"Should a message be sent to the Discord management channel, if the a player is added to the whitelist, " +
+			"Should a message be sent to the Discord management channel, if a player is added to the whitelist, " +
 				"because of a linking?",
-			"Message send to the Discord management channel, if a player is added to the whitelist, " +
-				"because of a linking. (Avaiable parameters: %player% = Player name)",
+			"Message sent to the Discord management channel, if a player is added to the whitelist, " +
+				"because of a linking. (Available parameters: %player% = Player name)",
 			"**%player%** added to whitelist"
 		);
 		player_whitelist_removed = new MessageConfig(
 			builder,
 			"player_whitelist_removed",
 			"Options for the player from whitelist removed message",
-			"Should a message be sent to the Discord management channel, if the a player is removed from the " +
+			"Should a message be sent to the Discord management channel, if a player is removed from the " +
 				"whitelist, because of a linking?",
-			"Message send to the Discord management channel, if a player is added to the whitelist, " +
-				"because of a linking. (Avaiable parameters: %player% = Player name)",
+			"Message sent to the Discord management channel, if a player is added to the whitelist, " +
+				"because of a linking. (Available parameters: %player% = Player name)",
 			"**%player%** removed from the whitelist"
 		);
 		builder.pop();

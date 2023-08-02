@@ -17,7 +17,8 @@ public class PatchUtilClassLoadFixer {
 		@SuppressWarnings( "DuplicatedCode" )
 		Linking found = new Linking();
 		found.setDiscordMemberId( 1L );
-		found.setDiscordName( null );
+		found.setDiscordUsername( null );
+		found.setDiscordNickname( null );
 		found.setHasRole( false );
 		found.setActive( true );
 		found.setMessageId( 1L );
@@ -28,7 +29,8 @@ public class PatchUtilClassLoadFixer {
 		@SuppressWarnings( "DuplicatedCode" )
 		Linking linking = new Linking();
 		linking.setDiscordMemberId( 1L );
-		linking.setDiscordName( null );
+		linking.setDiscordUsername( null );
+		linking.setDiscordNickname( null );
 		linking.setHasRole( false );
 		linking.setActive( true );
 		linking.setMessageId( 1L );
@@ -37,7 +39,8 @@ public class PatchUtilClassLoadFixer {
 			.name( "Test" )
 			.build() );
 		PatchUtil.Snapshot snapshot = PatchUtil.take( linking );
-		linking.setDiscordName( "Test" );
+		linking.setDiscordUsername( "Test" );
+		linking.setDiscordNickname( "Test" );
 		linking.setHasRole( true );
 		linking.setActive( false );
 		linking.setMessageId( null );

@@ -97,7 +97,7 @@ public class LinkingsManagementMessageManager {
 			synchronized( LinkingsManagementMessageManager.class ) {
 				if( isInitialized() ) {
 					LinkingMessageRequestCounter linkingMessageRequestCounter = new LinkingMessageRequestCounter(
-						linking.getDiscordName(),
+						linking.getDiscordUsername(),
 						linking.getMinecraftGameProfile().getName()
 					);
 					
@@ -238,7 +238,7 @@ public class LinkingsManagementMessageManager {
 	
 	private static MessageEmbed buildMessage( Member member, Linking linking ) {
 		
-		String discordName = linking.getDiscordName();
+		String discordName = linking.getDiscordUsername();
 		String minecraftName = linking.getMinecraftGameProfile().getName();
 		boolean hasRole = LinkingsManager.hasCorrectRole( member );
 		boolean isActive = linking.isActive();

@@ -20,7 +20,9 @@ public class Linking {
 	@EqualsAndHashCode.Include
 	private Long discordMemberId;
 	
-	private String discordName;
+	private String discordUsername;
+	
+	private String discordNickname;
 	
 	private boolean hasRole;
 	

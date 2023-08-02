@@ -23,6 +23,8 @@ public class CommandSettingsConfig {
 	
 	private final ForgeConfigSpec.ConfigValue<List<String>> other_bots_command_prefixes;
 	
+	private final CommandMessagesConfig commandMessagesConfig;
+	
 	private final ForgeConfigSpec.ConfigValue<List<? extends CommandConfig>> commands;
 	
 	//package-private
@@ -41,6 +43,7 @@ public class CommandSettingsConfig {
 		other_bots_command_prefixes = builder.comment( "Command prefixes of other bots. " +
 				"Messages with these prefixes are not sent to the Minecraft chat." )
 			.define( "other_bots_command_prefixes", new ArrayList<>() );
+		commandMessagesConfig = new CommandMessagesConfig( builder );
 		commands = builder.comment( "Command mapping from Discord to Minecraft commands" )
 			.defineList( "commands", CommandSettingsConfig::buildDefaultCommandList, CommandConfig::isCorrect );
 		builder.pop();
@@ -89,6 +92,11 @@ public class CommandSettingsConfig {
 		return other_bots_command_prefixes.get();
 	}
 	
+	public CommandMessagesConfig getCommandMessagesConfig() {
+		
+		return commandMessagesConfig;
+	}
+	
 	public List<? extends AbstractCommentedConfig> getCommands() {
 		
 		return commands.get();
@@ -110,6 +118,7 @@ public class CommandSettingsConfig {
 		);
 		logger.info( "{} = {}", other_bots_command_prefixes.getPath(), other_bots_command_prefixes.get() );
 		
+		commandMessagesConfig.printConfig( logger );
 		List<? extends AbstractCommentedConfig> commandList = commands.get();
 		for( int i = 0; i < commandList.size(); i++ ) {
 			CommandConfig.printConfig(

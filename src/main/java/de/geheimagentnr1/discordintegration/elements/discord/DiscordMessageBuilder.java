@@ -1,13 +1,17 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
+import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class DiscordMessageBuilder {
@@ -22,58 +26,54 @@ public class DiscordMessageBuilder {
 		return message.startsWith( FEEDBACK_START ) || message.endsWith( FEEDBACK_END );
 	}
 	
-	private static String getPlayerName( Player player ) {
+	public static String getEntityName( Entity entity ) {
 		
-		return player.getDisplayName().getString();
+		return entity.getDisplayName().getString();
 	}
 	
-	public static String buildDeathMessage( LivingDeathEvent event, String customMessage ) {
+	private static String getCommandSourceStackName( CommandSourceStack source ) {
 		
-		LivingEntity entity = event.getEntityLiving();
-		String name = entity.getDisplayName().getString();
-		if( customMessage.isEmpty() ) {
-			return event.getSource()
-				.getLocalizedDeathMessage( entity )
-				.getString()
-				.replace( name, "**" + name + "**" );
-		} else {
-			return String.format( "**%s** %s", name, customMessage );
-		}
+		return source.getDisplayName().getString();
 	}
 	
-	public static String buildPlayerMessage( Player player, String message ) {
+	public static String buildDeathMessage( LivingDeathEvent event, LivingEntity entity, String name ) {
 		
-		return buildPlayerMessage( getPlayerName( player ), message );
-	}
-	
-	public static String buildPlayerMessage( String playerName, String message ) {
-		
-		return String.format( "**%s** %s", playerName, message );
+		return event.getSource()
+			.getLocalizedDeathMessage( entity )
+			.getString()
+			.replace( name, "**" + name + "**" );
 	}
 	
 	public static String buildMeChatMessage( CommandSourceStack source, String action ) {
 		
-		return buildChatMessage( source, String.format( "*%s*", action ) );
+		return MessageUtil.replaceParameters(
+			ServerConfig.CHAT_CONFIG.getMessageFormatMinecraftToDiscordMeMessage(),
+			Map.of(
+				"player", getCommandSourceStackName( source ),
+				"message", action
+			)
+		);
 	}
 	
 	public static String buildChatMessage( Player player, String message ) {
 		
-		return buildChatMessage( getPlayerName( player ), message );
+		return buildChatMessage( getEntityName( player ), message );
 	}
 	
 	public static String buildChatMessage( CommandSourceStack source, Component message ) {
 		
-		return buildChatMessage( source, message.getString() );
-	}
-	
-	private static String buildChatMessage( CommandSourceStack source, String message ) {
-		
-		return buildChatMessage( source.getDisplayName().getString(), message );
+		return buildChatMessage( getCommandSourceStackName( source ), message.getString() );
 	}
 	
 	private static String buildChatMessage( String name, String message ) {
 		
-		return String.format( "**[%s]** %s", name, message );
+		return MessageUtil.replaceParameters(
+			ServerConfig.CHAT_CONFIG.getMessageFormatMinecraftToDiscord(),
+			Map.of(
+				"player", name,
+				"message", message
+			)
+		);
 	}
 	
 	public static List<String> buildFeedbackMessage( String message ) {

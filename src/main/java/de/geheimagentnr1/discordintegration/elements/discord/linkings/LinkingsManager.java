@@ -9,6 +9,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Lin
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linkings;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.MinecraftGameProfile;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
+import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -16,6 +17,7 @@ import net.dv8tion.jda.api.entities.Role;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -33,14 +35,19 @@ public class LinkingsManager {
 		
 		log.info(
 			"Created Linking between Discord account \"{}\" and Minecraft account \"{}\"",
-			linking.getDiscordName(),
+			linking.getDiscordUsername(),
 			linking.getMinecraftGameProfile().getName()
 		);
 		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingCreated().isEnabled() ) {
-			ManagementManager.sendLinkingMessage(
-				linking.getDiscordName(),
-				linking.getMinecraftGameProfile().getName(),
-				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingCreated().getMessage()
+			ManagementManager.sendMessage(
+				MessageUtil.replaceParameters(
+					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingCreated().getMessage(),
+					Map.of(
+						"username", linking.getDiscordUsername(),
+						"nickname", linking.getDiscordNickname(),
+						"player", linking.getMinecraftGameProfile().getName()
+					)
+				)
 			);
 		}
 	}
@@ -49,14 +56,19 @@ public class LinkingsManager {
 		
 		log.info(
 			"Removed Linking between Discord account \"{}\" and Minecraft account \"{}\"",
-			linking.getDiscordName(),
+			linking.getDiscordUsername(),
 			linking.getMinecraftGameProfile().getName()
 		);
 		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingRemoved().isEnabled() ) {
-			ManagementManager.sendLinkingMessage(
-				linking.getDiscordName(),
-				linking.getMinecraftGameProfile().getName(),
-				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingRemoved().getMessage()
+			ManagementManager.sendMessage(
+				MessageUtil.replaceParameters(
+					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingRemoved().getMessage(),
+					Map.of(
+						"username", linking.getDiscordUsername(),
+						"nickname", linking.getDiscordNickname(),
+						"player", linking.getMinecraftGameProfile().getName()
+					)
+				)
 			);
 		}
 	}
@@ -145,7 +157,8 @@ public class LinkingsManager {
 					deactivateList.add( minecraftGameProfile );
 				}
 				linking.setHasRole( hasRole );
-				linking.setDiscordName( DiscordManager.getNameFromMember( member ) );
+				linking.setDiscordUsername( DiscordManager.getMemberAsTag( member ) );
+				linking.setDiscordNickname( member.getEffectiveName() );
 				boolean hasChanged = !snapshot.peek().isEmpty();
 				if( hasChanged || forceMessageUpdate ) {
 					int finalLinkingCounter = linkingCounter;
@@ -241,7 +254,8 @@ public class LinkingsManager {
 		if( isEnabled() ) {
 			Linking linking = Linking.builder()
 				.discordMemberId( member.getIdLong() )
-				.discordName( DiscordManager.getNameFromMember( member ) )
+				.discordUsername( DiscordManager.getMemberAsTag( member ) )
+				.discordNickname( member.getEffectiveName() )
 				.hasRole( hasCorrectRole( member ) )
 				.active( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() )
 				.minecraftGameProfile( new MinecraftGameProfile( gameProfile ) )
@@ -253,7 +267,8 @@ public class LinkingsManager {
 			if( foundLinkingOptional.isPresent() ) {
 				Linking foundLinking = foundLinkingOptional.get();
 				PatchUtil.Snapshot snapshot = PatchUtil.take( foundLinking );
-				foundLinking.setDiscordName( DiscordManager.getNameFromMember( member ) );
+				foundLinking.setDiscordUsername( DiscordManager.getMemberAsTag( member ) );
+				foundLinking.setDiscordNickname( member.getEffectiveName() );
 				foundLinking.getMinecraftGameProfile().setName( gameProfile.getName() );
 				boolean hasChanged = !snapshot.peek().isEmpty();
 				LinkingsManagementMessageManager.sendOrEditMessage(
@@ -384,7 +399,8 @@ public class LinkingsManager {
 		if( member == null ) {
 			updateWhitelist( errorHandler );
 		} else {
-			linking.setDiscordName( DiscordManager.getNameFromMember( member ) );
+			linking.setDiscordUsername( DiscordManager.getMemberAsTag( member ) );
+			linking.setDiscordNickname( member.getEffectiveName() );
 			boolean hasChanged = !snapshot.peek().isEmpty();
 			LinkingsManagementMessageManager.sendOrEditMessage(
 				member,

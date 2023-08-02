@@ -17,7 +17,7 @@ public class UnlinkCommandConfig extends CommandConfig {
 			true,
 			false,
 			false,
-			"<Minecraft player name> unlinks a minecraft player from the discord user using this command."
+			"<Minecraft player name> unlinks a Minecraft player from the Discord user using this command."
 		);
 	}
 	
