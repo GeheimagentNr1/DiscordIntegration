@@ -17,7 +17,7 @@ public class GamerulesCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows the gamerules and their values."
+			"%command%%command_description_separator%shows the gamerules and their values."
 		);
 	}
 	

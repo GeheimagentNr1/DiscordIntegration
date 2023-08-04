@@ -17,7 +17,7 @@ public class HelpCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows all commands with their description."
+			"%command%%command_description_separator%shows all commands with their description."
 		);
 	}
 	

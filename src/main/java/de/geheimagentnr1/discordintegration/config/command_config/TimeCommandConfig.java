@@ -17,7 +17,7 @@ public class TimeCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows the current day's time on the server."
+			"%command%%command_description_separator%shows the current day's time on the server."
 		);
 	}
 	

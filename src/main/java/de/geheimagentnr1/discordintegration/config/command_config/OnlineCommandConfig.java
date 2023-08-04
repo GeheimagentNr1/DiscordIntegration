@@ -17,7 +17,7 @@ public class OnlineCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows how many and which players are on the server."
+			"%command%%command_description_separator%shows how many and which players are on the server."
 		);
 	}
 	

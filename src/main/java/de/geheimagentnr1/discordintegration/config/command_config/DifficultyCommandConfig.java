@@ -18,7 +18,7 @@ public class DifficultyCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows the difficulty of the server."
+			"%command%%command_description_separator%shows the difficulty of the server."
 		);
 	}
 	

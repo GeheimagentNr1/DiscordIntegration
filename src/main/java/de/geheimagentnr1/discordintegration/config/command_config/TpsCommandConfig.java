@@ -17,7 +17,7 @@ public class TpsCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows the tps statistic of the server and its dimensions."
+			"%command%%command_description_separator%shows the tps statistic of the server and its dimensions."
 		);
 	}
 	

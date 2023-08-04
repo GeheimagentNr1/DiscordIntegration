@@ -80,16 +80,23 @@ public class DiscordCommand {
 		for( AbstractCommentedConfig commandConfig : commands ) {
 			if( CommandConfig.isEnabled( commandConfig ) ) {
 				source.sendSuccess(
-					new TextComponent( String.format(
-						"%s%s - %s%s",
-						ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix(),
-						CommandConfig.getDiscordCommand( commandConfig ),
-						CommandConfig.getDescription( commandConfig ),
+					new TextComponent(
+						MessageUtil.replaceParameters(
+							CommandConfig.getDescription( commandConfig ),
+							Map.of(
+								"command",
+								ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix() +
+									CommandConfig.getDiscordCommand( commandConfig ),
+								"command_description_separator",
+								" - "
+							)
+						)
+					).append(
 						CommandConfig.isManagementCommand( commandConfig ) ?
 							" (" + ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
 								.getOnlyManagementCommandHintMessage() + ")" :
 							""
-					) ),
+					),
 					false
 				);
 			}

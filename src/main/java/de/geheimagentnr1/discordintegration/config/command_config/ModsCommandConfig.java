@@ -17,7 +17,7 @@ public class ModsCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows a list of the mods on the server."
+			"%command%%command_description_separator%shows a list of the mods on the server."
 		);
 	}
 	

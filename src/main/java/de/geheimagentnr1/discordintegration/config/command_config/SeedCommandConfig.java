@@ -17,7 +17,7 @@ public class SeedCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows the seed of the active world."
+			"%command%%command_description_separator%shows the seed of the active world."
 		);
 	}
 	
