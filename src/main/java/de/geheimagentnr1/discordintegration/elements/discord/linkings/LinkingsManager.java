@@ -31,6 +31,14 @@ public class LinkingsManager {
 		return DiscordManager.isInitialized() && ServerConfig.WHITELIST_CONFIG.isEnabled();
 	}
 	
+	private static boolean hasSingleLinkingManagementRole( Member member ) {
+		
+		return DiscordManager.hasCorrectRole(
+			member,
+			ServerConfig.WHITELIST_CONFIG.getSingleLinkingManagementRoleId()
+		);
+	}
+	
 	private static void sendLinkingCreatedMessage( Linking linking ) {
 		
 		log.info(
@@ -368,12 +376,13 @@ public class LinkingsManager {
 	
 	//package-private
 	static synchronized void changeActiveStateOfLinking(
+		Member member,
 		long messageId,
 		boolean shouldActive,
 		Consumer<Throwable> errorHandler )
 		throws IOException {
 		
-		if( isEnabled() ) {
+		if( isEnabled() && hasSingleLinkingManagementRole( member ) ) {
 			
 			Linkings linkings = LinkingsFileManager.load();
 			Optional<Linking> foundLinkingOptional = linkings.findLinking( messageId );

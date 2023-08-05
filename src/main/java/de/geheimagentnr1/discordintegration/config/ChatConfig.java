@@ -78,7 +78,8 @@ public class ChatConfig {
 				" " +
 				"(Available parameters: %username% = Discord username, " +
 				"%nickname% = Discord nickname, " +
-				"%max_char_count% = Max message length (value of " + max_char_count.getPath() + "), " +
+				"%max_char_count% = Max message length (value of " + String.join( ".", max_char_count.getPath() ) + ")" +
+				", " +
 				"%actual_message_char_count% = Actual length of the send message, " +
 				"%new_line% = New line)" )
 			.define( "max_char_count_error_message", "%username%%new_line%Error: Message too long.%new_line%" +

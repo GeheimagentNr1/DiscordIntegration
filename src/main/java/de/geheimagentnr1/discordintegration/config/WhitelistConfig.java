@@ -3,6 +3,8 @@ package de.geheimagentnr1.discordintegration.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.logging.log4j.Logger;
 
+import java.util.stream.Collectors;
+
 
 public class WhitelistConfig {
 	
@@ -14,6 +16,8 @@ public class WhitelistConfig {
 	private final ForgeConfigSpec.LongValue role_id;
 	
 	private final ForgeConfigSpec.BooleanValue use_single_linking_management;
+	
+	private final ForgeConfigSpec.LongValue single_linking_management_role_id;
 	
 	private final ForgeConfigSpec.LongValue linking_management_channel_id;
 	
@@ -32,6 +36,10 @@ public class WhitelistConfig {
 				"Does every linking has to be separately activated, before the Minecraft account is being " +
 					"whitelisted?" )
 			.define( "use_single_linking_management", true );
+		single_linking_management_role_id = builder.comment(
+				"Role ID of the Discord role, that a user have to have to activate or deactivate the linkings. Only " +
+					"needed if " + String.join( ".", use_single_linking_management.getPath() ) + " is true" )
+			.defineInRange( "single_linking_management_role_id", 0, 0, Long.MAX_VALUE );
 		linking_management_channel_id = builder.comment(
 				"Channel ID of the channel, where the activation of the linkings are handled." )
 			.defineInRange( "linking_management_channel_id", 0, 0, Long.MAX_VALUE );
@@ -58,6 +66,11 @@ public class WhitelistConfig {
 		return use_single_linking_management.get();
 	}
 	
+	public long getSingleLinkingManagementRoleId() {
+		
+		return single_linking_management_role_id.get();
+	}
+	
 	public long getLinkingManagementChannelId() {
 		
 		return linking_management_channel_id.get();
@@ -71,6 +84,7 @@ public class WhitelistConfig {
 		logger.info( "{} = {}", use_role.getPath(), use_role.get() );
 		logger.info( "{} = {}", role_id.getPath(), role_id.get() );
 		logger.info( "{} = {}", use_single_linking_management.getPath(), use_single_linking_management.get() );
+		logger.info( "{} = {}", single_linking_management_role_id.getPath(), single_linking_management_role_id.get() );
 		logger.info( "{} = {}", linking_management_channel_id.getPath(), linking_management_channel_id.get() );
 	}
 }

@@ -2,10 +2,7 @@ package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import lombok.extern.log4j.Log4j2;
-import net.dv8tion.jda.api.entities.MessageReaction;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
@@ -157,6 +154,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 			user.isBot() ) {
 			return;
 		}
+		Member member = event.getMember();
 		long messageId = event.getMessageIdLong();
 		TextChannel channel = event.getChannel();
 		MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
@@ -174,7 +172,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 				);
 			
 			try {
-				LinkingsManager.changeActiveStateOfLinking( messageId, shouldActive, errorHandler );
+				LinkingsManager.changeActiveStateOfLinking( member, messageId, shouldActive, errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
