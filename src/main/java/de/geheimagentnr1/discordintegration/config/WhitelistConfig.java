@@ -3,8 +3,6 @@ package de.geheimagentnr1.discordintegration.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.logging.log4j.Logger;
 
-import java.util.stream.Collectors;
-
 
 public class WhitelistConfig {
 	
