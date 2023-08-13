@@ -10,12 +10,16 @@ import net.minecraft.network.chat.TextComponent;
 class DiscordCommandHelper {
 	
 	
-	static void sendInvalidCommandConfigurationErrorMessage( CommandSourceStack source ) {
+	private static void sendErrorMessage( CommandSourceStack source, String message ) {
 		
-		source.sendFailure( new TextComponent( "Invalid Command Configuration" ) );
+		source.sendFailure( new TextComponent( message ) );
 	}
 	
-	//package-private
+	static void sendInvalidCommandConfigurationErrorMessage( CommandSourceStack source ) {
+		
+		sendErrorMessage( source, "Invalid Command Configuration" );
+	}
+	
 	static boolean isDiscordSource( CommandSourceStack source ) {
 		
 		if( source instanceof DiscordCommandSourceStack ) {
@@ -25,17 +29,24 @@ class DiscordCommandHelper {
 		return false;
 	}
 	
-	//package-private
 	static void sendInvalidMember( CommandSourceStack source ) {
 		
-		source.sendFailure( new TextComponent(
+		sendErrorMessage(
+			source,
 			ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig().getLinkInvalidDiscordMemberIdErrorMessage()
-		) );
+		);
 	}
 	
-	//package-private
+	static void sendLinkCommandsUseIfWhitelistIsDisabledErrorMessage( CommandSourceStack source ) {
+		
+		sendErrorMessage( source,
+			ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+				.getLinkCommandsUseIfWhitelistIsDisabledErrorMessage()
+		);
+	}
+	
 	static void handleError( CommandSourceStack source, Throwable throwable ) {
 		
-		source.sendFailure( new TextComponent( throwable.getMessage() ) );
+		sendErrorMessage( source, throwable.getMessage() );
 	}
 }

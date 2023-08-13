@@ -114,23 +114,25 @@ public class DiscordManager {
 	
 	public static void updatePresence( int onlinePlayerCount ) {
 		
-		if( ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().isShow() ) {
-			jda.getPresence().setPresence(
-				Activity.playing(
-					MessageUtil.replaceParameters(
-						ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().getMessage(),
-						Map.of(
-							"online_player_count",
-							String.valueOf( onlinePlayerCount ),
-							"max_player_count",
-							String.valueOf( ServerLifecycleHooks.getCurrentServer().getMaxPlayers() )
+		if( isInitialized() ) {
+			if( ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().isShow() ) {
+				jda.getPresence().setPresence(
+					Activity.playing(
+						MessageUtil.replaceParameters(
+							ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().getMessage(),
+							Map.of(
+								"online_player_count",
+								String.valueOf( onlinePlayerCount ),
+								"max_player_count",
+								String.valueOf( ServerLifecycleHooks.getCurrentServer().getMaxPlayers() )
+							)
 						)
-					)
-				),
-				false
-			);
-		} else {
-			jda.getPresence().setPresence( (Activity)null, false );
+					),
+					false
+				);
+			} else {
+				jda.getPresence().setPresence( (Activity)null, false );
+			}
 		}
 	}
 	
@@ -142,7 +144,10 @@ public class DiscordManager {
 			
 			try {
 				log.info( "Check Discord whitelist on startup" );
-				LinkingsManager.updateWhitelist( errorHandler, true );
+				LinkingsManager.updateWhitelist(
+					errorHandler,
+					ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement()
+				);
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}

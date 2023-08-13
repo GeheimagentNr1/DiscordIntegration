@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration;
 
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.elements.discord.linkings.patch.PatchUtilClassLoadFixer;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -17,7 +18,7 @@ public class DiscordIntegration {
 	
 	public DiscordIntegration() {
 		
-		//PatchUtilClassLoadFixer.fixPatchUtilClassLoading();
+		PatchUtilClassLoadFixer.fixPatchUtilClassLoading();
 		
 		ModLoadingContext.get().registerConfig( ModConfig.Type.SERVER, ServerConfig.CONFIG );
 		ModLoadingContext.get().registerExtensionPoint(

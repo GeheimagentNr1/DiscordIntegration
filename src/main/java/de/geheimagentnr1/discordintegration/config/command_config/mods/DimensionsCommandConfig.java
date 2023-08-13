@@ -19,7 +19,7 @@ public class DimensionsCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows the access states of all dimensions."
+			"%command%%command_description_separator%shows the access states of all dimensions."
 		);
 	}
 	

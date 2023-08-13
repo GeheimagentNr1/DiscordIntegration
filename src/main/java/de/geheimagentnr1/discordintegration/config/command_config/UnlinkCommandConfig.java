@@ -17,7 +17,7 @@ public class UnlinkCommandConfig extends CommandConfig {
 			true,
 			false,
 			false,
-			"%command%<Minecraft player name>%command_description_separator%unlinks a Minecraft player from the " +
+			"%command% <Minecraft player name>%command_description_separator%unlinks a Minecraft player from the " +
 				"Discord user using this command."
 		);
 	}

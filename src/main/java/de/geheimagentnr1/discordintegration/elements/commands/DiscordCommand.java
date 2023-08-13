@@ -210,10 +210,8 @@ public class DiscordCommand {
 							) )
 						);
 					}
-					if( source instanceof DiscordCommandSourceStack discordCommandSourceStack ) {
-						discordCommandSourceStack.getSource().sendMessage();
-					}
 				},
+				() -> DiscordCommandHelper.sendLinkCommandsUseIfWhitelistIsDisabledErrorMessage( source ),
 				throwable -> DiscordCommandHelper.handleError( source, throwable )
 			);
 		} catch( IOException exception ) {
@@ -272,19 +270,22 @@ public class DiscordCommand {
 			LinkingsManager.removeLinking(
 				member,
 				gameProfile,
+				() -> {
+					source.sendSuccess(
+						new TextComponent( MessageUtil.replaceParameters(
+							ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+								.getLinkRemovedResultMessage(),
+							Map.of(
+								"username", DiscordManager.getMemberAsTag( member ),
+								"nickname", member.getEffectiveName(),
+								"player", gameProfile.getName()
+							)
+						) ),
+						true
+					);
+				},
+				() -> DiscordCommandHelper.sendLinkCommandsUseIfWhitelistIsDisabledErrorMessage( source ),
 				throwable -> DiscordCommandHelper.handleError( source, throwable )
-			);
-			source.sendSuccess(
-				new TextComponent( MessageUtil.replaceParameters(
-					ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
-						.getLinkRemovedResultMessage(),
-					Map.of(
-						"username", DiscordManager.getMemberAsTag( member ),
-						"nickname", member.getEffectiveName(),
-						"player", gameProfile.getName()
-					)
-				) ),
-				true
 			);
 		} catch( IOException exception ) {
 			DiscordCommandHelper.handleError( source, exception );

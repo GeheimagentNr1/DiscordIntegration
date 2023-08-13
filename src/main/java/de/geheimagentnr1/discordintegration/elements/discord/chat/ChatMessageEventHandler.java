@@ -103,13 +103,14 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 						ChatType.CHAT,
 						Util.NIL_UUID
 					);
-				} catch( CommandSyntaxException e ) {
+				} catch( CommandSyntaxException exception ) {
 					ChatManager.sendFeedbackMessage(
 						MessageUtil.replaceParameters(
 							ServerConfig.CHAT_CONFIG.getInvalidRawMessageFormatForDiscordToMinecraftErrorMessage(),
 							Map.of(
 								"username", DiscordManager.getMemberAsTag( member ),
 								"nickname", member.getEffectiveName(),
+								"error_message", exception.getMessage(),
 								"new_line", System.lineSeparator()
 							)
 						)

@@ -19,7 +19,7 @@ public class MobgriefingCommandConfig extends CommandConfig {
 			false,
 			true,
 			false,
-			"shows all mobgriefing options of the mobs."
+			"%command%%command_description_separator%shows all mobgriefing options of the mobs."
 		);
 	}
 	

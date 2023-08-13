@@ -13,6 +13,7 @@ import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.minecraft.network.chat.TextComponent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,17 +82,19 @@ public class LinkingsManager {
 		}
 	}
 	
-	private static void sendFinishedWhitelistUpdateWithForcedMessageUpdate() {
+	private static void sendFinishedWhitelistUpdateWithForcedMessageUpdate( boolean forceMessageUpdate ) {
 		
-		log.info( "Finished check of Discord whitelist with forced message update" );
-		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
-			.getWhitelistUpdateWithForcedMessageUpdateFinished()
-			.isEnabled() ) {
-			ManagementManager.sendMessage(
-				ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
-					.getWhitelistUpdateWithForcedMessageUpdateFinished()
-					.getMessage()
-			);
+		if( forceMessageUpdate ) {
+			log.info( "Finished check of Discord whitelist with forced message update" );
+			if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+				.getWhitelistUpdateWithForcedMessageUpdateFinished()
+				.isEnabled() ) {
+				ManagementManager.sendMessage(
+					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+						.getWhitelistUpdateWithForcedMessageUpdateFinished()
+						.getMessage()
+				);
+			}
 		}
 	}
 	
@@ -185,7 +188,7 @@ public class LinkingsManager {
 										linkingCount
 									);
 									if( finalLinkingCounter == linkingCount ) {
-										sendFinishedWhitelistUpdateWithForcedMessageUpdate();
+										sendFinishedWhitelistUpdateWithForcedMessageUpdate( forceMessageUpdate );
 									}
 								}
 							} catch( Throwable throwable ) {
@@ -197,7 +200,7 @@ public class LinkingsManager {
 			}
 		}
 		if( linkingCount == 0 ) {
-			sendFinishedWhitelistUpdateWithForcedMessageUpdate();
+			sendFinishedWhitelistUpdateWithForcedMessageUpdate( forceMessageUpdate );
 		}
 		deactivateList.stream()
 			.filter( minecraftGameProfile -> !activateList.contains( minecraftGameProfile ) )
@@ -257,6 +260,7 @@ public class LinkingsManager {
 		Member member,
 		GameProfile gameProfile,
 		Consumer<Boolean> successHandler,
+		Runnable whitelistDisabledErrorHandler,
 		Consumer<Throwable> errorHandler ) throws IOException {
 		
 		if( isEnabled() ) {
@@ -311,12 +315,16 @@ public class LinkingsManager {
 					}
 				);
 			}
+		} else {
+			whitelistDisabledErrorHandler.run();
 		}
 	}
 	
 	public static synchronized void removeLinking(
 		Member member,
 		GameProfile gameProfile,
+		Runnable successHandler,
+		Runnable whitelistDisabledErrorHandler,
 		Consumer<Throwable> errorHandler )
 		throws IOException {
 		
@@ -337,6 +345,9 @@ public class LinkingsManager {
 				updateWhitelist( List.of( removedLinking ), errorHandler );
 				LinkingsManagementMessageManager.deleteMessage( removedLinking );
 			}
+			successHandler.run();
+		} else {
+			whitelistDisabledErrorHandler.run();
 		}
 	}
 	

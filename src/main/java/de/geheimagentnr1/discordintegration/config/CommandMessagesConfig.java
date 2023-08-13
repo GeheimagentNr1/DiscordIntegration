@@ -17,6 +17,8 @@ public class CommandMessagesConfig {
 	
 	private final ForgeConfigSpec.ConfigValue<String> link_invalid_discord_member_id_error_message;
 	
+	private final ForgeConfigSpec.ConfigValue<String> link_commands_use_if_whitelist_is_disabled_error_message;
+	
 	private final ForgeConfigSpec.ConfigValue<String> unknown_command_error_message;
 	
 	private final ForgeConfigSpec.ConfigValue<String> invalid_permissions_error_message;
@@ -65,6 +67,13 @@ public class CommandMessagesConfig {
 				"link_invalid_discord_member_id_error_message",
 				"Discord Member does not exist or Discord context is unloadable"
 			);
+		link_commands_use_if_whitelist_is_disabled_error_message = builder.comment(
+			"Message that is shown, when the link or unlink commands are executed, " +
+				"but the whitelist management in Discord is disabled."
+		).define(
+			"link_commands_use_if_whitelist_is_disabled_error_message",
+			"This command is only usable, if the whitelist management in Discord is enabled (whitelist.enabled = true)."
+			);
 		unknown_command_error_message = builder.comment( "Error message shown, when a unknown command is entered " +
 				"in the Discord chat" +
 				"(Available parameters: %username% = Discord username, " +
@@ -109,6 +118,11 @@ public class CommandMessagesConfig {
 	public String getLinkInvalidDiscordMemberIdErrorMessage() {
 		
 		return link_invalid_discord_member_id_error_message.get();
+	}
+	
+	public String getLinkCommandsUseIfWhitelistIsDisabledErrorMessage() {
+		
+		return link_commands_use_if_whitelist_is_disabled_error_message.get();
 	}
 	
 	public String getUnknownCommandErrorMessage() {
