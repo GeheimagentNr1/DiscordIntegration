@@ -12,10 +12,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.minecraft.Util;
 import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
@@ -76,10 +74,9 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 		
 		if( ServerConfig.CHAT_CONFIG.transmitBotMessages() &&
 			DiscordMessageBuilder.isMessageBotFeedback( message ) ) {
-			server.getPlayerList().broadcastMessage(
-				new TextComponent( message ),
-				ChatType.CHAT,
-				Util.NIL_UUID
+			server.getPlayerList().broadcastSystemMessage(
+				Component.literal( message ),
+				false
 			);
 		}
 	}
@@ -98,10 +95,9 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 			);
 			if( ServerConfig.CHAT_CONFIG.useRawMessageFormatDiscordToMinecraft() ) {
 				try {
-					server.getPlayerList().broadcastMessage(
+					server.getPlayerList().broadcastSystemMessage(
 						ComponentArgument.textComponent().parse( new StringReader( buildMessage ) ),
-						ChatType.CHAT,
-						Util.NIL_UUID
+						false
 					);
 				} catch( CommandSyntaxException exception ) {
 					ChatManager.sendFeedbackMessage(
@@ -117,10 +113,9 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 					);
 				}
 			} else {
-				server.getPlayerList().broadcastMessage(
-					new TextComponent( buildMessage ),
-					ChatType.CHAT,
-					Util.NIL_UUID
+				server.getPlayerList().broadcastSystemMessage(
+					Component.literal( buildMessage ),
+					false
 				);
 			}
 		} else {

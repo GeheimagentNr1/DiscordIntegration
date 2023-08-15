@@ -7,7 +7,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Min
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
 import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -85,7 +85,7 @@ class WhitelistManager {
 				for( ServerPlayer serverPlayer : Lists.newArrayList( playerList.getPlayers() ) ) {
 					if( !userWhiteList.isWhiteListed( serverPlayer.getGameProfile() ) ) {
 						serverPlayer.connection.disconnect(
-							new TranslatableComponent( "multiplayer.disconnect.not_whitelisted" )
+							Component.translatable( "multiplayer.disconnect.not_whitelisted" )
 						);
 					}
 				}

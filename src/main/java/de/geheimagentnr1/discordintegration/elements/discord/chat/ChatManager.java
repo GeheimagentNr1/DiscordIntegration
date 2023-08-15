@@ -61,9 +61,9 @@ public class ChatManager {
 		return isInitialized() && ServerConfig.CHAT_CONFIG.getChannelId() == channelId;
 	}
 	
-	public static void sendMeChatMessage( CommandSourceStack source, String action ) {
+	public static void sendEmoteChatMessage( CommandSourceStack source, Component action ) {
 		
-		sendMessage( DiscordMessageBuilder.buildMeChatMessage( source, action ) );
+		sendMessage( DiscordMessageBuilder.buildMeChatMessage( source, action.getString() ) );
 	}
 	
 	public static void sendChatMessage( CommandSourceStack source, Component message ) {

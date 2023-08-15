@@ -110,7 +110,7 @@ public class ForgeEventHandler {
 				MessageUtil.replaceParameters(
 					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerJoined().getMessage(),
 					Map.of(
-						"player", DiscordMessageBuilder.getEntityName( event.getPlayer() )
+						"player", DiscordMessageBuilder.getEntityName( event.getEntity() )
 					)
 				)
 			);
@@ -136,7 +136,7 @@ public class ForgeEventHandler {
 				MessageUtil.replaceParameters(
 					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getPlayerLeft().getMessage(),
 					Map.of(
-						"player", DiscordMessageBuilder.getEntityName( event.getPlayer() )
+						"player", DiscordMessageBuilder.getEntityName( event.getEntity() )
 					)
 				)
 			);

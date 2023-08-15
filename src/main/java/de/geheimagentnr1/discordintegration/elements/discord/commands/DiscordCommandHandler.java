@@ -67,7 +67,7 @@ public class DiscordCommandHandler {
 				
 				if( doesCommandMatch( commandConfig, command, discordCommand ) ) {
 					if( !CommandConfig.isManagementCommand( commandConfig ) || hasManagementRole ) {
-						server.getCommands().performCommand(
+						server.getCommands().performPrefixedCommand(
 							source,
 							buildMinecraftCommand( commandConfig, discordCommand, command )
 						);

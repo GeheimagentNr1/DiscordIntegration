@@ -185,7 +185,7 @@ public class DiscordCommand {
 				successful -> {
 					if( successful ) {
 						source.sendSuccess(
-							new TextComponent( MessageUtil.replaceParameters(
+							Component.literal( MessageUtil.replaceParameters(
 								ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
 									.getLinkCreatedResultMessage(),
 								Map.of(
@@ -198,7 +198,7 @@ public class DiscordCommand {
 						);
 					} else {
 						source.sendFailure(
-							new TextComponent( MessageUtil.replaceParameters(
+							Component.literal( MessageUtil.replaceParameters(
 								ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
 									.getLinkAlreadyExistsResultMessage(),
 								Map.of(
@@ -271,7 +271,7 @@ public class DiscordCommand {
 				gameProfile,
 				() -> {
 					source.sendSuccess(
-						new TextComponent( MessageUtil.replaceParameters(
+						Component.literal( MessageUtil.replaceParameters(
 							ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
 								.getLinkRemovedResultMessage(),
 							Map.of(

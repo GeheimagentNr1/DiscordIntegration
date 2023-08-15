@@ -3,7 +3,7 @@ package de.geheimagentnr1.discordintegration.elements.discord.commands.models;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -31,7 +31,7 @@ public class DiscordCommandSourceStack extends CommandSourceStack {
 			Objects.requireNonNull( server.overworld() ),
 			permissionLevel,
 			ServerConfig.MOD_NAME,
-			new TextComponent( ServerConfig.MOD_NAME ),
+			Component.literal( ServerConfig.MOD_NAME ),
 			server,
 			null
 		);

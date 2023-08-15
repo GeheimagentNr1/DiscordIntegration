@@ -13,7 +13,6 @@ import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.minecraft.network.chat.TextComponent;
 
 import java.io.IOException;
 import java.util.ArrayList;

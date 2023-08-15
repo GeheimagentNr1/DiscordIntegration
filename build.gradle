@@ -268,10 +268,6 @@ publishing {
         maven {
             url "file:../ModdingMavenRepositories"
         }
-        maven {
-            name "minecraft-mods-repo"
-            url "https://secretsoft.jfrog.io/artifactory/minecraft-mods/"
-        }
     }
 }
 

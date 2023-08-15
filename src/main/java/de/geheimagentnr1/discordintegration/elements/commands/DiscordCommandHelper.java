@@ -3,7 +3,7 @@ package de.geheimagentnr1.discordintegration.elements.commands;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSourceStack;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 
 //package-private
@@ -12,7 +12,7 @@ class DiscordCommandHelper {
 	
 	private static void sendErrorMessage( CommandSourceStack source, String message ) {
 		
-		source.sendFailure( new TextComponent( message ) );
+		source.sendFailure( Component.literal( message ) );
 	}
 	
 	static void sendInvalidCommandConfigurationErrorMessage( CommandSourceStack source ) {
@@ -39,7 +39,8 @@ class DiscordCommandHelper {
 	
 	static void sendLinkCommandsUseIfWhitelistIsDisabledErrorMessage( CommandSourceStack source ) {
 		
-		sendErrorMessage( source,
+		sendErrorMessage(
+			source,
 			ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
 				.getLinkCommandsUseIfWhitelistIsDisabledErrorMessage()
 		);

@@ -72,8 +72,9 @@ public class CommandMessagesConfig {
 				"but the whitelist management in Discord is disabled."
 		).define(
 			"link_commands_use_if_whitelist_is_disabled_error_message",
-			"This command is only usable, if the whitelist management in Discord is enabled (whitelist.enabled = true)."
-			);
+			"This command is only usable, if the whitelist management in Discord is enabled (whitelist.enabled = " +
+				"true)."
+		);
 		unknown_command_error_message = builder.comment( "Error message shown, when a unknown command is entered " +
 				"in the Discord chat" +
 				"(Available parameters: %username% = Discord username, " +

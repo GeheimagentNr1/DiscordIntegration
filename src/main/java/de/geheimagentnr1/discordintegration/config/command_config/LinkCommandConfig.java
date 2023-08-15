@@ -17,7 +17,8 @@ public class LinkCommandConfig extends CommandConfig {
 			true,
 			false,
 			false,
-			"%command% <Minecraft player name>%command_description_separator%links a Minecraft player with the Discord" +
+			"%command% <Minecraft player name>%command_description_separator%links a Minecraft player with the " +
+				"Discord" +
 				" user using this command."
 		);
 	}

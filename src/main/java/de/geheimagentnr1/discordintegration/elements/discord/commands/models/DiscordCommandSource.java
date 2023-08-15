@@ -5,6 +5,8 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
+
 
 @RequiredArgsConstructor
 public class DiscordCommandSource implements CommandSource {
