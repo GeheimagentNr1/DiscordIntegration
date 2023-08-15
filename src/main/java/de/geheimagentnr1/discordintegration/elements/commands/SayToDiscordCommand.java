@@ -5,7 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.MessageArgument;
@@ -35,7 +35,7 @@ public class SayToDiscordCommand {
 			( playerChatMessage ) -> {
 				source.getServer().getPlayerList()
 					.broadcastChatMessage( playerChatMessage, source, ChatType.bind( ChatType.SAY_COMMAND, source ) );
-				DiscordNet.sendChatMessage( source, playerChatMessage.serverContent() );
+				ChatManager.sendChatMessage( source, playerChatMessage.serverContent() );
 			}
 		);
 		return Command.SINGLE_SUCCESS;

@@ -1,22 +1,27 @@
-package de.geheimagentnr1.discordintegration.elements.discord;
+package de.geheimagentnr1.discordintegration.elements.discord.commands.models;
 
-import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
 
-
-//package-private
-class DiscordCommandSource implements CommandSource {
+@RequiredArgsConstructor
+public class DiscordCommandSource implements CommandSource {
 	
+	
+	private final Consumer<String> feedbackSender;
+	
+	private boolean messageNotSent = true;
 	
 	private String message = "";
 	
-	//package-private
-	void sendMessage() {
+	public void sendMessage() {
 		
-		DiscordNet.sendFeedbackMessage( message );
+		if( messageNotSent && !message.isEmpty() ) {
+			messageNotSent = false;
+			feedbackSender.accept( message );
+		}
 	}
 	
 	@Override
