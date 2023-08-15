@@ -183,21 +183,32 @@ dependencies {
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
     // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
 
-    implementation("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
-    }
-    shadow("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
-    }
-    runtimeOnly("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
-    }
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-    /*runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
-    runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")*/
+
+    minecraftLibrary "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
+    minecraftLibrary "net.dv8tion:JDA:${jda_version}", {
+        exclude module: 'opus-java'
+        exclude module: 'slf4j-api'
+    }
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
+
+    shadow "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
+    shadow "net.dv8tion:JDA:${jda_version}", {
+        exclude module: 'opus-java'
+        exclude module: 'slf4j-api'
+    }
+    shadow "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    shadow "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    shadow "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    shadow "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
+
+    runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${mc_version}:${dam_version}")
+    runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${mc_version}:${mmgo_version}")
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
@@ -207,6 +218,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+configurations {
+    implementation.extendsFrom(shadow)
+}
+
 shadowJar {
     classifier ""
     configurations = [project.configurations.shadow]
@@ -214,7 +229,10 @@ shadowJar {
     relocate 'com.fasterxml.jackson.annotation', 'lib.com.fasterxml.jackson.annotation'
     relocate 'com.fasterxml.jackson.core', 'lib.com.fasterxml.jackson.core'
     relocate 'com.fasterxml.jackson.databind', 'lib.com.fasterxml.jackson.databind'
+    relocate 'com.fasterxml.jackson.datatype.jsr310', 'lib.com.fasterxml.jackson.datatype.jsr310'
+    relocate 'com.flipkart.zjsonpatch', 'lib.com.flipkart.zjsonpatch'
     relocate 'com.iwebpp.crypto', 'lib.com.iwebpp.crypto'
+    relocate 'com.mantledillusion.essentials.json.patch', 'lib.com.mantledillusion.essentials.json.patch'
     relocate 'com.neovisionaries.ws.client', 'lib.com.neovisionaries.ws.client'
     relocate 'gnu.trove', 'lib.gnu.trove'
     relocate 'javax.annotation', 'lib.javax.annotation'
