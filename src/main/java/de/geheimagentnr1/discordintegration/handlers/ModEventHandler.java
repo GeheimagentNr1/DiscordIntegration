@@ -8,9 +8,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 
-@Mod.EventBusSubscriber( modid = DiscordIntegration.MODID,
+@Mod.EventBusSubscriber(
+	modid = DiscordIntegration.MODID,
 	bus = Mod.EventBusSubscriber.Bus.MOD,
-	value = Dist.DEDICATED_SERVER )
+	value = Dist.DEDICATED_SERVER
+)
 public class ModEventHandler {
 	
 	
