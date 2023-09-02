@@ -209,6 +209,9 @@ public class DiscordCommand {
 							) )
 						);
 					}
+					if( source instanceof DiscordCommandSourceStack discordCommandSourceStack ) {
+						discordCommandSourceStack.getSource().sendMessage();
+					}
 				},
 				() -> DiscordCommandHelper.sendLinkCommandsUseIfWhitelistIsDisabledErrorMessage( source ),
 				throwable -> DiscordCommandHelper.handleError( source, throwable )
