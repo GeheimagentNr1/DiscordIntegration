@@ -20,8 +20,8 @@ task copyLicenses(type: Copy) {
     from 'build/reports/licenses'
     into 'lib_licences'
 }
-//TODO compileJava.dependsOn(copyLicenses)
-//TODO copyLicenses.dependsOn("licenseReport")
+compileJava.dependsOn(copyLicenses)
+copyLicenses.dependsOn("licenseReport")
 
 version = "${major_version}.${minor_version}.${patch_version}"
 group = "${domain}.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
