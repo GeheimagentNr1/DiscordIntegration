@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
-    id("com.jaredsburrows.license") version "0.9.0"
+    id("com.jaredsburrows.license") version "0.9.3"
     id "net.linguica.maven-settings" version "0.5"
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }

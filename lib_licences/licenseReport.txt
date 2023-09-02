@@ -31,7 +31,7 @@ widely used encoders and decoders, the codec package also maintains a
 collection of phonetic encoding utilities.
      https://commons.apache.org/proper/commons-codec/
 
-Apache Commons Collections (4.1) - Apache License, Version 2.0
+Apache Commons Collections (4.2) - Apache License, Version 2.0
 The Apache Commons Collections package contains types that extend and augment the Java Collections Framework.
 http://commons.apache.org/proper/commons-collections/
 
@@ -197,17 +197,20 @@ providing Unicode and Globalization support
 translator to modify the result of translation.
       https://github.com/google/j2objc/
 
-Jackson-annotations (2.10.1) - The Apache Software License, Version 2.0
-Core annotations used for value types, used by Jackson data binding package.
-http://github.com/FasterXML/jackson
+Jackson datatype: JSR310 (2.14.3) - The Apache Software License, Version 2.0
+Add-on module to support JSR-310 (Java 8 Date & Time API) data types.
 
-Jackson-core (2.10.1) - The Apache Software License, Version 2.0
+Jackson-annotations (2.14.3) - The Apache Software License, Version 2.0
+Core annotations used for value types, used by Jackson data binding package.
+https://github.com/FasterXML/jackson
+
+Jackson-core (2.14.3) - The Apache Software License, Version 2.0
 Core Jackson processing abstractions (aka Streaming API), implementation for JSON
 https://github.com/FasterXML/jackson-core
 
-jackson-databind (2.10.1) - The Apache Software License, Version 2.0
+jackson-databind (2.14.3) - The Apache Software License, Version 2.0
 General data-binding functionality for Jackson: works on core streaming API
-http://github.com/FasterXML/jackson
+https://github.com/FasterXML/jackson
 
 JarJarFileSystems (0.3.16) - LGPL 2.1
 Jar in Jar Utilities including the required NIO FileSystems. SubSystem: JarJarFileSystems
@@ -252,6 +255,10 @@ JLine Terminal (3.12.1) - The BSD License
 JOpt Simple (5.0.4) - The MIT License
 A Java library for parsing command line options
 http://jopt-simple.github.io/jopt-simple
+
+JSON Patch Essentials (1.0.0) - The Apache License, Version 2.0
+JSON Patch Essentials contain utility classes useful for capturing and applying RFC 6902 compliant JSON patches from and to Java POJOs.
+http://www.mantledillusion.com
 
 JSR 353 (JSON Processing) Default Provider (1.0.4) - Dual license consisting of the CDDL v1.1 and GPL v2
 Default provider for JSR 353:Java API for Processing JSON
@@ -307,7 +314,7 @@ mixin (0.8.5) - MIT license
 Mixin
 http://www.spongepowered.org/
 
-Mod Launcher (10.0.8)
+Mod Launcher (10.0.9)
 Common ModLauncher framework
 https://github.com/McModLauncher/modlauncher
 
@@ -392,7 +399,7 @@ TerminalConsoleAppender (1.2.0) - MIT License
 JLine 3 appender for Log4j2, allows extending command line apps using colors and command completion
 https://github.com/Minecrell/TerminalConsoleAppender
 
-text2speech (1.13.9)
+text2speech (1.16.7)
 
 Typetools (0.8.3)
 Typetools for reading lambda metadata
@@ -401,3 +408,7 @@ https://github.com/MinecraftForge/typetools
 Unsafe (0.2.0)
 Unsafe hacks for forge
 https://github.com/MinecraftForge/Unsafe
+
+zjsonpatch (0.4.9) - The Apache Software License, Version 2.0
+Java Library to find / apply JSON Patches according to RFC 6902
+https://github.com/flipkart-incubator/zjsonpatch/
