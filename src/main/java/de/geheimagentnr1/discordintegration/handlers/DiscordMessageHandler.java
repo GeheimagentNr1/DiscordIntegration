@@ -4,7 +4,6 @@ import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import de.geheimagentnr1.minecraft_forge_api.events.ForgeEventHandlerInterface;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
@@ -102,19 +101,19 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 	@Override
 	public void handleAdvancementEarnEvent( @NotNull AdvancementEvent.AdvancementEarnEvent event ) {
 		
-		DisplayInfo displayInfo = event.getAdvancement().getDisplay();
-		
-		if( displayInfo != null && displayInfo.shouldAnnounceChat() &&
-			serverConfig.getPlayerGotAdvancementMessageEnabled() ) {
-			discordNet.sendPlayerMessage(
-				event.getEntity(),
-				String.format(
-					"%s **%s**%n*%s*",
-					serverConfig.getPlayerGotAdvancementMessage(),
-					displayInfo.getTitle().getString(),
-					displayInfo.getDescription().getString()
-				)
-			);
-		}
+		event.getAdvancement().value().display().ifPresent( displayInfo -> {
+			if( displayInfo.shouldAnnounceChat() &&
+				serverConfig.getPlayerGotAdvancementMessageEnabled() ) {
+				discordNet.sendPlayerMessage(
+					event.getEntity(),
+					String.format(
+						"%s **%s**%n*%s*",
+						serverConfig.getPlayerGotAdvancementMessage(),
+						displayInfo.getTitle().getString(),
+						displayInfo.getDescription().getString()
+					)
+				);
+			}
+		} );
 	}
 }
