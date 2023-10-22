@@ -96,7 +96,7 @@ public class ChatMessagesConfig {
 			"Options for the player got advancement message",
 			"Should a message be sent to the Discord chat, if a player got an advancement?",
 			"Message sent to the Discord chat, if a player got an advancement. " +
-				"**<advancement title>**<new line>*<advancement description>*" +
+				"**<advancement title>**<new line>*<advancement description>* " +
 				"(Available parameters: %player% = Player name, " +
 				"%advancement_title% = Advancement title, " +
 				"%advancement_description% = Advancement description, " +
