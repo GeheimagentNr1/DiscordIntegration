@@ -41,7 +41,7 @@ public abstract class CommandConfig extends AbstractCommentedConfig {
 	
 	private static final String DESCRIPTION_NAME = "description";
 	
-	private static final String DESCRIPTION_COMMENT = "Description for the help command" +
+	private static final String DESCRIPTION_COMMENT = "Description for the help command " +
 		"(Available parameters: %command% = Command, " +
 		"%command_description_separator% = Command Description Separator)";
 	

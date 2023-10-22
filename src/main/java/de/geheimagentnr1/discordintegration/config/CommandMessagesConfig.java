@@ -53,7 +53,7 @@ public class CommandMessagesConfig {
 			);
 		link_removed_result_message = builder.comment(
 				"Result message shown, when a Minecraft account is successfully unlinked from a " +
-					"Discord user." +
+					"Discord user. " +
 					"(Available parameters: %username% = Discord username, " +
 					"%nickname% = Discord nickname, " +
 					"%player% = Player name)" )
@@ -76,7 +76,7 @@ public class CommandMessagesConfig {
 				"true)."
 		);
 		unknown_command_error_message = builder.comment( "Error message shown, when a unknown command is entered " +
-				"in the Discord chat" +
+				"in the Discord chat " +
 				"(Available parameters: %username% = Discord username, " +
 				"%nickname% = Discord nickname, " +
 				"%new_line% = New line)" )
@@ -84,7 +84,7 @@ public class CommandMessagesConfig {
 		invalid_permissions_error_message = builder.comment( "Error message shown, when a user without the " +
 				"management" +
 				" " +
-				"role tries to execute a management command" +
+				"role tries to execute a management command " +
 				"(Available parameters: %username% = Discord username, " +
 				"%nickname% = Discord nickname, " +
 				"%new_line% = New line)" )
