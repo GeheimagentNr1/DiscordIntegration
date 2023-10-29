@@ -7,11 +7,13 @@ import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
 import de.geheimagentnr1.minecraft_forge_api.config.AbstractConfig;
 import net.minecraftforge.fml.config.ModConfig;
 import org.jetbrains.annotations.NotNull;
+import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import lombok.extern.log4j.Log4j2;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
+@Log4j2
 public class ServerConfig extends AbstractConfig {
 	
 	
@@ -36,6 +38,7 @@ public class ServerConfig extends AbstractConfig {
 	@NotNull
 	private static final String MESSAGES_KEY = "messages";
 	
+	public static final BotConfig BOT_CONFIG;
 	@NotNull
 	private static final String SERVER_STARTED_KEY = "server_started";
 	
@@ -113,12 +116,15 @@ public class ServerConfig extends AbstractConfig {
 	@NotNull
 	private static final List<String> PLAYER_DIED_ENABLED_KEY = List.of( MESSAGES_KEY, PLAYER_DIED_KEY, "enabled" );
 	
+	public static final ChatConfig CHAT_CONFIG;
 	@NotNull
 	private static final List<String> PLAYER_DIED_MESSAGE_KEY = List.of( MESSAGES_KEY, PLAYER_DIED_KEY, "message" );
 	
+	public static final ManagementConfig MANAGEMENT_CONFIG;
 	@NotNull
 	private static final String TAMED_MOB_DIED_KEY = "tamed_mob_died";
 	
+	public static final WhitelistConfig WHITELIST_CONFIG;
 	@NotNull
 	private static final List<String> TAMED_MOB_DIED_ENABLED_KEY = List.of(
 		MESSAGES_KEY,
@@ -126,6 +132,7 @@ public class ServerConfig extends AbstractConfig {
 		"enabled"
 	);
 	
+	public static final CommandSettingsConfig COMMAND_SETTINGS_CONFIG;
 	@NotNull
 	private static final List<String> TAMED_MOB_DIED_MESSAGE_KEY = List.of(
 		MESSAGES_KEY,
@@ -153,6 +160,15 @@ public class ServerConfig extends AbstractConfig {
 	@NotNull
 	private static final String OTHER_BOTS_KEY = "other_bots";
 	
+	static {
+		
+		BOT_CONFIG = new BotConfig( BUILDER );
+		CHAT_CONFIG = new ChatConfig( BUILDER );
+		MANAGEMENT_CONFIG = new ManagementConfig( BUILDER );
+		WHITELIST_CONFIG = new WhitelistConfig( BUILDER );
+		COMMAND_SETTINGS_CONFIG = new CommandSettingsConfig( BUILDER );
+		
+		CONFIG = BUILDER.build();
 	@NotNull
 	private static final List<String> TRANSMIT_BOT_MESSAGES_KEY = List.of( OTHER_BOTS_KEY, "transmit_bot_messages" );
 	
@@ -330,6 +346,7 @@ public class ServerConfig extends AbstractConfig {
 		);
 	}
 	
+	public static void handleConfigEvent() {
 	private List<CommandConfig> buildDefaultCommandList() {
 		
 		ArrayList<CommandConfig> commands = new ArrayList<>();
@@ -389,11 +406,19 @@ public class ServerConfig extends AbstractConfig {
 	@Override
 	protected void handleConfigChanging() {
 		
+		printConfig();
+		DiscordManager.init();
 		discordNet.init();
 	}
 	
 	public boolean getActive() {
 		
+		log.info( "Loading \"{}\" Server Config", MOD_NAME );
+		BOT_CONFIG.printConfig( log );
+		CHAT_CONFIG.printConfig( log );
+		MANAGEMENT_CONFIG.printConfig( log );
+		WHITELIST_CONFIG.printConfig( log );
+		COMMAND_SETTINGS_CONFIG.printConfig( log );
 		return getValue( Boolean.class, ACTIVE_KEY );
 	}
 	
@@ -405,6 +430,7 @@ public class ServerConfig extends AbstractConfig {
 	
 	public long getChannelId() {
 		
+		log.info( "\"{}\" Server Config loaded", MOD_NAME );
 		return getValue( Long.class, CHANNEL_ID_KEY );
 	}
 	

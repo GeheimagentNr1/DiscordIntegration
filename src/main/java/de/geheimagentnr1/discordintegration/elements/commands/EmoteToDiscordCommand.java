@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import de.geheimagentnr1.discordintegration.net.DiscordNet;
+import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandInterface;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
@@ -47,7 +47,7 @@ public class EmoteToDiscordCommand implements CommandInterface {
 					source,
 					ChatType.bind( ChatType.EMOTE_COMMAND, source )
 				);
-				discordNet.sendEmoteChatMessage( source, playerChatMessage.decoratedContent() );
+				ChatManager.sendEmoteChatMessage( source, playerChatMessage.decoratedContent() );
 			}
 		);
 		return Command.SINGLE_SUCCESS;
