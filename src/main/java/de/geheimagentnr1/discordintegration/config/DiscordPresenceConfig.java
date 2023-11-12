@@ -1,44 +1,45 @@
 package de.geheimagentnr1.discordintegration.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
+import org.jetbrains.annotations.NotNull;
 
 
-public class DiscordPresenceConfig {
+public class DiscordPresenceConfig extends AbstractSubConfig {
 	
 	
-	private final ForgeConfigSpec.BooleanValue show;
+	@NotNull
+	private static final String SHOW_KEY = "show_discord_presence";
 	
-	private final ForgeConfigSpec.ConfigValue<String> message;
+	@NotNull
+	private static final String MESSAGE_KEY = "message";
 	
-	//package-private
-	DiscordPresenceConfig( ForgeConfigSpec.Builder builder ) {
+	protected DiscordPresenceConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		builder.comment( "Discord Presence configuration" )
-			.push( "discord_presence" );
-		show = builder.comment( "Shall a Discord Presence message be shown?" )
-			.define( "show_discord_presence", false );
-		message = builder.comment( "Message shown in the Discord Presence (activity is always playing). " +
+		super( _abstractMod );
+	}
+	
+	@Override
+	protected void registerConfigValues() {
+		
+		registerConfigValue( "Shall a Discord Presence message be shown?", SHOW_KEY, false );
+		registerConfigValue(
+			"Message shown in the Discord Presence (activity is always playing). " +
 				"(Available parameters: %online_player_count% = Online Player Count, " +
-				"%max_player_count% = Max Player Count)" )
-			.define( "message", "Minecraft with %online_player_count% players" );
-		builder.pop();
+				"%max_player_count% = Max Player Count)",
+			MESSAGE_KEY,
+			"Minecraft with %online_player_count% players"
+		);
 	}
 	
 	public boolean isShow() {
 		
-		return show.get();
+		return getValue( Boolean.class, SHOW_KEY );
 	}
 	
+	@NotNull
 	public String getMessage() {
 		
-		return message.get();
-	}
-	
-	//package-private
-	void printConfig( Logger logger ) {
-		
-		logger.info( "{} = {}", show.getPath(), show.get() );
-		logger.info( "{} = {}", message.getPath(), message.get() );
+		return getValue( String.class, MESSAGE_KEY );
 	}
 }

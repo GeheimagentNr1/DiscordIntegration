@@ -1,61 +1,35 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class HelpCommandConfig extends CommandConfig {
 	
 	
-	public HelpCommandConfig() {
+	public HelpCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"help",
-			"discord commands",
-			false,
-			true,
-			false,
-			"%command%%command_description_separator%shows all commands with their description."
-		);
+		super( _abstractMod );
 	}
 	
-	private HelpCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private HelpCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final HelpCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new HelpCommandConfig( this, mapCreator );
+		return "help";
 	}
 	
+	@NotNull
 	@Override
-	public HelpCommandConfig createSubConfig() {
+	protected String minecraftCommandDefaultValue() {
 		
-		return new HelpCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return "discord commands";
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command%%command_description_separator%shows all commands with their description.";
 	}
 }

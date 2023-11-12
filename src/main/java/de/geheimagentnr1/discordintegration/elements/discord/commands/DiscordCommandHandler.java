@@ -1,30 +1,37 @@
 package de.geheimagentnr1.discordintegration.elements.discord.commands;
 
-import com.electronwill.nightconfig.core.AbstractCommentedConfig;
-import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
-import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSource;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSourceStack;
-import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
 import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.function.Consumer;
 
 
-public class DiscordCommandHandler {
+@Getter( AccessLevel.PROTECTED )
+@RequiredArgsConstructor
+public class DiscordCommandHandler extends AbstractDiscordIntegrationServiceProvider {
 	
 	
-	public static boolean isCommand( String message ) {
+	@NotNull
+	private final DiscordIntegration discordIntegration;
+	
+	public boolean isCommand( String message ) {
 		
-		return message.startsWith( ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix() );
+		return message.startsWith( serverConfig().getCommandSettingsConfig().getCommandPrefix() );
 	}
 	
-	public static void handleCommand(
+	public void handleCommand(
 		Member member,
 		String command,
 		MinecraftServer server,
@@ -32,10 +39,9 @@ public class DiscordCommandHandler {
 		
 		if( !executeCommand( member, command, server, feedbackSender ) ) {
 			feedbackSender.accept( MessageUtil.replaceParameters(
-				ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
-					.getUnknownCommandErrorMessage(),
+				serverConfig().getCommandSettingsConfig().getCommandMessagesConfig().getUnknownCommandErrorMessage(),
 				Map.of(
-					"username", DiscordManager.getMemberAsTag( member ),
+					"username", discordManager().getMemberAsTag( member ),
 					"nickname", member.getEffectiveName(),
 					"new_line", System.lineSeparator()
 				)
@@ -43,30 +49,31 @@ public class DiscordCommandHandler {
 		}
 	}
 	
-	private static boolean executeCommand(
+	private boolean executeCommand(
 		Member member,
 		String command,
 		MinecraftServer server,
 		Consumer<String> feedbackSender ) {
 		
-		boolean hasManagementRole = ManagementManager.hasManagementRole( member );
+		boolean hasManagementRole = managementManager().hasManagementRole( member );
 		DiscordCommandSource discordCommandSource = new DiscordCommandSource( feedbackSender );
 		CommandSourceStack source = new DiscordCommandSourceStack(
+			discordIntegration,
 			discordCommandSource,
 			hasManagementRole
-				? ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandManagementUserPermissionLevel()
-				: ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandNormalUserPermissionLevel(),
+				? serverConfig().getCommandSettingsConfig().getCommandManagementUserPermissionLevel()
+				: serverConfig().getCommandSettingsConfig().getCommandNormalUserPermissionLevel(),
 			server,
 			member
 		);
 		
-		for( AbstractCommentedConfig commandConfig : ServerConfig.COMMAND_SETTINGS_CONFIG.getCommands() ) {
-			if( CommandConfig.isEnabled( commandConfig ) ) {
+		for( CommandConfig commandConfig : serverConfig().getCommandSettingsConfig().getCommands() ) {
+			if( commandConfig.isEnabled() ) {
 				
 				String discordCommand = buildDiscordCommand( commandConfig );
 				
 				if( doesCommandMatch( commandConfig, command, discordCommand ) ) {
-					if( !CommandConfig.isManagementCommand( commandConfig ) || hasManagementRole ) {
+					if( !commandConfig.isManagementCommand() || hasManagementRole ) {
 						server.getCommands().performPrefixedCommand(
 							source,
 							buildMinecraftCommand( commandConfig, discordCommand, command )
@@ -74,10 +81,11 @@ public class DiscordCommandHandler {
 						discordCommandSource.sendMessage();
 					} else {
 						feedbackSender.accept( MessageUtil.replaceParameters(
-							ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandMessagesConfig()
+							serverConfig().getCommandSettingsConfig()
+								.getCommandMessagesConfig()
 								.getInvalidPermissionsErrorMessage(),
 							Map.of(
-								"username", DiscordManager.getMemberAsTag( member ),
+								"username", discordManager().getMemberAsTag( member ),
 								"nickname", member.getEffectiveName(),
 								"new_line", System.lineSeparator()
 							)
@@ -90,35 +98,31 @@ public class DiscordCommandHandler {
 		return false;
 	}
 	
-	private static boolean doesCommandMatch(
-		AbstractCommentedConfig commandConfig,
+	private boolean doesCommandMatch(
+		CommandConfig commandConfig,
 		String command,
 		String discordCommand ) {
 		
-		if( CommandConfig.useParameters( commandConfig ) ) {
+		if( commandConfig.useParameters() ) {
 			return command.startsWith( discordCommand + " " );
 		} else {
 			return command.equals( discordCommand );
 		}
 	}
 	
-	private static String buildDiscordCommand( AbstractCommentedConfig commandConfig ) {
+	private String buildDiscordCommand( CommandConfig commandConfig ) {
 		
-		return ServerConfig.COMMAND_SETTINGS_CONFIG.getCommandPrefix() +
-			CommandConfig.getDiscordCommand( commandConfig );
+		return serverConfig().getCommandSettingsConfig().getCommandPrefix() + commandConfig.getDiscordCommand();
 	}
 	
-	private static String buildMinecraftCommand(
-		AbstractCommentedConfig commandConfig,
+	private String buildMinecraftCommand(
+		CommandConfig commandConfig,
 		String discordCommand,
 		String command ) {
 		
-		if( CommandConfig.useParameters( commandConfig ) ) {
-			return "/" + CommandConfig.getMinecraftCommand( commandConfig ) + command.replaceFirst(
-				discordCommand,
-				""
-			);
+		if( commandConfig.useParameters() ) {
+			return "/" + commandConfig.getMinecraftCommand() + command.replaceFirst( discordCommand, "" );
 		}
-		return "/" + CommandConfig.getMinecraftCommand( commandConfig );
+		return "/" + commandConfig.getMinecraftCommand();
 	}
 }

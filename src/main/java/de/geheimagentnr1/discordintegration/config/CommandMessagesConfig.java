@@ -1,162 +1,154 @@
 package de.geheimagentnr1.discordintegration.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
+import org.jetbrains.annotations.NotNull;
 
 
-public class CommandMessagesConfig {
+public class CommandMessagesConfig extends AbstractSubConfig {
 	
 	
-	private final ForgeConfigSpec.ConfigValue<String> only_management_command_hint_message;
+	@NotNull
+	private static final String ONLY_MANAGEMENT_COMMAND_HINT_MESSAGE_KEY = "only_management_command_hint_message";
 	
-	private final ForgeConfigSpec.ConfigValue<String> link_created_result_message;
+	@NotNull
+	private static final String LINK_CREATED_RESULT_MESSAGE_KEY = "link_created_result_message";
 	
-	private final ForgeConfigSpec.ConfigValue<String> link_already_exists_result_message;
+	@NotNull
+	private static final String LINK_ALREADY_EXISTS_RESULT_MESSAGE_KEY = "link_already_exists_result_message";
 	
-	private final ForgeConfigSpec.ConfigValue<String> link_removed_result_message;
+	@NotNull
+	private static final String LINK_REMOVED_RESULT_MESSAGE_KEY = "link_removed_result_message";
 	
-	private final ForgeConfigSpec.ConfigValue<String> link_invalid_discord_member_id_error_message;
+	@NotNull
+	private static final String LINK_INVALID_DISCORD_MEMBER_ID_ERROR_MESSAGE_KEY =
+		"link_invalid_discord_member_id_error_message";
 	
-	private final ForgeConfigSpec.ConfigValue<String> link_commands_use_if_whitelist_is_disabled_error_message;
+	@NotNull
+	private static final String LINK_COMMANDS_USE_IF_WHITELIST_IS_DISABLED_ERROR_MESSAGE_KEY =
+		"link_commands_use_if_whitelist_is_disabled_error_message";
 	
-	private final ForgeConfigSpec.ConfigValue<String> unknown_command_error_message;
+	@NotNull
+	private static final String UNKNOWN_COMMAND_ERROR_MESSAGE_KEY = "unknown_command_error_message";
 	
-	private final ForgeConfigSpec.ConfigValue<String> invalid_permissions_error_message;
+	@NotNull
+	private static final String INVALID_PERMISSIONS_ERROR_MESSAGE_KEY = "invalid_permissions_error_message";
 	
-	//package-private
-	CommandMessagesConfig( ForgeConfigSpec.Builder builder ) {
+	CommandMessagesConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		builder.comment( "Command message settings" )
-			.push( "messages" );
-		only_management_command_hint_message = builder.comment(
-				"Message that is shown in the help command as a command " +
-					"description, if a command can only be executed by a Discord user with the management role" )
-			.define( "only_management_command_hint_message", "Only usable by users with the management role" );
-		link_created_result_message = builder.comment( "Result message shown, when a Discord user is successfully " +
-				"linked with a Minecraft account. " +
+		super( _abstractMod );
+	}
+	
+	@Override
+	protected void registerConfigValues() {
+		
+		registerConfigValue(
+			"Message that is shown in the help command as a command " +
+				"description, if a command can only be executed by a Discord user with the management role",
+			ONLY_MANAGEMENT_COMMAND_HINT_MESSAGE_KEY,
+			"Only usable by users with the management role"
+		);
+		registerConfigValue(
+			"Result message shown, when a Discord user is successfully linked with a Minecraft account. " +
 				"(Available parameters: %username% = Discord username, " +
 				"%nickname% = Discord nickname, " +
-				"%player% = Player name)" )
-			.define(
-				"link_created_result_message",
-				"Created Linking between Discord account \"%username%\" and Minecraft account \"%player%\""
-			);
-		link_already_exists_result_message = builder.comment(
-				"Result message shown, when a Discord user link with a " +
-					"Minecraft account already exists. " +
-					"(Available parameters: %username% = Discord username, " +
-					"%nickname% = Discord nickname, " +
-					"%player% = Player name)" )
-			.define(
-				"link_already_exists_result_message",
-				"Linking between Discord account \"%username%\" and Minecraft account \"%player%\" already exists"
-			);
-		link_removed_result_message = builder.comment(
-				"Result message shown, when a Minecraft account is successfully unlinked from a " +
-					"Discord user. " +
-					"(Available parameters: %username% = Discord username, " +
-					"%nickname% = Discord nickname, " +
-					"%player% = Player name)" )
-			.define(
-				"link_removed_result_message",
-				"Removed Linking between Discord account \"%username%\" and Minecraft account \"%player%\""
-			);
-		link_invalid_discord_member_id_error_message = builder.comment(
-				"Message that is shown, when a user could not be found for the Discord server" )
-			.define(
-				"link_invalid_discord_member_id_error_message",
-				"Discord Member does not exist or Discord context is unloadable"
-			);
-		link_commands_use_if_whitelist_is_disabled_error_message = builder.comment(
+				"%player% = Player name)",
+			LINK_CREATED_RESULT_MESSAGE_KEY,
+			"Created Linking between Discord account \"%username%\" and Minecraft account \"%player%\""
+		);
+		registerConfigValue(
+			"Result message shown, when a Discord user link with a Minecraft account already exists. " +
+				"(Available parameters: %username% = Discord username, " +
+				"%nickname% = Discord nickname, " +
+				"%player% = Player name)",
+			LINK_ALREADY_EXISTS_RESULT_MESSAGE_KEY,
+			"Linking between Discord account \"%username%\" and Minecraft account \"%player%\" already exists"
+		);
+		registerConfigValue(
+			"Result message shown, when a Minecraft account is successfully unlinked from a Discord user. " +
+				"(Available parameters: %username% = Discord username, " +
+				"%nickname% = Discord nickname, " +
+				"%player% = Player name)",
+			LINK_REMOVED_RESULT_MESSAGE_KEY,
+			"Removed Linking between Discord account \"%username%\" and Minecraft account \"%player%\""
+		);
+		registerConfigValue(
+			"Message that is shown, when a user could not be found for the Discord server",
+			LINK_INVALID_DISCORD_MEMBER_ID_ERROR_MESSAGE_KEY,
+			"Discord Member does not exist or Discord context is unloadable"
+		);
+		registerConfigValue(
 			"Message that is shown, when the link or unlink commands are executed, " +
-				"but the whitelist management in Discord is disabled."
-		).define(
-			"link_commands_use_if_whitelist_is_disabled_error_message",
+				"but the whitelist management in Discord is disabled.",
+			LINK_COMMANDS_USE_IF_WHITELIST_IS_DISABLED_ERROR_MESSAGE_KEY,
 			"This command is only usable, if the whitelist management in Discord is enabled (whitelist.enabled = " +
 				"true)."
 		);
-		unknown_command_error_message = builder.comment( "Error message shown, when a unknown command is entered " +
-				"in the Discord chat " +
+		registerConfigValue(
+			"Error message shown, when a unknown command is entered in the Discord chat " +
 				"(Available parameters: %username% = Discord username, " +
 				"%nickname% = Discord nickname, " +
-				"%new_line% = New line)" )
-			.define( "unknown_command_error_message", "%nickname%%new_line%Error: Unknown Command" );
-		invalid_permissions_error_message = builder.comment( "Error message shown, when a user without the " +
-				"management" +
-				" " +
+				"%new_line% = New line)",
+			UNKNOWN_COMMAND_ERROR_MESSAGE_KEY,
+			"%nickname%%new_line%Error: Unknown Command"
+		);
+		registerConfigValue(
+			"Error message shown, when a user without the management " +
 				"role tries to execute a management command " +
 				"(Available parameters: %username% = Discord username, " +
 				"%nickname% = Discord nickname, " +
-				"%new_line% = New line)" )
-			.define(
-				"invalid_permissions_error_message",
-				"%nickname%%new_line%Error: Invalid permissions, only users with the management role can use this " +
-					"command."
-			);
-		builder.pop();
+				"%new_line% = New line)",
+			INVALID_PERMISSIONS_ERROR_MESSAGE_KEY,
+			"%nickname%%new_line%Error: Invalid permissions, only users with the management role can use this " +
+				"command."
+		);
 	}
 	
+	@NotNull
 	public String getOnlyManagementCommandHintMessage() {
 		
-		return only_management_command_hint_message.get();
+		return getValue( String.class, ONLY_MANAGEMENT_COMMAND_HINT_MESSAGE_KEY );
 	}
 	
+	@NotNull
 	public String getLinkCreatedResultMessage() {
 		
-		return link_created_result_message.get();
+		return getValue( String.class, LINK_CREATED_RESULT_MESSAGE_KEY );
 	}
 	
+	@NotNull
 	public String getLinkAlreadyExistsResultMessage() {
 		
-		return link_already_exists_result_message.get();
+		return getValue( String.class, LINK_ALREADY_EXISTS_RESULT_MESSAGE_KEY );
 	}
 	
+	@NotNull
 	public String getLinkRemovedResultMessage() {
 		
-		return link_removed_result_message.get();
+		return getValue( String.class, LINK_REMOVED_RESULT_MESSAGE_KEY );
 	}
 	
+	@NotNull
 	public String getLinkInvalidDiscordMemberIdErrorMessage() {
 		
-		return link_invalid_discord_member_id_error_message.get();
+		return getValue( String.class, LINK_INVALID_DISCORD_MEMBER_ID_ERROR_MESSAGE_KEY );
 	}
 	
+	@NotNull
 	public String getLinkCommandsUseIfWhitelistIsDisabledErrorMessage() {
 		
-		return link_commands_use_if_whitelist_is_disabled_error_message.get();
+		return getValue( String.class, LINK_COMMANDS_USE_IF_WHITELIST_IS_DISABLED_ERROR_MESSAGE_KEY );
 	}
 	
+	@NotNull
 	public String getUnknownCommandErrorMessage() {
 		
-		return unknown_command_error_message.get();
+		return getValue( String.class, UNKNOWN_COMMAND_ERROR_MESSAGE_KEY );
 	}
 	
+	@NotNull
 	public String getInvalidPermissionsErrorMessage() {
 		
-		return invalid_permissions_error_message.get();
-	}
-	
-	//package-private
-	void printConfig( Logger logger ) {
-		
-		logger.info(
-			"{} = {}",
-			only_management_command_hint_message.getPath(),
-			only_management_command_hint_message.get()
-		);
-		logger.info( "{} = {}", link_created_result_message.getPath(), link_created_result_message.get() );
-		logger.info(
-			"{} = {}",
-			link_already_exists_result_message.getPath(),
-			link_already_exists_result_message.get()
-		);
-		logger.info( "{} = {}", link_removed_result_message.getPath(), link_removed_result_message.get() );
-		logger.info(
-			"{} = {}",
-			link_invalid_discord_member_id_error_message.getPath(),
-			link_invalid_discord_member_id_error_message.get()
-		);
-		logger.info( "{} = {}", unknown_command_error_message.getPath(), unknown_command_error_message.get() );
-		logger.info( "{} = {}", invalid_permissions_error_message.getPath(), invalid_permissions_error_message.get() );
+		return getValue( String.class, INVALID_PERMISSIONS_ERROR_MESSAGE_KEY );
 	}
 }

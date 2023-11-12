@@ -21,7 +21,7 @@ public class EmoteToDiscordCommand implements CommandInterface {
 	
 	
 	@NotNull
-	private final DiscordNet discordNet;
+	private final ChatManager chatManager;
 	
 	@NotNull
 	@Override
@@ -47,7 +47,7 @@ public class EmoteToDiscordCommand implements CommandInterface {
 					source,
 					ChatType.bind( ChatType.EMOTE_COMMAND, source )
 				);
-				ChatManager.sendEmoteChatMessage( source, playerChatMessage.decoratedContent() );
+				chatManager.sendEmoteChatMessage( source, playerChatMessage.decoratedContent() );
 			}
 		);
 		return Command.SINGLE_SUCCESS;

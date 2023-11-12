@@ -1,48 +1,56 @@
 package de.geheimagentnr1.discordintegration.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
+import org.jetbrains.annotations.NotNull;
 
 
-public class MessageConfig {
+public class MessageConfig extends AbstractSubConfig {
 	
 	
-	private final ForgeConfigSpec.BooleanValue enabled;
+	@NotNull
+	private static final String ENABLED_KEY = "enabled";
 	
-	private final ForgeConfigSpec.ConfigValue<String> message;
+	@NotNull
+	private static final String MESSAGE_KEY = "message";
 	
-	//package-private
+	@NotNull
+	private final String enabledComment;
+	
+	@NotNull
+	private final String messageComment;
+	
+	@NotNull
+	private final String messageDefaultValue;
+	
 	MessageConfig(
-		ForgeConfigSpec.Builder builder,
-		String path,
-		String pathComment,
-		String enabledComment,
-		String messageComment,
-		String messageDefaultValue ) {
+		@NotNull AbstractMod _abstractMod,
+		@NotNull String enabledComment,
+		@NotNull String messageComment,
+		@NotNull String messageDefaultValue ) {
 		
-		builder.comment( pathComment )
-			.push( path );
-		enabled = builder.comment( enabledComment )
-			.define( "enabled", true );
-		message = builder.comment( messageComment )
-			.define( "message", messageDefaultValue );
-		builder.pop();
+		super( _abstractMod );
+		this.enabledComment = enabledComment;
+		this.messageComment = messageComment;
+		this.messageDefaultValue = messageDefaultValue;
 	}
 	
+	@Override
+	protected void registerConfigValues() {
+		
+		registerConfigValue( enabledComment, ENABLED_KEY, true );
+		registerConfigValue( messageComment, MESSAGE_KEY, messageDefaultValue );
+	}
+	
+	@NotNull
 	public boolean isEnabled() {
 		
-		return enabled.get();
+		return getValue( Boolean.class, ENABLED_KEY );
 	}
 	
+	@NotNull
 	public String getMessage() {
 		
-		return message.get();
-	}
-	
-	//package-private
-	void printConfig( Logger logger ) {
-		
-		logger.info( "{} = {}", enabled.getPath(), enabled.get() );
-		logger.info( "{} = {}", message.getPath(), message.get() );
+		return getValue( String.class, MESSAGE_KEY );
 	}
 }

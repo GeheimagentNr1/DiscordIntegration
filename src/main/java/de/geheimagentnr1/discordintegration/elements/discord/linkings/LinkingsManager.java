@@ -3,16 +3,19 @@ package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 import com.mantledillusion.essentials.json.patch.PatchUtil;
 import com.mantledillusion.essentials.json.patch.model.Patch;
 import com.mojang.authlib.GameProfile;
-import de.geheimagentnr1.discordintegration.config.ServerConfig;
-import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import de.geheimagentnr1.discordintegration.DiscordIntegration;
+import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linking;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linkings;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.MinecraftGameProfile;
-import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
 import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,34 +25,39 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 
+@Getter( AccessLevel.PROTECTED )
 @Log4j2
-public class LinkingsManager {
+@RequiredArgsConstructor
+public class LinkingsManager extends AbstractDiscordIntegrationServiceProvider {
 	
 	
-	public static boolean isEnabled() {
+	@NotNull
+	private final DiscordIntegration discordIntegration;
+	
+	public boolean isEnabled() {
 		
-		return DiscordManager.isInitialized() && ServerConfig.WHITELIST_CONFIG.isEnabled();
+		return discordManager().isInitialized() && serverConfig().getWhitelistConfig().isEnabled();
 	}
 	
-	private static boolean hasSingleLinkingManagementRole( Member member ) {
+	private boolean hasSingleLinkingManagementRole( @NotNull Member member ) {
 		
-		return DiscordManager.hasCorrectRole(
+		return discordManager().hasCorrectRole(
 			member,
-			ServerConfig.WHITELIST_CONFIG.getSingleLinkingManagementRoleId()
+			serverConfig().getWhitelistConfig().getSingleLinkingManagementRoleId()
 		);
 	}
 	
-	private static void sendLinkingCreatedMessage( Linking linking ) {
+	private void sendLinkingCreatedMessage( @NotNull Linking linking ) {
 		
 		log.info(
 			"Created Linking between Discord account \"{}\" and Minecraft account \"{}\"",
 			linking.getDiscordUsername(),
 			linking.getMinecraftGameProfile().getName()
 		);
-		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingCreated().isEnabled() ) {
-			ManagementManager.sendMessage(
+		if( serverConfig().getManagementConfig().getManagementMessagesConfig().getLinkingCreated().isEnabled() ) {
+			managementManager().sendMessage(
 				MessageUtil.replaceParameters(
-					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingCreated().getMessage(),
+					serverConfig().getManagementConfig().getManagementMessagesConfig().getLinkingCreated().getMessage(),
 					Map.of(
 						"username", linking.getDiscordUsername(),
 						"nickname", linking.getDiscordNickname(),
@@ -60,17 +68,17 @@ public class LinkingsManager {
 		}
 	}
 	
-	private static void sendLinkingRemovedMessage( Linking linking ) {
+	private void sendLinkingRemovedMessage( @NotNull Linking linking ) {
 		
 		log.info(
 			"Removed Linking between Discord account \"{}\" and Minecraft account \"{}\"",
 			linking.getDiscordUsername(),
 			linking.getMinecraftGameProfile().getName()
 		);
-		if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingRemoved().isEnabled() ) {
-			ManagementManager.sendMessage(
+		if( serverConfig().getManagementConfig().getManagementMessagesConfig().getLinkingRemoved().isEnabled() ) {
+			managementManager().sendMessage(
 				MessageUtil.replaceParameters(
-					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig().getLinkingRemoved().getMessage(),
+					serverConfig().getManagementConfig().getManagementMessagesConfig().getLinkingRemoved().getMessage(),
 					Map.of(
 						"username", linking.getDiscordUsername(),
 						"nickname", linking.getDiscordNickname(),
@@ -81,15 +89,15 @@ public class LinkingsManager {
 		}
 	}
 	
-	private static void sendFinishedWhitelistUpdateWithForcedMessageUpdate( boolean forceMessageUpdate ) {
+	private void sendFinishedWhitelistUpdateWithForcedMessageUpdate( boolean forceMessageUpdate ) {
 		
 		if( forceMessageUpdate ) {
 			log.info( "Finished check of Discord whitelist with forced message update" );
-			if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+			if( serverConfig().getManagementConfig().getManagementMessagesConfig()
 				.getWhitelistUpdateWithForcedMessageUpdateFinished()
 				.isEnabled() ) {
-				ManagementManager.sendMessage(
-					ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+				managementManager().sendMessage(
+					serverConfig().getManagementConfig().getManagementMessagesConfig()
 						.getWhitelistUpdateWithForcedMessageUpdateFinished()
 						.getMessage()
 				);
@@ -98,22 +106,22 @@ public class LinkingsManager {
 	}
 	
 	//package-private
-	static void updateWhitelist( Consumer<Throwable> errorHandler ) throws IOException {
+	void updateWhitelist( @NotNull Consumer<Throwable> errorHandler ) throws IOException {
 		
 		updateWhitelist( errorHandler, false );
 	}
 	
-	public static void updateWhitelist( Consumer<Throwable> errorHandler, boolean forceMessageUpdate )
+	public void updateWhitelist( @NotNull Consumer<Throwable> errorHandler, boolean forceMessageUpdate )
 		throws IOException {
 		
 		if( isEnabled() ) {
 			if( forceMessageUpdate ) {
 				log.info( "Start check of Discord whitelist with forced message update" );
-				if( ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+				if( serverConfig().getManagementConfig().getManagementMessagesConfig()
 					.getWhitelistUpdateWithForcedMessageUpdateStart()
 					.isEnabled() ) {
-					ManagementManager.sendMessage(
-						ServerConfig.MANAGEMENT_CONFIG.getManagementMessagesConfig()
+					managementManager().sendMessage(
+						serverConfig().getManagementConfig().getManagementMessagesConfig()
 							.getWhitelistUpdateWithForcedMessageUpdateStart()
 							.getMessage()
 					);
@@ -123,19 +131,19 @@ public class LinkingsManager {
 		}
 	}
 	
-	private static synchronized void updateWhitelist(
-		List<Linking> removedLinkings,
-		Consumer<Throwable> errorHandler ) throws IOException {
+	private synchronized void updateWhitelist(
+		@NotNull List<Linking> removedLinkings,
+		@NotNull Consumer<Throwable> errorHandler ) throws IOException {
 		
 		updateWhitelist( removedLinkings, errorHandler, false );
 	}
 	
-	private static synchronized void updateWhitelist(
-		List<Linking> removedLinkings,
-		Consumer<Throwable> errorHandler,
+	private synchronized void updateWhitelist(
+		@NotNull List<Linking> removedLinkings,
+		@NotNull Consumer<Throwable> errorHandler,
 		boolean forceMessageUpdate ) throws IOException {
 		
-		Linkings linkings = LinkingsFileManager.load();
+		Linkings linkings = linkingsFileManager().load();
 		List<MinecraftGameProfile> removedMinecraftGameProfiles = removedLinkings.stream()
 			.map( Linking::getMinecraftGameProfile )
 			.toList();
@@ -146,18 +154,18 @@ public class LinkingsManager {
 		int linkingCounter = 0;
 		for( Linking linking : linkings.getLinkings() ) {
 			linkingCounter++;
-			Member member = DiscordManager.getMember( linking.getDiscordMemberId() );
+			Member member = discordManager().getMember( linking.getDiscordMemberId() );
 			MinecraftGameProfile minecraftGameProfile = linking.getMinecraftGameProfile();
 			
 			if( member == null ) {
 				linkings.remove( linking );
-				LinkingsFileManager.save( linkings );
+				linkingsFileManager().save( linkings );
 				sendLinkingRemovedMessage( linking );
-				LinkingsManagementMessageManager.deleteMessage( linking );
+				linkingsManagementMessageManager().deleteMessage( linking );
 			} else {
 				PatchUtil.Snapshot snapshot = PatchUtil.take( linking );
 				boolean hasRole = hasCorrectRole( member );
-				if( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() || linking.isActive() ) {
+				if( !serverConfig().getWhitelistConfig().useSingleLinkingManagement() || linking.isActive() ) {
 					if( hasRole ) {
 						activateList.add( minecraftGameProfile );
 					} else {
@@ -167,12 +175,12 @@ public class LinkingsManager {
 					deactivateList.add( minecraftGameProfile );
 				}
 				linking.setHasRole( hasRole );
-				linking.setDiscordUsername( DiscordManager.getMemberAsTag( member ) );
+				linking.setDiscordUsername( discordManager().getMemberAsTag( member ) );
 				linking.setDiscordNickname( member.getEffectiveName() );
 				boolean hasChanged = !snapshot.peek().isEmpty();
 				if( hasChanged || forceMessageUpdate ) {
 					int finalLinkingCounter = linkingCounter;
-					LinkingsManagementMessageManager.sendOrEditMessage(
+					linkingsManagementMessageManager().sendOrEditMessage(
 						member,
 						linking,
 						hasChanged,
@@ -187,7 +195,7 @@ public class LinkingsManager {
 										linkingCount
 									);
 									if( finalLinkingCounter == linkingCount ) {
-										sendFinishedWhitelistUpdateWithForcedMessageUpdate( forceMessageUpdate );
+										sendFinishedWhitelistUpdateWithForcedMessageUpdate( true );
 									}
 								}
 							} catch( Throwable throwable ) {
@@ -203,86 +211,86 @@ public class LinkingsManager {
 		}
 		deactivateList.stream()
 			.filter( minecraftGameProfile -> !activateList.contains( minecraftGameProfile ) )
-			.forEach( WhitelistManager::removeFromWhitelist );
-		activateList.forEach( WhitelistManager::addToWhitelist );
+			.forEach( whitelistManager()::removeFromWhitelist );
+		activateList.forEach( whitelistManager()::addToWhitelist );
 	}
 	
 	//package-private
-	static boolean hasCorrectRole( Member member ) {
+	boolean hasCorrectRole( @NotNull Member member ) {
 		
-		return !ServerConfig.WHITELIST_CONFIG.useRole() ||
-			DiscordManager.hasCorrectRole( member, ServerConfig.WHITELIST_CONFIG.getRoleId() );
+		return !serverConfig().getWhitelistConfig().useRole() ||
+			discordManager().hasCorrectRole( member, serverConfig().getWhitelistConfig().getRoleId() );
 	}
 	
 	//package-private
-	static boolean isCorrectRole( Role role ) {
+	boolean isCorrectRole( @NotNull Role role ) {
 		
-		return ServerConfig.WHITELIST_CONFIG.useRole() &&
-			ServerConfig.WHITELIST_CONFIG.getRoleId() == role.getIdLong();
+		return serverConfig().getWhitelistConfig().useRole() &&
+			serverConfig().getWhitelistConfig().getRoleId() == role.getIdLong();
 	}
 	
-	private static void updateLinking(
-		Linking linking,
-		List<Patch> patches,
-		Consumer<Throwable> errorHandler )
+	private void updateLinking(
+		@NotNull Linking linking,
+		@NotNull List<Patch> patches,
+		@NotNull Consumer<Throwable> errorHandler )
 		throws IOException {
 		
 		updateLinking( linking, patches, errorHandler, true );
 	}
 	
-	private static synchronized void updateLinking(
-		Linking linking,
-		List<Patch> patches,
-		Consumer<Throwable> errorHandler,
+	private synchronized void updateLinking(
+		@NotNull Linking linking,
+		@NotNull List<Patch> patches,
+		@NotNull Consumer<Throwable> errorHandler,
 		boolean updateWhitelist )
 		throws IOException {
 		
-		Linkings linkings = LinkingsFileManager.load();
+		Linkings linkings = linkingsFileManager().load();
 		Optional<Linking> foundLinkingOptional = linkings.findLinking( linking );
 		if( foundLinkingOptional.isPresent() ) {
 			Linking foundLinking = foundLinkingOptional.get();
 			if( !patches.isEmpty() ) {
-				Linking updatedLinking = Linking.applyPatches( foundLinking, patches );
+				Linking updatedLinking = PatchUtil.apply( foundLinking, patches );
 				linkings.remove( foundLinking );
 				linkings.add( updatedLinking );
 			}
 		} else {
 			linkings.add( linking );
 		}
-		LinkingsFileManager.save( linkings );
+		linkingsFileManager().save( linkings );
 		if( updateWhitelist ) {
 			updateWhitelist( errorHandler );
 		}
 	}
 	
-	public static synchronized void createLinking(
-		Member member,
-		GameProfile gameProfile,
-		Consumer<Boolean> successHandler,
-		Runnable whitelistDisabledErrorHandler,
-		Consumer<Throwable> errorHandler ) throws IOException {
+	public synchronized void createLinking(
+		@NotNull Member member,
+		@NotNull GameProfile gameProfile,
+		@NotNull Consumer<Boolean> successHandler,
+		@NotNull Runnable whitelistDisabledErrorHandler,
+		@NotNull Consumer<Throwable> errorHandler ) throws IOException {
 		
 		if( isEnabled() ) {
 			Linking linking = Linking.builder()
 				.discordMemberId( member.getIdLong() )
-				.discordUsername( DiscordManager.getMemberAsTag( member ) )
+				.discordUsername( discordManager().getMemberAsTag( member ) )
 				.discordNickname( member.getEffectiveName() )
 				.hasRole( hasCorrectRole( member ) )
-				.active( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() )
+				.active( !serverConfig().getWhitelistConfig().useSingleLinkingManagement() )
 				.minecraftGameProfile( new MinecraftGameProfile( gameProfile ) )
 				.build();
 			
-			Linkings linkings = LinkingsFileManager.load();
+			Linkings linkings = linkingsFileManager().load();
 			Optional<Linking> foundLinkingOptional = linkings.findLinking( linking );
 			
 			if( foundLinkingOptional.isPresent() ) {
 				Linking foundLinking = foundLinkingOptional.get();
 				PatchUtil.Snapshot snapshot = PatchUtil.take( foundLinking );
-				foundLinking.setDiscordUsername( DiscordManager.getMemberAsTag( member ) );
+				foundLinking.setDiscordUsername( discordManager().getMemberAsTag( member ) );
 				foundLinking.setDiscordNickname( member.getEffectiveName() );
 				foundLinking.getMinecraftGameProfile().setName( gameProfile.getName() );
 				boolean hasChanged = !snapshot.peek().isEmpty();
-				LinkingsManagementMessageManager.sendOrEditMessage(
+				linkingsManagementMessageManager().sendOrEditMessage(
 					member,
 					foundLinking,
 					hasChanged,
@@ -298,7 +306,7 @@ public class LinkingsManager {
 					}
 				);
 			} else {
-				LinkingsManagementMessageManager.sendOrEditMessage(
+				linkingsManagementMessageManager().sendOrEditMessage(
 					member,
 					linking,
 					true,
@@ -319,16 +327,16 @@ public class LinkingsManager {
 		}
 	}
 	
-	public static synchronized void removeLinking(
-		Member member,
-		GameProfile gameProfile,
-		Runnable successHandler,
-		Runnable whitelistDisabledErrorHandler,
-		Consumer<Throwable> errorHandler )
+	public synchronized void removeLinking(
+		@NotNull Member member,
+		@NotNull GameProfile gameProfile,
+		@NotNull Runnable successHandler,
+		@NotNull Runnable whitelistDisabledErrorHandler,
+		@NotNull Consumer<Throwable> errorHandler )
 		throws IOException {
 		
 		if( isEnabled() ) {
-			Linkings linkings = LinkingsFileManager.load();
+			Linkings linkings = linkingsFileManager().load();
 			
 			Optional<Linking> foundLinking = linkings.findLinking(
 				Linking.builder()
@@ -339,10 +347,10 @@ public class LinkingsManager {
 			if( foundLinking.isPresent() ) {
 				Linking removedLinking = foundLinking.get();
 				linkings.remove( removedLinking );
-				LinkingsFileManager.save( linkings );
+				linkingsFileManager().save( linkings );
 				sendLinkingRemovedMessage( removedLinking );
 				updateWhitelist( List.of( removedLinking ), errorHandler );
-				LinkingsManagementMessageManager.deleteMessage( removedLinking );
+				linkingsManagementMessageManager().deleteMessage( removedLinking );
 			}
 			successHandler.run();
 		} else {
@@ -351,11 +359,11 @@ public class LinkingsManager {
 	}
 	
 	//package-private
-	static synchronized void resendMessage( long messageId, Consumer<Throwable> errorHandler ) throws IOException {
+	synchronized void resendMessage( long messageId, @NotNull Consumer<Throwable> errorHandler ) throws IOException {
 		
 		if( isEnabled() ) {
 			
-			Linkings linkings = LinkingsFileManager.load();
+			Linkings linkings = linkingsFileManager().load();
 			Optional<Linking> foundLinkingOptional = linkings.findLinking( messageId );
 			
 			if( foundLinkingOptional.isPresent() ) {
@@ -368,33 +376,34 @@ public class LinkingsManager {
 	}
 	
 	//package-private
-	static synchronized void removeLinkings( Member member, Consumer<Throwable> errorHandler ) throws IOException {
+	synchronized void removeLinkings( @NotNull Member member, @NotNull Consumer<Throwable> errorHandler )
+		throws IOException {
 		
 		if( isEnabled() ) {
-			Linkings linkings = LinkingsFileManager.load();
+			Linkings linkings = linkingsFileManager().load();
 			
 			List<Linking> removedLinkings = linkings.findLinkings( member.getIdLong() );
 			if( linkings.remove( member.getIdLong() ) ) {
 				removedLinkings.forEach( linkings::remove );
-				LinkingsFileManager.save( linkings );
-				removedLinkings.forEach( LinkingsManager::sendLinkingRemovedMessage );
+				linkingsFileManager().save( linkings );
+				removedLinkings.forEach( this::sendLinkingRemovedMessage );
 				updateWhitelist( removedLinkings, errorHandler );
-				removedLinkings.forEach( LinkingsManagementMessageManager::deleteMessage );
+				removedLinkings.forEach( linkingsManagementMessageManager()::deleteMessage );
 			}
 		}
 	}
 	
 	//package-private
-	static synchronized void changeActiveStateOfLinking(
-		Member member,
+	synchronized void changeActiveStateOfLinking(
+		@NotNull Member member,
 		long messageId,
 		boolean shouldActive,
-		Consumer<Throwable> errorHandler )
+		@NotNull Consumer<Throwable> errorHandler )
 		throws IOException {
 		
 		if( isEnabled() && hasSingleLinkingManagementRole( member ) ) {
 			
-			Linkings linkings = LinkingsFileManager.load();
+			Linkings linkings = linkingsFileManager().load();
 			Optional<Linking> foundLinkingOptional = linkings.findLinking( messageId );
 			
 			if( foundLinkingOptional.isPresent() ) {
@@ -406,22 +415,22 @@ public class LinkingsManager {
 		}
 	}
 	
-	private static synchronized void updateLinking(
-		Linking linking,
-		PatchUtil.Snapshot snapshot,
-		Consumer<Throwable> errorHandler,
+	private synchronized void updateLinking(
+		@NotNull Linking linking,
+		@NotNull PatchUtil.Snapshot snapshot,
+		@NotNull Consumer<Throwable> errorHandler,
 		boolean updateWhitelist )
 		throws IOException {
 		
-		Member member = DiscordManager.getMember( linking.getDiscordMemberId() );
+		Member member = discordManager().getMember( linking.getDiscordMemberId() );
 		
 		if( member == null ) {
 			updateWhitelist( errorHandler );
 		} else {
-			linking.setDiscordUsername( DiscordManager.getMemberAsTag( member ) );
+			linking.setDiscordUsername( discordManager().getMemberAsTag( member ) );
 			linking.setDiscordNickname( member.getEffectiveName() );
 			boolean hasChanged = !snapshot.peek().isEmpty();
-			LinkingsManagementMessageManager.sendOrEditMessage(
+			linkingsManagementMessageManager().sendOrEditMessage(
 				member,
 				linking,
 				hasChanged,

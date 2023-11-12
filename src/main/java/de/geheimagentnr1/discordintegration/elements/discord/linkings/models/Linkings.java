@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord.linkings.models;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,9 +12,10 @@ import java.util.Optional;
 public class Linkings {
 	
 	
+	@NotNull
 	private HashSet<Linking> linkings = new HashSet<>();
 	
-	public void add( Linking linking ) {
+	public void add( @NotNull Linking linking ) {
 		
 		linkings.add( linking );
 	}
@@ -23,18 +25,20 @@ public class Linkings {
 		return linkings.removeIf( linking -> linking.getDiscordMemberId() == discordMemberId );
 	}
 	
-	public void remove( Linking linking ) {
+	public void remove( @NotNull Linking linking ) {
 		
 		linkings.remove( linking );
 	}
 	
-	public Optional<Linking> findLinking( Linking searchLinking ) {
+	@NotNull
+	public Optional<Linking> findLinking( @NotNull Linking searchLinking ) {
 		
 		return linkings.stream()
 			.filter( linking -> linking.equals( searchLinking ) )
 			.findFirst();
 	}
 	
+	@NotNull
 	public Optional<Linking> findLinking( long messageId ) {
 		
 		return linkings.stream()
@@ -42,6 +46,7 @@ public class Linkings {
 			.findFirst();
 	}
 	
+	@NotNull
 	public List<Linking> findLinkings( long discordMemberId ) {
 		
 		return linkings.stream()

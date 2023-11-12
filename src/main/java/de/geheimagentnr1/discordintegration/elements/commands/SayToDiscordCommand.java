@@ -20,7 +20,7 @@ public class SayToDiscordCommand implements CommandInterface {
 	
 	
 	@NotNull
-	private final DiscordNet discordNet;
+	private final ChatManager chatManager;
 	
 	@NotNull
 	@Override
@@ -42,7 +42,7 @@ public class SayToDiscordCommand implements CommandInterface {
 			playerChatMessage -> {
 				source.getServer().getPlayerList()
 					.broadcastChatMessage( playerChatMessage, source, ChatType.bind( ChatType.SAY_COMMAND, source ) );
-				ChatManager.sendChatMessage( source, playerChatMessage.decoratedContent() );
+				chatManager.sendChatMessage( source, playerChatMessage.decoratedContent() );
 			}
 		);
 		return Command.SINGLE_SUCCESS;

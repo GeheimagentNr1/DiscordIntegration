@@ -1,61 +1,35 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class TpsCommandConfig extends CommandConfig {
 	
 	
-	public TpsCommandConfig() {
+	public TpsCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"tps",
-			"forge tps",
-			false,
-			true,
-			false,
-			"%command%%command_description_separator%shows the tps statistic of the server and its dimensions."
-		);
+		super( _abstractMod );
 	}
 	
-	private TpsCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private TpsCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final TpsCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new TpsCommandConfig( this, mapCreator );
+		return "tps";
 	}
 	
+	@NotNull
 	@Override
-	public TpsCommandConfig createSubConfig() {
+	protected String minecraftCommandDefaultValue() {
 		
-		return new TpsCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return "forge tps";
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command%%command_description_separator%shows the tps statistic of the server and its dimensions.";
 	}
 }

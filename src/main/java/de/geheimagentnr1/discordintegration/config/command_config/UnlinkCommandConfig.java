@@ -1,62 +1,48 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class UnlinkCommandConfig extends CommandConfig {
 	
 	
-	public UnlinkCommandConfig() {
+	public UnlinkCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"unlink",
-			"discord linkings unlink",
-			true,
-			false,
-			false,
-			"%command% <Minecraft player name>%command_description_separator%unlinks a Minecraft player from the " +
-				"Discord user using this command."
-		);
+		super( _abstractMod );
 	}
 	
-	private UnlinkCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private UnlinkCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final UnlinkCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new UnlinkCommandConfig( this, mapCreator );
+		return "unlink";
+	}
+	
+	@NotNull
+	@Override
+	protected String minecraftCommandDefaultValue() {
+		
+		return "discord linkings unlink";
 	}
 	
 	@Override
-	public UnlinkCommandConfig createSubConfig() {
+	protected boolean useParametersDefaultValue() {
 		
-		return new UnlinkCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return true;
+	}
+	
+	@Override
+	protected boolean enabledDefaultValue() {
+		
+		return false;
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command% <Minecraft player name>%command_description_separator%unlinks a Minecraft player from the " +
+			"Discord user using this command.";
 	}
 }

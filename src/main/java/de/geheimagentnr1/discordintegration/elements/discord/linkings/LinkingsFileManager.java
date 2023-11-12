@@ -5,6 +5,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linkings;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,15 +14,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 
-//package-private
 @Log4j2
-class LinkingsFileManager {
+public class LinkingsFileManager {
 	
 	
+	@NotNull
 	private static final File FILE = new File( "linking.json" );
 	
-	//package-private
-	static synchronized Linkings load() throws IOException {
+	@NotNull
+	synchronized Linkings load() throws IOException {
 		
 		try( FileReader fileReader = new FileReader( FILE, StandardCharsets.UTF_8 ) ) {
 			Linkings linkings = new GsonBuilder().setPrettyPrinting().create().fromJson( fileReader, Linkings.class );
@@ -37,8 +38,7 @@ class LinkingsFileManager {
 		}
 	}
 	
-	//package-private
-	static synchronized void save( Linkings linkings ) throws IOException {
+	synchronized void save( @NotNull Linkings linkings ) throws IOException {
 		
 		try( FileWriter fileWriter = new FileWriter( FILE, StandardCharsets.UTF_8 ) ) {
 			new GsonBuilder().setPrettyPrinting().create().toJson( linkings, fileWriter );

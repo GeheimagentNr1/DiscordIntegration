@@ -1,69 +1,43 @@
 package de.geheimagentnr1.discordintegration.config.command_config.mods;
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
 import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import de.geheimagentnr1.discordintegration.util.VersionHelper;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class DimensionsCommandConfig extends CommandConfig {
 	
 	
-	public DimensionsCommandConfig() {
+	public DimensionsCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"dimensions",
-			"dimensions status",
-			false,
-			true,
-			false,
-			"%command%%command_description_separator%shows the access states of all dimensions."
-		);
+		super( _abstractMod );
 	}
 	
 	@Override
 	public boolean shouldBeInCommandList() {
 		
-		return VersionHelper.isDependecyWithVersionPresent( "dimension_access_manager" );
+		return VersionHelper.isDependecyWithVersionPresent( abstractMod.getModId(), "dimension_access_manager" );
 	}
 	
-	private DimensionsCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private DimensionsCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final DimensionsCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new DimensionsCommandConfig( this, mapCreator );
+		return "dimensions";
 	}
 	
+	@NotNull
 	@Override
-	public DimensionsCommandConfig createSubConfig() {
+	protected String minecraftCommandDefaultValue() {
 		
-		return new DimensionsCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return "dimensions status";
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command%%command_description_separator%shows the access states of all dimensions.";
 	}
 }

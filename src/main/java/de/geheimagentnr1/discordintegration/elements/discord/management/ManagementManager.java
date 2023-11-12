@@ -1,30 +1,39 @@
 package de.geheimagentnr1.discordintegration.elements.discord.management;
 
-import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.DiscordIntegration;
+import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
-import de.geheimagentnr1.discordintegration.elements.discord.DiscordMessageBuilder;
-import de.geheimagentnr1.discordintegration.elements.discord.DiscordMessageSender;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @SuppressWarnings( { "SynchronizeOnThis", "NestedSynchronizedStatement" } )
 @Log4j2
-public class ManagementManager {
+@RequiredArgsConstructor
+public class ManagementManager extends AbstractDiscordIntegrationServiceProvider {
 	
 	
-	private static TextChannel channel;
+	@Getter
+	@NotNull
+	private final DiscordIntegration discordIntegration;
 	
-	public static void init() {
+	@Nullable
+	private TextChannel channel;
+	
+	public void init() {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( ManagementManager.class ) {
 				stop();
 				if( shouldInitialize() ) {
-					long channelId = ServerConfig.MANAGEMENT_CONFIG.getChannelId();
-					JDA jda = DiscordManager.getJda();
+					long channelId = serverConfig().getManagementConfig().getChannelId();
+					JDA jda = discordManager().getJda();
 					channel = jda.getTextChannelById( channelId );
 					if( channel == null ) {
 						log.error( "Discord Management Text Channel {} not found", channelId );
@@ -34,17 +43,17 @@ public class ManagementManager {
 		}
 	}
 	
-	public static synchronized void stop() {
+	public synchronized void stop() {
 		
 		channel = null;
 	}
 	
-	private static boolean shouldInitialize() {
+	private boolean shouldInitialize() {
 		
-		return DiscordManager.isInitialized() && ServerConfig.MANAGEMENT_CONFIG.isEnabled();
+		return discordManager().isInitialized() && serverConfig().getManagementConfig().isEnabled();
 	}
 	
-	private static boolean isInitialized() {
+	private boolean isInitialized() {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( ManagementManager.class ) {
@@ -54,35 +63,35 @@ public class ManagementManager {
 	}
 	
 	//package-private
-	static boolean isCorrectChannel( long channelId ) {
+	boolean isCorrectChannel( long channelId ) {
 		
-		return isInitialized() && ServerConfig.MANAGEMENT_CONFIG.getChannelId() == channelId;
+		return isInitialized() && serverConfig().getManagementConfig().getChannelId() == channelId;
 	}
 	
-	public static boolean hasManagementRole( Member member ) {
+	public boolean hasManagementRole( @NotNull Member member ) {
 		
-		return DiscordManager.hasCorrectRole( member, ServerConfig.MANAGEMENT_CONFIG.getRoleId() );
+		return discordManager().hasCorrectRole( member, serverConfig().getManagementConfig().getRoleId() );
 	}
 	
-	public static void sendMessage( String message ) {
+	public void sendMessage( @NotNull String message ) {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( ManagementManager.class ) {
 				if( isInitialized() ) {
-					DiscordMessageSender.sendMessage( channel, message );
+					discordMessageSender().sendMessage( channel, message );
 				}
 			}
 		}
 	}
 	
 	//package-private
-	static void sendFeedbackMessage( String message ) {
+	void sendFeedbackMessage( @NotNull String message ) {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( ManagementManager.class ) {
 				if( isInitialized() ) {
-					for( String messagePart : DiscordMessageBuilder.buildFeedbackMessage( message ) ) {
-						DiscordMessageSender.sendMessage( channel, messagePart );
+					for( String messagePart : discordMessageBuilder().buildFeedbackMessage( message ) ) {
+						discordMessageSender().sendMessage( channel, messagePart );
 					}
 				}
 			}

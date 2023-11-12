@@ -1,14 +1,13 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
-import de.geheimagentnr1.discordintegration.config.ServerConfig;
-import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
+import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatMessageEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsEventHandler;
-import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManagementMessageManager;
-import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
-import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementMessageEventHandler;
 import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -18,6 +17,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,42 +27,62 @@ import java.util.function.Consumer;
 
 
 @Log4j2
-public class DiscordManager {
+@RequiredArgsConstructor
+public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 	
 	
-	private static boolean serverStarted = false;
+	@Getter( AccessLevel.PROTECTED )
+	@NotNull
+	private final DiscordIntegration discordIntegration;
 	
-	private static JDA jda;
+	private boolean serverStarted = false;
 	
-	private static Guild guild;
+	private JDA jda;
 	
+	private Guild guild;
+	
+	@NotNull
 	private static final List<GatewayIntent> INTENTS = List.of(
 		GatewayIntent.GUILD_MESSAGES,
 		GatewayIntent.GUILD_MEMBERS,
 		GatewayIntent.GUILD_MESSAGE_REACTIONS
 	);
 	
-	public static synchronized void init() {
+	@SuppressWarnings( "AccessToStaticFieldLockedOnInstance" )
+	public synchronized void init() {
 		
 		stop();
 		if( shouldInitialize() ) {
 			try {
-				jda = JDABuilder.create( ServerConfig.BOT_CONFIG.getBotToken(), INTENTS )
-					.addEventListeners( new ChatMessageEventHandler() )
-					.addEventListeners( new ManagementMessageEventHandler() )
-					.addEventListeners( new LinkingsEventHandler() )
+				jda = JDABuilder.create( serverConfig().getBotConfig().getBotToken(), INTENTS )
+					.addEventListeners( new ChatMessageEventHandler(
+						serverConfig(),
+						this,
+						chatManager(),
+						discordCommandHandler(),
+						discordMessageBuilder()
+					) )
+					.addEventListeners( new ManagementMessageEventHandler(
+						managementManager(),
+						discordCommandHandler()
+					) )
+					.addEventListeners( new LinkingsEventHandler(
+						this,
+						linkingsManagementMessageManager(),
+						linkingsManager()
+					) )
 					.setAutoReconnect( true )
 					.build();
 				jda.awaitReady();
 				
-				guild = jda.getGuildById( ServerConfig.BOT_CONFIG.getGuildId() );
+				guild = jda.getGuildById( serverConfig().getBotConfig().getGuildId() );
 				if( guild == null ) {
-					log.error( "The bot has no access to the guild {}", ServerConfig.BOT_CONFIG.getGuildId() );
+					log.error( "The bot has no access to the guild {}", serverConfig().getBotConfig().getGuildId() );
 					stop();
 				} else {
-					ChatManager.init();
-					ManagementManager.init();
-					LinkingsManagementMessageManager.init();
+					chatManager().init();
+					managementManager().init();
+					linkingsManagementMessageManager().init();
 					if( serverStarted ) {
 						updateWhitelist();
 					}
@@ -73,24 +94,24 @@ public class DiscordManager {
 		}
 	}
 	
-	public static synchronized void stop() {
+	public synchronized void stop() {
 		
 		if( isInitialized() ) {
 			jda.shutdown();
 			jda = null;
 			guild = null;
-			ChatManager.stop();
-			ManagementManager.stop();
-			LinkingsManagementMessageManager.stop();
+			chatManager().stop();
+			managementManager().stop();
+			linkingsManagementMessageManager().stop();
 		}
 	}
 	
-	private static boolean shouldInitialize() {
+	private boolean shouldInitialize() {
 		
-		return ServerConfig.BOT_CONFIG.isActive();
+		return serverConfig().getBotConfig().isActive();
 	}
 	
-	public static synchronized boolean isInitialized() {
+	public synchronized boolean isInitialized() {
 		
 		return shouldInitialize() &&
 			jda != null &&
@@ -99,12 +120,12 @@ public class DiscordManager {
 			guild != null;
 	}
 	
-	public static synchronized JDA getJda() {
+	public synchronized JDA getJda() {
 		
 		return jda;
 	}
 	
-	public static synchronized void setServerStarted() {
+	public synchronized void setServerStarted() {
 		
 		if( !serverStarted ) {
 			serverStarted = true;
@@ -112,14 +133,14 @@ public class DiscordManager {
 		}
 	}
 	
-	public static void updatePresence( int onlinePlayerCount ) {
+	public synchronized void updatePresence( int onlinePlayerCount ) {
 		
 		if( isInitialized() ) {
-			if( ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().isShow() ) {
+			if( serverConfig().getBotConfig().getDiscordPresenceConfig().isShow() ) {
 				jda.getPresence().setPresence(
 					Activity.playing(
 						MessageUtil.replaceParameters(
-							ServerConfig.BOT_CONFIG.getDiscordPresenceConfig().getMessage(),
+							serverConfig().getBotConfig().getDiscordPresenceConfig().getMessage(),
 							Map.of(
 								"online_player_count",
 								String.valueOf( onlinePlayerCount ),
@@ -136,17 +157,17 @@ public class DiscordManager {
 		}
 	}
 	
-	private static void updateWhitelist() {
+	private void updateWhitelist() {
 		
-		if( LinkingsManager.isEnabled() ) {
+		if( linkingsManager().isEnabled() ) {
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error( "Whitelist could not be updated on startup", throwable );
 			
 			try {
 				log.info( "Check Discord whitelist on startup" );
-				LinkingsManager.updateWhitelist(
+				linkingsManager().updateWhitelist(
 					errorHandler,
-					ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement()
+					serverConfig().getWhitelistConfig().useSingleLinkingManagement()
 				);
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
@@ -154,12 +175,14 @@ public class DiscordManager {
 		}
 	}
 	
-	public static synchronized SelfUser getSelfUser() {
+	@NotNull
+	public synchronized SelfUser getSelfUser() {
 		
 		return jda.getSelfUser();
 	}
 	
-	public static synchronized Member getMember( Long discordMemberId ) {
+	@Nullable
+	public synchronized Member getMember( @NotNull Long discordMemberId ) {
 		
 		if( isInitialized() ) {
 			return guild.getMemberById( discordMemberId );
@@ -168,12 +191,13 @@ public class DiscordManager {
 		}
 	}
 	
-	public static boolean hasCorrectRole( Member member, long roleId ) {
+	public boolean hasCorrectRole( @NotNull Member member, long roleId ) {
 		
 		return member.getRoles().stream().anyMatch( role -> role.getIdLong() == roleId );
 	}
 	
-	public static String getMemberAsTag( Member member ) {
+	@NotNull
+	public String getMemberAsTag( @NotNull Member member ) {
 		
 		return member.getUser().getAsTag();
 	}

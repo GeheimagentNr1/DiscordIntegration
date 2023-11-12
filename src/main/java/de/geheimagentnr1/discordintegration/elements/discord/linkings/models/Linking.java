@@ -1,11 +1,8 @@
 package de.geheimagentnr1.discordintegration.elements.discord.linkings.models;
 
-import com.mantledillusion.essentials.json.patch.PatchUtil;
 import com.mantledillusion.essentials.json.patch.ignore.NoPatch;
-import com.mantledillusion.essentials.json.patch.model.Patch;
 import lombok.*;
-
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 
 @Data
@@ -18,6 +15,7 @@ public class Linking {
 	
 	@NoPatch
 	@EqualsAndHashCode.Include
+	@NotNull
 	private Long discordMemberId;
 	
 	private String discordUsername;
@@ -31,10 +29,6 @@ public class Linking {
 	private Long messageId;
 	
 	@EqualsAndHashCode.Include
+	@NotNull
 	private MinecraftGameProfile minecraftGameProfile;
-	
-	public static Linking applyPatches( Linking existingLinking, List<Patch> patches ) {
-		
-		return PatchUtil.apply( existingLinking, patches );
-	}
 }

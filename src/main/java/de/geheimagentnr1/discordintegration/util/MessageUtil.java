@@ -8,6 +8,7 @@ import java.util.Map;
 public class MessageUtil {
 	
 	
+	@NotNull
 	private static final String PARAMETER_CHARACTER = "%";
 	
 	@NotNull

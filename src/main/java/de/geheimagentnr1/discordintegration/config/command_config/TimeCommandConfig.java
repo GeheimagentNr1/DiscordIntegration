@@ -1,61 +1,35 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class TimeCommandConfig extends CommandConfig {
 	
 	
-	public TimeCommandConfig() {
+	public TimeCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"time",
-			"time query daytime",
-			false,
-			true,
-			false,
-			"%command%%command_description_separator%shows the current day's time on the server."
-		);
+		super( _abstractMod );
 	}
 	
-	private TimeCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private TimeCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final TimeCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new TimeCommandConfig( this, mapCreator );
+		return "time";
 	}
 	
+	@NotNull
 	@Override
-	public TimeCommandConfig createSubConfig() {
+	protected String minecraftCommandDefaultValue() {
 		
-		return new TimeCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return "time query daytime";
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command%%command_description_separator%shows the current day's time on the server.";
 	}
 }

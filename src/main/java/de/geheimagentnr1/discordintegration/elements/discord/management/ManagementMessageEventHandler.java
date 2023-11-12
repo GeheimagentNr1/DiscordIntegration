@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord.management;
 
 import de.geheimagentnr1.discordintegration.elements.discord.commands.DiscordCommandHandler;
+import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
@@ -10,17 +11,22 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 
-
+@RequiredArgsConstructor
 public class ManagementMessageEventHandler extends ListenerAdapter {
 	
 	
+	@NotNull
+	private final ManagementManager managementManager;
+	
+	@NotNull
+	private final DiscordCommandHandler discordCommandHandler;
+	
 	@Override
-	public void onTextChannelDelete( @Nonnull TextChannelDeleteEvent event ) {
+	public void onTextChannelDelete( @NotNull TextChannelDeleteEvent event ) {
 		
-		if( ManagementManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
-			ManagementManager.init();
+		if( managementManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+			managementManager.init();
 		}
 	}
 	
@@ -32,14 +38,14 @@ public class ManagementMessageEventHandler extends ListenerAdapter {
 		String message = event.getMessage().getContentDisplay();
 		
 		if( server == null ||
-			!ManagementManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
+			!managementManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
 			author.isBot() ||
-			!DiscordCommandHandler.isCommand( message ) ) {
+			!discordCommandHandler.isCommand( message ) ) {
 			return;
 		}
 		
 		Member member = event.getMember();
 		
-		DiscordCommandHandler.handleCommand( member, message, server, ManagementManager::sendFeedbackMessage );
+		discordCommandHandler.handleCommand( member, message, server, managementManager::sendFeedbackMessage );
 	}
 }

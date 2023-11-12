@@ -1,61 +1,69 @@
 package de.geheimagentnr1.discordintegration.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.logging.log4j.Logger;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
+import org.jetbrains.annotations.NotNull;
 
 
-public class ManagementConfig {
+public class ManagementConfig extends AbstractSubConfig {
 	
 	
-	private final ForgeConfigSpec.BooleanValue enabled;
+	@NotNull
+	private static final String ENABLED_KEY = "enabled";
 	
-	private final ForgeConfigSpec.LongValue channel_id;
+	@NotNull
+	private static final String CHANNEL_ID_KEY = "channel_id";
 	
-	private final ForgeConfigSpec.LongValue role_id;
+	@NotNull
+	private static final String ROLE_ID_KEY = "role_id";
 	
-	private final ManagementMessagesConfig management_messages_config;
+	@NotNull
+	private static final String MANAGEMENT_MESSAGES_CONFIG_KEY = "messages";
 	
-	//package-private
-	ManagementConfig( ForgeConfigSpec.Builder builder ) {
+	ManagementConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		builder.comment( "Management channel settings" )
-			.push( "management" );
-		enabled = builder.comment( "Should a management channel be used?" )
-			.define( "enabled", false );
-		channel_id = builder.comment( "Channel ID, where the management channel should be." )
-			.defineInRange( "channel_id", 0, 0, Long.MAX_VALUE );
-		role_id = builder.comment( "Role ID, which Discord users need to execute management commands" )
-			.defineInRange( "role_id", 0, 0, Long.MAX_VALUE );
-		management_messages_config = new ManagementMessagesConfig( builder );
-		builder.pop();
+		super( _abstractMod );
+	}
+	
+	@Override
+	protected void registerConfigValues() {
+		
+		registerConfigValue( "Should a management channel be used?", ENABLED_KEY, false );
+		registerConfigValue(
+			"Channel ID, where the management channel should be.",
+			CHANNEL_ID_KEY,
+			( builder, path ) -> builder.defineInRange( path, 0, 0, Long.MAX_VALUE )
+		);
+		registerConfigValue(
+			"Role ID, which Discord users need to execute management commands",
+			ROLE_ID_KEY,
+			( builder, path ) -> builder.defineInRange( path, 0, 0, Long.MAX_VALUE )
+		);
+		registerSubConfig(
+			"Messages shown on Discord in the management channel",
+			MANAGEMENT_MESSAGES_CONFIG_KEY,
+			new ManagementMessagesConfig( abstractMod )
+		);
 	}
 	
 	public boolean isEnabled() {
 		
-		return enabled.get();
+		return getValue( Boolean.class, ENABLED_KEY );
 	}
 	
 	public long getChannelId() {
 		
-		return channel_id.get();
+		return getValue( Long.class, CHANNEL_ID_KEY );
 	}
 	
 	public long getRoleId() {
 		
-		return role_id.get();
+		return getValue( Long.class, ROLE_ID_KEY );
 	}
 	
+	@NotNull
 	public ManagementMessagesConfig getManagementMessagesConfig() {
 		
-		return management_messages_config;
-	}
-	
-	//package-private
-	void printConfig( Logger logger ) {
-		
-		logger.info( "{} = {}", enabled.getPath(), enabled.get() );
-		logger.info( "{} = {}", channel_id.getPath(), channel_id.get() );
-		logger.info( "{} = {}", role_id.getPath(), role_id.get() );
-		management_messages_config.printConfig( logger );
+		return getSubConfig( ManagementMessagesConfig.class, MANAGEMENT_MESSAGES_CONFIG_KEY );
 	}
 }

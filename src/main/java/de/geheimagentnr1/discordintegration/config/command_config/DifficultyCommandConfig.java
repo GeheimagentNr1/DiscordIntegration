@@ -1,62 +1,37 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class DifficultyCommandConfig extends CommandConfig {
 	
 	
-	public DifficultyCommandConfig() {
+	public DifficultyCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"difficulty",
-			"difficulty",
-			false,
-			true,
-			false,
-			"%command%%command_description_separator%shows the difficulty of the server."
-		);
+		super( _abstractMod );
 	}
 	
-	private DifficultyCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private DifficultyCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final DifficultyCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new DifficultyCommandConfig( this, mapCreator );
+		return "difficulty";
 	}
+	
+	@NotNull
 	
 	@Override
-	public DifficultyCommandConfig createSubConfig() {
+	protected String minecraftCommandDefaultValue() {
 		
-		return new DifficultyCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return "difficulty";
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command%%command_description_separator%shows the difficulty of the server.";
 	}
 }

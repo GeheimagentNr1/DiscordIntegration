@@ -1,61 +1,35 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class OnlineCommandConfig extends CommandConfig {
 	
 	
-	public OnlineCommandConfig() {
+	public OnlineCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"online",
-			"list",
-			false,
-			true,
-			false,
-			"%command%%command_description_separator%shows how many and which players are on the server."
-		);
+		super( _abstractMod );
 	}
 	
-	private OnlineCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private OnlineCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final OnlineCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new OnlineCommandConfig( this, mapCreator );
+		return "online";
 	}
 	
+	@NotNull
 	@Override
-	public OnlineCommandConfig createSubConfig() {
+	protected String minecraftCommandDefaultValue() {
 		
-		return new OnlineCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return "list";
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command%%command_description_separator%shows how many and which players are on the server.";
 	}
 }

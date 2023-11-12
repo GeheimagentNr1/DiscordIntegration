@@ -1,61 +1,35 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig;
-
-import java.util.Map;
-import java.util.function.Supplier;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import org.jetbrains.annotations.NotNull;
 
 
 public class SeedCommandConfig extends CommandConfig {
 	
 	
-	public SeedCommandConfig() {
+	public SeedCommandConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		super(
-			"seed",
-			"seed",
-			false,
-			true,
-			false,
-			"%command%%command_description_separator%shows the seed of the active world."
-		);
+		super( _abstractMod );
 	}
 	
-	private SeedCommandConfig(
-		String discordCommand,
-		String minecraftCommand,
-		boolean useParameters,
-		boolean enabled,
-		boolean managementCommand,
-		String description ) {
-		
-		super( discordCommand, minecraftCommand, useParameters, enabled, managementCommand, description );
-	}
-	
-	private SeedCommandConfig(
-		UnmodifiableCommentedConfig toCopy,
-		@SuppressWarnings( "ParameterHidesMemberVariable" ) Supplier<Map<String, Object>> mapCreator ) {
-		
-		super( toCopy, mapCreator );
-	}
-	
-	@SuppressWarnings( { "FinalMethod", "UseOfClone" } )
+	@NotNull
 	@Override
-	public final SeedCommandConfig clone() {
+	protected String discordCommandDefaultValue() {
 		
-		return new SeedCommandConfig( this, mapCreator );
+		return "seed";
 	}
 	
+	@NotNull
 	@Override
-	public SeedCommandConfig createSubConfig() {
+	protected String minecraftCommandDefaultValue() {
 		
-		return new SeedCommandConfig(
-			getDiscordCommand( this ),
-			getMinecraftCommand( this ),
-			useParameters( this ),
-			isEnabled( this ),
-			isManagementCommand( this ),
-			getDescription( this )
-		);
+		return "seed";
+	}
+	
+	@NotNull
+	@Override
+	protected String descriptionDefaultValue() {
+		
+		return "%command%%command_description_separator%shows the seed of the active world.";
 	}
 }

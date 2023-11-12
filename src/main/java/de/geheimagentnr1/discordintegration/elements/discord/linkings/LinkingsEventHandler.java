@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
@@ -16,28 +17,37 @@ import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
 @Log4j2
+@RequiredArgsConstructor
 public class LinkingsEventHandler extends ListenerAdapter {
 	
 	
+	@NotNull
+	private final DiscordManager discordManager;
+	
+	@NotNull
+	private final LinkingsManagementMessageManager linkingsManagementMessageManager;
+	
+	@NotNull
+	private final LinkingsManager linkingsManager;
+	
 	@Override
-	public void onTextChannelDelete( @Nonnull TextChannelDeleteEvent event ) {
+	public void onTextChannelDelete( @NotNull TextChannelDeleteEvent event ) {
 		
-		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
-			LinkingsManagementMessageManager.init();
+		if( linkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+			linkingsManagementMessageManager.init();
 		}
 	}
 	
 	@Override
-	public void onGuildMemberRemove( @Nonnull GuildMemberRemoveEvent event ) {
+	public void onGuildMemberRemove( @NotNull GuildMemberRemoveEvent event ) {
 		
-		if( LinkingsManager.isEnabled() ) {
+		if( linkingsManager.isEnabled() ) {
 			if( event.getMember() == null ) {
 				log.error( "Failed to remove Linkings for discord user, who leaved the Discord server." );
 			} else {
@@ -50,7 +60,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 					);
 				
 				try {
-					LinkingsManager.removeLinkings( event.getMember(), errorHandler );
+					linkingsManager.removeLinkings( event.getMember(), errorHandler );
 					log.info(
 						"Remove Linkings for discord user {}, who leaved the Discord server.",
 						event.getMember().getEffectiveName()
@@ -63,17 +73,17 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onRoleDelete( @Nonnull RoleDeleteEvent event ) {
+	public void onRoleDelete( @NotNull RoleDeleteEvent event ) {
 		
-		if( LinkingsManager.isEnabled() &&
-			LinkingsManager.isCorrectRole( event.getRole() ) ) {
+		if( linkingsManager.isEnabled() &&
+			linkingsManager.isCorrectRole( event.getRole() ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error( "Failed to update Whitelist, after the Discord whitelistrole has been deleted", throwable );
 			
 			try {
 				log.info( "Update whiteliste, because the Discord whitelist role has been deleted" );
-				LinkingsManager.updateWhitelist( errorHandler );
+				linkingsManager.updateWhitelist( errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
@@ -81,10 +91,10 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMemberRoleAdd( @Nonnull GuildMemberRoleAddEvent event ) {
+	public void onGuildMemberRoleAdd( @NotNull GuildMemberRoleAddEvent event ) {
 		
-		if( LinkingsManager.isEnabled() &&
-			event.getRoles().stream().anyMatch( LinkingsManager::isCorrectRole ) ) {
+		if( linkingsManager.isEnabled() &&
+			event.getRoles().stream().anyMatch( linkingsManager::isCorrectRole ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
@@ -98,7 +108,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 				);
 			
 			try {
-				LinkingsManager.updateWhitelist( errorHandler );
+				linkingsManager.updateWhitelist( errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
@@ -106,10 +116,10 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMemberRoleRemove( @Nonnull GuildMemberRoleRemoveEvent event ) {
+	public void onGuildMemberRoleRemove( @NotNull GuildMemberRoleRemoveEvent event ) {
 		
-		if( LinkingsManager.isEnabled() &&
-			event.getRoles().stream().anyMatch( LinkingsManager::isCorrectRole ) ) {
+		if( linkingsManager.isEnabled() &&
+			event.getRoles().stream().anyMatch( linkingsManager::isCorrectRole ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
@@ -123,7 +133,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 				);
 			
 			try {
-				LinkingsManager.updateWhitelist( errorHandler );
+				linkingsManager.updateWhitelist( errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
@@ -131,15 +141,15 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageDelete( @Nonnull GuildMessageDeleteEvent event ) {
+	public void onGuildMessageDelete( @NotNull GuildMessageDeleteEvent event ) {
 		
-		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+		if( linkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error( "Failed to resend message, after message has been deleted", throwable );
 			
 			try {
-				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
+				linkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
@@ -147,10 +157,10 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReactionAdd( @Nonnull GuildMessageReactionAddEvent event ) {
+	public void onGuildMessageReactionAdd( @NotNull GuildMessageReactionAddEvent event ) {
 		
 		User user = event.getUser();
-		if( !LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
+		if( !linkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
 			user.isBot() ) {
 			return;
 		}
@@ -160,7 +170,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 		MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
 		
 		Boolean shouldActive =
-			LinkingsManagementMessageManager.reactionCodeToBool( reactionEmote.getAsReactionCode() );
+			linkingsManagementMessageManager.reactionCodeToBool( reactionEmote.getAsReactionCode() );
 		
 		if( shouldActive != null ) {
 			
@@ -172,7 +182,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 				);
 			
 			try {
-				LinkingsManager.changeActiveStateOfLinking( member, messageId, shouldActive, errorHandler );
+				linkingsManager.changeActiveStateOfLinking( member, messageId, shouldActive, errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
@@ -187,8 +197,8 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReactionRemove( @NotNull GuildMessageReactionRemoveEvent event ) {
 		
-		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) &&
-			DiscordManager.getSelfUser().getIdLong() == event.getUserIdLong() ) {
+		if( linkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) &&
+			discordManager.getSelfUser().getIdLong() == event.getUserIdLong() ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
@@ -197,7 +207,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 				);
 			
 			try {
-				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
+				linkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
@@ -205,9 +215,9 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReactionRemoveAll( @Nonnull GuildMessageReactionRemoveAllEvent event ) {
+	public void onGuildMessageReactionRemoveAll( @NotNull GuildMessageReactionRemoveAllEvent event ) {
 		
-		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+		if( linkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error(
@@ -216,7 +226,7 @@ public class LinkingsEventHandler extends ListenerAdapter {
 				);
 			
 			try {
-				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
+				linkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}
@@ -224,15 +234,15 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReactionRemoveEmote( @Nonnull GuildMessageReactionRemoveEmoteEvent event ) {
+	public void onGuildMessageReactionRemoveEmote( @NotNull GuildMessageReactionRemoveEmoteEvent event ) {
 		
-		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+		if( linkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
 				log.error( "Failed to resend message, after reaction has been fully removed from message", throwable );
 			
 			try {
-				LinkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
+				linkingsManager.resendMessage( event.getMessageIdLong(), errorHandler );
 			} catch( IOException exception ) {
 				errorHandler.accept( exception );
 			}

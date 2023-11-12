@@ -6,27 +6,45 @@ repositories {
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:${jda_version}") {
+    minecraftLibrary "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
+    minecraftLibrary "net.dv8tion:JDA:${jda_version}", {
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
+    }
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    minecraftLibrary "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
+
+    jarJar("com.mantledillusion.essentials:json-patch-essentials:[${json_patch_essentials_version},)") {
+        jarJar.pin(it, "${json_patch_essentials_version}")
+        transitive = false
+    }
+    jarJar("com.flipkart.zjsonpatch:zjsonpatch:[0.4.14,)") {
+        jarJar.pin(it, "0.4.14")
+        transitive = false
+    }
+    jarJar("com.fasterxml.jackson.core:jackson-core:[${jackson_version},)") {
+        jarJar.pin(it, "${jackson_version}")
+        transitive = false
+    }
+    jarJar("com.fasterxml.jackson.core:jackson-annotations:[${jackson_version},)") {
+        jarJar.pin(it, "${jackson_version}")
+        transitive = false
+    }
+    jarJar("com.fasterxml.jackson.core:jackson-databind:[${jackson_version},)") {
+        jarJar.pin(it, "${jackson_version}")
+        transitive = false
+    }
+    jarJar("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:[${jackson_version},)") {
+        jarJar.pin(it, "${jackson_version}")
+        transitive = false
     }
     jarJar("net.dv8tion:JDA:[${jda_version},)") {
         jarJar.pin(it, "${jda_version}")
         transitive = false
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
-    }
-    jarJar("com.fasterxml.jackson.core:jackson-core:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
-        transitive = false
-    }
-    jarJar("com.fasterxml.jackson.core:jackson-annotations:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
-        transitive = false
-    }
-    jarJar("com.fasterxml.jackson.core:jackson-databind:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
-        transitive = false
     }
     jarJar("com.neovisionaries:nv-websocket-client:[2.14,)") {
         jarJar.pin(it, "2.14")

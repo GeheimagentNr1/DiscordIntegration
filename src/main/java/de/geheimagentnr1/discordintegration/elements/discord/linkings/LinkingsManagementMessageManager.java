@@ -1,9 +1,13 @@
 package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 
-import de.geheimagentnr1.discordintegration.config.ServerConfig;
+import de.geheimagentnr1.discordintegration.DiscordIntegration;
+import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linking;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.LinkingMessageRequestCounter;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -14,29 +18,40 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 
 @SuppressWarnings( { "SynchronizeOnThis", "NestedSynchronizedStatement" } )
 @Log4j2
-public class LinkingsManagementMessageManager {
+@RequiredArgsConstructor
+public class LinkingsManagementMessageManager extends AbstractDiscordIntegrationServiceProvider {
 	
 	
+	@SuppressWarnings( "UnnecessaryUnicodeEscape" )
+	@NotNull
 	private static final String TRUE_EMOJI = "\u2705";
 	
+	@SuppressWarnings( "UnnecessaryUnicodeEscape" )
+	@NotNull
 	private static final String FALSE_EMOJI = "\u274C";
 	
-	private static TextChannel channel;
+	@Getter( AccessLevel.PROTECTED )
+	@NotNull
+	private final DiscordIntegration discordIntegration;
 	
-	public static void init() {
+	private TextChannel channel;
+	
+	public void init() {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( LinkingsManagementMessageManager.class ) {
 				stop();
 				if( shouldInitialize() ) {
-					long channelId = ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId();
-					JDA jda = DiscordManager.getJda();
+					long channelId = serverConfig().getWhitelistConfig().getLinkingManagementChannelId();
+					JDA jda = discordManager().getJda();
 					channel = jda.getTextChannelById( channelId );
 					if( channel == null ) {
 						log.error( "Discord Linking Management Text Channel {} not found", channelId );
@@ -46,17 +61,17 @@ public class LinkingsManagementMessageManager {
 		}
 	}
 	
-	public static synchronized void stop() {
+	public synchronized void stop() {
 		
 		channel = null;
 	}
 	
-	private static boolean shouldInitialize() {
+	private boolean shouldInitialize() {
 		
-		return LinkingsManager.isEnabled() && ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement();
+		return linkingsManager().isEnabled() && serverConfig().getWhitelistConfig().useSingleLinkingManagement();
 	}
 	
-	private static boolean isInitialized() {
+	private boolean isInitialized() {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( LinkingsManagementMessageManager.class ) {
@@ -66,18 +81,19 @@ public class LinkingsManagementMessageManager {
 	}
 	
 	//package-private
-	static boolean isCorrectChannel( long channelId ) {
+	boolean isCorrectChannel( long channelId ) {
 		
-		return isInitialized() && ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId() == channelId;
+		return isInitialized() && serverConfig().getWhitelistConfig().getLinkingManagementChannelId() == channelId;
 	}
 	
-	private static String boolToEmoji( boolean value ) {
+	@NotNull
+	private String boolToEmoji( boolean value ) {
 		
 		return value ? TRUE_EMOJI : FALSE_EMOJI;
 	}
 	
-	//package-private
-	static Boolean reactionCodeToBool( String reactionCode ) {
+	@Nullable
+	Boolean reactionCodeToBool( @NotNull String reactionCode ) {
 		
 		return switch( reactionCode ) {
 			case TRUE_EMOJI -> true;
@@ -87,11 +103,11 @@ public class LinkingsManagementMessageManager {
 	}
 	
 	//package-private
-	static void sendOrEditMessage(
-		Member member,
-		Linking linking,
+	void sendOrEditMessage(
+		@NotNull Member member,
+		@NotNull Linking linking,
 		boolean hasChanged,
-		Consumer<Long> messageIdHandler ) {
+		@NotNull Consumer<Long> messageIdHandler ) {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( LinkingsManagementMessageManager.class ) {
@@ -145,12 +161,12 @@ public class LinkingsManagementMessageManager {
 					} catch( Exception exception ) {
 						log.error(
 							"Message could not be retrieved from Linking Management Channel {}",
-							ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId(),
+							serverConfig().getWhitelistConfig().getLinkingManagementChannelId(),
 							exception
 						);
 					}
 				} else {
-					if( !ServerConfig.WHITELIST_CONFIG.useSingleLinkingManagement() ) {
+					if( !serverConfig().getWhitelistConfig().useSingleLinkingManagement() ) {
 						messageIdHandler.accept( null );
 					}
 				}
@@ -158,13 +174,13 @@ public class LinkingsManagementMessageManager {
 		}
 	}
 	
-	private static void sendOrEditMessage(
-		Message oldMessage,
-		Member member,
-		Linking linking,
+	private void sendOrEditMessage(
+		@Nullable Message oldMessage,
+		@NotNull Member member,
+		@NotNull Linking linking,
 		boolean hasChanged,
-		Consumer<Long> messageIdHandler,
-		LinkingMessageRequestCounter linkingMessageRequestCounter ) {
+		@NotNull Consumer<Long> messageIdHandler,
+		@NotNull LinkingMessageRequestCounter linkingMessageRequestCounter ) {
 		
 		synchronized( DiscordManager.class ) {
 			synchronized( LinkingsManagementMessageManager.class ) {
@@ -199,7 +215,7 @@ public class LinkingsManagementMessageManager {
 					} catch( Exception exception ) {
 						log.error(
 							"Message could not be send or edited to Linking Management Channel {}",
-							ServerConfig.WHITELIST_CONFIG.getLinkingManagementChannelId(),
+							serverConfig().getWhitelistConfig().getLinkingManagementChannelId(),
 							exception
 						);
 					}
@@ -208,10 +224,10 @@ public class LinkingsManagementMessageManager {
 		}
 	}
 	
-	private static void handleMessageSentOrEdited(
-		Message message,
-		Consumer<Long> messageIdHandler,
-		LinkingMessageRequestCounter linkingMessageRequestCounter ) {
+	private void handleMessageSentOrEdited(
+		@NotNull Message message,
+		@NotNull Consumer<Long> messageIdHandler,
+		@NotNull LinkingMessageRequestCounter linkingMessageRequestCounter ) {
 		
 		synchronized( DiscordManager.class ) {
 			if( isInitialized() ) {
@@ -236,11 +252,12 @@ public class LinkingsManagementMessageManager {
 		}
 	}
 	
-	private static MessageEmbed buildMessage( Member member, Linking linking ) {
+	@NotNull
+	private MessageEmbed buildMessage( @NotNull Member member, @NotNull Linking linking ) {
 		
 		String discordName = linking.getDiscordUsername();
 		String minecraftName = linking.getMinecraftGameProfile().getName();
-		boolean hasRole = LinkingsManager.hasCorrectRole( member );
+		boolean hasRole = linkingsManager().hasCorrectRole( member );
 		boolean isActive = linking.isActive();
 		
 		EmbedBuilder builder = new EmbedBuilder();
@@ -256,7 +273,7 @@ public class LinkingsManagementMessageManager {
 	}
 	
 	//package-private
-	static void deleteMessage( Linking linking ) {
+	void deleteMessage( @NotNull Linking linking ) {
 		
 		if( isInitialized() ) {
 			synchronized( LinkingsManagementMessageManager.class ) {
