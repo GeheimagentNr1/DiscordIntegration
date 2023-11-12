@@ -38,7 +38,7 @@ brigadier,null,1.0.18,null,null,null,null,null,com.mojang:brigadier:1.0.18
 Checker Qual,checker-qual contains annotations (type qualifiers) that a programmer
 writes to specify Java code for type-checking by the Checker Framework.,3.12.0,"Michael Ernst,Suzanne Millstein",https://checkerframework.org,null,The MIT License,http://opensource.org/licenses/MIT,org.checkerframework:checker-qual:3.12.0
 client,null,1.18.1,null,null,null,null,null,net.minecraft:client:1.18.1
-Core Mods,Core modding framework for use with forge,5.0.2,cpw,https://github.com/MinecraftForge/coremods,null,LGPLv2.1,https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt,net.minecraftforge:coremods:5.0.2
+Core Mods,Core modding framework for use with forge,5.0.3,cpw,https://github.com/MinecraftForge/coremods,null,LGPLv2.1,https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt,net.minecraftforge:coremods:5.0.3
 datafixerupper,null,4.0.26,null,null,null,null,null,com.mojang:datafixerupper:4.0.26
 error-prone annotations,null,2.7.1,null,null,null,Apache 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,com.google.errorprone:error_prone_annotations:2.7.1
 Event Bus,High performance Event Bus library,5.0.7,"cpw,LexManos",https://github.com/MinecraftForge/eventbus,null,LGPLv2.1,https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt,net.minecraftforge:eventbus:5.0.7

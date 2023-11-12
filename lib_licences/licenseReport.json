@@ -520,7 +520,7 @@
   {
     "project": "Core Mods",
     "description": "Core modding framework for use with forge",
-    "version": "5.0.2",
+    "version": "5.0.3",
     "developers": [
       "cpw"
     ],
@@ -532,7 +532,7 @@
         "license_url": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt"
       }
     ],
-    "dependency": "net.minecraftforge:coremods:5.0.2"
+    "dependency": "net.minecraftforge:coremods:5.0.3"
   },
   {
     "project": "datafixerupper",
