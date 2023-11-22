@@ -4,7 +4,7 @@ import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatMessageEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementMessageEventHandler;
-import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

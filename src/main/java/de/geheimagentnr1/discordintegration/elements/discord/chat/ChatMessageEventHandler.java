@@ -6,7 +6,7 @@ import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordMessageBuilder;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.DiscordCommandHandler;
-import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;

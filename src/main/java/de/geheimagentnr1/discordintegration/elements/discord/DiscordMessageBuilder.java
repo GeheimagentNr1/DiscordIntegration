@@ -1,7 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
-import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;

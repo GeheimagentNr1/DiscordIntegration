@@ -5,7 +5,7 @@ import com.mojang.authlib.GameProfile;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.MinecraftGameProfile;
-import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

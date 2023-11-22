@@ -5,7 +5,7 @@ import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSource;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.models.DiscordCommandSourceStack;
-import de.geheimagentnr1.discordintegration.util.MessageUtil;
+import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
