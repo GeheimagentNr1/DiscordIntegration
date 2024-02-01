@@ -14,70 +14,33 @@ dependencies {
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
     }
-    jarJar("net.dv8tion:JDA:[${jda_version},)") {
-        jarJar.pin(it, "${jda_version}")
+    jarJar("net.dv8tion:JDA:[${jda_version},5)") {
         transitive = false
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
     }
-    jarJar("com.fasterxml.jackson.core:jackson-core:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
+    jarJar("com.neovisionaries:nv-websocket-client:[2.14,3)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.core:jackson-annotations:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
+    jarJar("com.squareup.okhttp3:okhttp:[3.13.0,4)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.core:jackson-databind:[2.14.1,)") {
-        jarJar.pin(it, "2.14.1")
+    jarJar("com.squareup.okio:okio:[1.17.2,2)") {
         transitive = false
     }
-    jarJar("com.neovisionaries:nv-websocket-client:[2.14,)") {
-        jarJar.pin(it, "2.14")
+    jarJar("net.sf.trove4j:trove4j:[3.0.3,4)") {
         transitive = false
     }
-    jarJar("com.squareup.okhttp3:okhttp:[4.10.0,)") {
-        jarJar.pin(it, "4.10.0")
+    jarJar("org.apache.commons:commons-collections4:[4.1,5)") {
         transitive = false
     }
-    jarJar("com.squareup.okio:okio:[3.0.0,)") {
-        jarJar.pin(it, "3.0.0")
+    jarJar("com.fasterxml.jackson.core:jackson-core:[2.10.1,3)") {
         transitive = false
     }
-    jarJar("com.squareup.okio:okio-jvm:[3.0.0,)") {
-        jarJar.pin(it, "3.0.0")
+    jarJar("com.fasterxml.jackson.core:jackson-annotations:[2.10.1,3)") {
         transitive = false
     }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-common:[1.6.20,)") {
-        jarJar.pin(it, "1.6.20")
-        transitive = false
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-jdk8:[1.5.31,)") {
-        jarJar.pin(it, "1.5.31")
-        transitive = false
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-jdk7:[1.5.31,)") {
-        jarJar.pin(it, "1.5.31")
-        transitive = false
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib:[1.6.20,)") {
-        jarJar.pin(it, "1.6.20")
-        transitive = false
-    }
-    jarJar("org.jetbrains.kotlin:kotlin-stdlib-common:[1.6.20,)") {
-        jarJar.pin(it, "1.6.20")
-        transitive = false
-    }
-    jarJar("org.jetbrains:annotations:[24.0.1,)") {
-        jarJar.pin(it, "24.0.1")
-        transitive = false
-    }
-    jarJar("net.sf.trove4j:trove4j:[3.0.3,)") {
-        jarJar.pin(it, "3.0.3")
-        transitive = false
-    }
-    jarJar("org.apache.commons:commons-collections4:[4.4,)") {
-        jarJar.pin(it, "4.4")
+    jarJar("com.fasterxml.jackson.core:jackson-databind:[2.10.1,3)") {
         transitive = false
     }
 
