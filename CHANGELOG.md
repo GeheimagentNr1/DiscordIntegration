@@ -1,1 +1,2 @@
-Ported to 1.20.4 
+- Fix issues with Kotlin for Forge
+- Update dependencies
