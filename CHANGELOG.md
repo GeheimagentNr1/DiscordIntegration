@@ -1,1 +1,2 @@
-- Fix crash on startup
+- Fix issues with Kotlin for Forge
+- Update dependencies
