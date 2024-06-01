@@ -2,6 +2,7 @@ package de.geheimagentnr1.discordintegration.config.command_config.mods;
 
 import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
 import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
 import de.geheimagentnr1.minecraft_forge_api.util.VersionHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 public class MobgriefingCommandConfig extends CommandConfig {
 	
 	
-	public MobgriefingCommandConfig( @NotNull AbstractMod _abstractMod ) {
+	public MobgriefingCommandConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override

@@ -34,9 +34,9 @@ public class CommandMessagesConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String INVALID_PERMISSIONS_ERROR_MESSAGE_KEY = "invalid_permissions_error_message";
 	
-	CommandMessagesConfig( @NotNull AbstractMod _abstractMod ) {
+	CommandMessagesConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override

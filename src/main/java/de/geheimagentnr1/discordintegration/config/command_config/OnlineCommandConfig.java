@@ -1,15 +1,16 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
 import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
 import org.jetbrains.annotations.NotNull;
 
 
 public class OnlineCommandConfig extends CommandConfig {
 	
 	
-	public OnlineCommandConfig( @NotNull AbstractMod _abstractMod ) {
+	public OnlineCommandConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@NotNull

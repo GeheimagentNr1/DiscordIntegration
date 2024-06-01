@@ -55,6 +55,6 @@ dependencies {
         transitive = false
     }
 
-    runtimeOnly fg.deobf("de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${minecraft_version}:${dam_version}")
-    runtimeOnly fg.deobf("de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${minecraft_version}:${mmgo_version}")
+    runtimeOnly "de.geheimagentnr1.dimension_access_manager:DimensionAccessManager-${minecraft_version}:${dam_version}"
+    runtimeOnly "de.geheimagentnr1.moremobgriefingoptions:MoreMobGriefingOptions-${minecraft_version}:${mmgo_version}"
 }

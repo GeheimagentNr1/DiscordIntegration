@@ -20,9 +20,9 @@ public class ManagementConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String MANAGEMENT_MESSAGES_CONFIG_KEY = "messages";
 	
-	ManagementConfig( @NotNull AbstractMod _abstractMod ) {
+	ManagementConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class ManagementConfig extends AbstractSubConfig {
 		registerSubConfig(
 			"Messages shown on Discord in the management channel",
 			MANAGEMENT_MESSAGES_CONFIG_KEY,
-			new ManagementMessagesConfig( abstractMod )
+			new ManagementMessagesConfig( abstractMod, this )
 		);
 	}
 	

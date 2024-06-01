@@ -34,9 +34,9 @@ public class CommandSettingsConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String COMMANDS_KEY = "commands";
 	
-	protected CommandSettingsConfig( @NotNull AbstractMod _abstractMod ) {
+	protected CommandSettingsConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class CommandSettingsConfig extends AbstractSubConfig {
 		registerSubConfig(
 			"Command message settings",
 			COMMAND_MESSAGES_CONFIG_KEY,
-			new CommandMessagesConfig( abstractMod )
+			new CommandMessagesConfig( abstractMod, this )
 		);
 		registerSubConfigList(
 			"Command mapping from Discord to Minecraft commands",
@@ -76,19 +76,19 @@ public class CommandSettingsConfig extends AbstractSubConfig {
 	private List<CommandConfig> buildDefaultCommandList() {
 		
 		ArrayList<CommandConfig> commands = new ArrayList<>();
-		commands.add( new DifficultyCommandConfig( abstractMod ) );
-		commands.add( new GamerulesCommandConfig( abstractMod ) );
-		commands.add( new HelpCommandConfig( abstractMod ) );
-		commands.add( new LinkCommandConfig( abstractMod ) );
-		commands.add( new ModsCommandConfig( abstractMod ) );
-		commands.add( new OnlineCommandConfig( abstractMod ) );
-		commands.add( new SeedCommandConfig( abstractMod ) );
-		commands.add( new TimeCommandConfig( abstractMod ) );
-		commands.add( new TpsCommandConfig( abstractMod ) );
-		commands.add( new UnlinkCommandConfig( abstractMod ) );
+		commands.add( new DifficultyCommandConfig( abstractMod, this ) );
+		commands.add( new GamerulesCommandConfig( abstractMod, this ) );
+		commands.add( new HelpCommandConfig( abstractMod, this ) );
+		commands.add( new LinkCommandConfig( abstractMod, this ) );
+		commands.add( new ModsCommandConfig( abstractMod, this ) );
+		commands.add( new OnlineCommandConfig( abstractMod, this ) );
+		commands.add( new SeedCommandConfig( abstractMod, this ) );
+		commands.add( new TimeCommandConfig( abstractMod, this ) );
+		commands.add( new TpsCommandConfig( abstractMod, this ) );
+		commands.add( new UnlinkCommandConfig( abstractMod, this ) );
 		//Modded commands
-		commands.add( new DimensionsCommandConfig( abstractMod ) );
-		commands.add( new MobgriefingCommandConfig( abstractMod ) );
+		commands.add( new DimensionsCommandConfig( abstractMod, this ) );
+		commands.add( new MobgriefingCommandConfig( abstractMod, this ) );
 		
 		return commands.stream()
 			.filter( CommandConfig::shouldBeInCommandList )

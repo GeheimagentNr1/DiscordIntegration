@@ -26,9 +26,9 @@ public class WhitelistConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String LINKING_MANAGEMENT_CHANNEL_ID_KEY = "linking_management_channel_id";
 	
-	WhitelistConfig( @NotNull AbstractMod _abstractMod ) {
+	WhitelistConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override

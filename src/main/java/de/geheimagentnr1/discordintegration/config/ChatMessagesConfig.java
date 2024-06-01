@@ -32,9 +32,9 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String PLAYER_GOT_ADVANCEMENT_KEY = "player_got_advancement";
 	
-	ChatMessagesConfig( @NotNull AbstractMod _abstractMod ) {
+	ChatMessagesConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override
@@ -45,6 +45,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			SERVER_STARTED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if the server started?",
 				"Message sent to the Discord chat, if the Minecraft server started.",
 				"Server started"
@@ -55,6 +56,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			SERVER_STOPPED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if the server stopped?",
 				"Message sent to the Discord chat, if the Minecraft server stopped.",
 				"Server stopped"
@@ -65,6 +67,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			SERVER_CRASHED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if the server crashed?",
 				"Message sent to the Discord chat, if the Minecraft server crashed.",
 				"Server crashed"
@@ -75,6 +78,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			PLAYER_JOINED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if a player joined?",
 				"Message sent to the Discord chat, if a player joined. " +
 					"(Available parameters: %player% = Player name)",
@@ -86,6 +90,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			PLAYER_LEFT_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if a player left?",
 				"Message sent to the Discord chat, if a player left the server. " +
 					"(Available parameters: %player% = Player name)",
@@ -97,6 +102,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			PLAYER_DIED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if a player died?",
 				"Message sent to the Discord chat, if a player died. " +
 					"(Available parameters: %player% = Player name, " +
@@ -109,6 +115,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			TAMED_MOB_DIED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if a tamed mob left?",
 				"Message sent to the Discord chat, if a tamed mob died. " +
 					"(Available parameters: %tamed_mob% = Tamed mob name, " +
@@ -121,6 +128,7 @@ public class ChatMessagesConfig extends AbstractSubConfig {
 			PLAYER_GOT_ADVANCEMENT_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord chat, if a player got an advancement?",
 				"Message sent to the Discord chat, if a player got an advancement. " +
 					"(Available parameters: %player% = Player name, " +

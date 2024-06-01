@@ -47,9 +47,9 @@ public class ChatConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String CHAT_MESSAGES_CONFIG_KEY = "messages";
 	
-	ChatConfig( @NotNull AbstractMod _abstractMod ) {
+	ChatConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override
@@ -131,7 +131,7 @@ public class ChatConfig extends AbstractSubConfig {
 		registerSubConfig(
 			"Messages shown on Discord in the chat channel",
 			CHAT_MESSAGES_CONFIG_KEY,
-			new ChatMessagesConfig( abstractMod )
+			new ChatMessagesConfig( abstractMod, this )
 		);
 	}
 	

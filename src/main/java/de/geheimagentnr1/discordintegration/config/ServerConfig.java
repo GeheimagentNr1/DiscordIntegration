@@ -52,15 +52,23 @@ public class ServerConfig extends AbstractConfig {
 	@Override
 	protected void registerConfigValues() {
 		
-		registerSubConfig( "General bot configuration", BOT_CONFIG_KEY, new BotConfig( abstractMod ) );
-		registerSubConfig( "Chat channel settings", CHAT_CONFIG_KEY, new ChatConfig( abstractMod ) );
-		registerSubConfig( "Management channel settings", MANAGEMENT_CONFIG_KEY, new ManagementConfig( abstractMod ) );
+		registerSubConfig( "General bot configuration", BOT_CONFIG_KEY, new BotConfig( abstractMod, this ) );
+		registerSubConfig( "Chat channel settings", CHAT_CONFIG_KEY, new ChatConfig( abstractMod, this ) );
+		registerSubConfig(
+			"Management channel settings",
+			MANAGEMENT_CONFIG_KEY,
+			new ManagementConfig( abstractMod, this )
+		);
 		registerSubConfig(
 			"Settings for whitelist management in Discord",
 			WHITELIST_CONFIG_KEY,
-			new WhitelistConfig( abstractMod )
+			new WhitelistConfig( abstractMod, this )
 		);
-		registerSubConfig( "Command settings", COMMAND_SETTINGS_CONFIG_KEY, new CommandSettingsConfig( abstractMod ) );
+		registerSubConfig(
+			"Command settings",
+			COMMAND_SETTINGS_CONFIG_KEY,
+			new CommandSettingsConfig( abstractMod, this )
+		);
 	}
 	
 	@Override

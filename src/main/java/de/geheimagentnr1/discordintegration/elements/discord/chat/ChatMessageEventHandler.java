@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -115,13 +116,19 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 			if( serverConfig.getChatConfig().useRawMessageFormatDiscordToMinecraft() ) {
 				try {
 					server.getPlayerList().broadcastSystemMessage(
-						ComponentArgument.textComponent().parse( new StringReader( buildMessage ) ),
+						ComponentArgument.textComponent(
+							CommandBuildContext.simple(
+								server.registryAccess(),
+								server.getWorldData().enabledFeatures()
+							)
+						).parse( new StringReader( buildMessage ) ),
 						false
 					);
 				} catch( CommandSyntaxException exception ) {
 					chatManager.sendFeedbackMessage(
 						MessageUtil.replaceParameters(
-							serverConfig.getChatConfig().getInvalidRawMessageFormatForDiscordToMinecraftErrorMessage(),
+							serverConfig.getChatConfig()
+								.getInvalidRawMessageFormatForDiscordToMinecraftErrorMessage(),
 							Map.of(
 								"username", discordManager.getMemberAsTag( member ),
 								"nickname", member.getEffectiveName(),

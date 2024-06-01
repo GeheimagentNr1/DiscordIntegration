@@ -23,9 +23,9 @@ public class BotConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String DISCORD_PRESENCE_KEY = "discord_presence";
 	
-	BotConfig( @NotNull AbstractMod _abstractMod ) {
+	BotConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class BotConfig extends AbstractSubConfig {
 		registerSubConfig(
 			"Discord Presence configuration",
 			DISCORD_PRESENCE_KEY,
-			new DiscordPresenceConfig( abstractMod )
+			new DiscordPresenceConfig( abstractMod, this )
 		);
 	}
 	

@@ -25,11 +25,12 @@ public class MessageConfig extends AbstractSubConfig {
 	
 	MessageConfig(
 		@NotNull AbstractMod _abstractMod,
+		@NotNull AbstractSubConfig _parent,
 		@NotNull String enabledComment,
 		@NotNull String messageComment,
 		@NotNull String messageDefaultValue ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 		this.enabledComment = enabledComment;
 		this.messageComment = messageComment;
 		this.messageDefaultValue = messageDefaultValue;

@@ -14,9 +14,9 @@ public class DiscordPresenceConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String MESSAGE_KEY = "message";
 	
-	protected DiscordPresenceConfig( @NotNull AbstractMod _abstractMod ) {
+	protected DiscordPresenceConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override

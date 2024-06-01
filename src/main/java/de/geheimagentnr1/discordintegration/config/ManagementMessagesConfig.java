@@ -43,9 +43,9 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 	@NotNull
 	private static final String PLAYER_WHITELIST_REMOVED_KEY = "player_whitelist_removed";
 	
-	ManagementMessagesConfig( @NotNull AbstractMod _abstractMod ) {
+	ManagementMessagesConfig( @NotNull AbstractMod _abstractMod, @NotNull AbstractSubConfig _parent ) {
 		
-		super( _abstractMod );
+		super( _abstractMod, _parent );
 	}
 	
 	@Override
@@ -56,6 +56,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			SERVER_STARTED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if the server started?",
 				"Message sent to the Discord management channel, if the Minecraft server started.",
 				"Server started"
@@ -66,6 +67,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			SERVER_STOPPED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if the server stopped?",
 				"Message sent to the Discord management channel, if the Minecraft server stopped.",
 				"Server stopped"
@@ -76,6 +78,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			SERVER_CRASHED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if the server crashed?",
 				"Message sent to the Discord management channel, if the Minecraft server crashed.",
 				"Server crashed"
@@ -86,6 +89,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			PLAYER_JOINED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if a player joined?",
 				"Message sent to the Discord management channel, if a player joined. " +
 					"(Available parameters: %player% = Player name)",
@@ -97,6 +101,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			PLAYER_LEFT_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if a player left?",
 				"Message sent to the Discord management channel, if a player left the server. " +
 					"(Available parameters: %player% = Player name)",
@@ -108,6 +113,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			LINKING_CREATED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if the a linking is created?",
 				"Message sent to the Discord management channel, if a linking is created. " +
 					"(Available parameters: %player% = Player name, %username% = Discord username, " +
@@ -120,6 +126,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			LINKING_REMOVED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if the a linking is removed?",
 				"Message sent to the Discord management channel, if a linking is removed. " +
 					"(Available parameters: %player% = Player name, %username% = Discord username, " +
@@ -132,6 +139,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			WHITELIST_UPDATE_WITH_FORCED_MESSAGE_UPDATE_START_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if the process of updating the " +
 					"whitelist" +
 					" " +
@@ -147,6 +155,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			WHITELIST_UPDATE_WITH_FORCED_MESSAGE_UPDATE_FINISHED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if the process of updating the " +
 					"whitelist" +
 					" " +
@@ -162,6 +171,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			PLAYER_WHITELIST_ADDED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if a player is added to the whitelist, " +
 					"because of a linking?",
 				"Message sent to the Discord management channel, if a player is added to the whitelist, " +
@@ -174,6 +184,7 @@ public class ManagementMessagesConfig extends AbstractSubConfig {
 			PLAYER_WHITELIST_REMOVED_KEY,
 			new MessageConfig(
 				abstractMod,
+				this,
 				"Should a message be sent to the Discord management channel, if a player is removed from the " +
 					"whitelist, because of a linking?",
 				"Message sent to the Discord management channel, if a player is added to the whitelist, " +
