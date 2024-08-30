@@ -42,16 +42,16 @@ dependencies {
     jarJar("org.apache.commons:commons-collections4:[4.1,5)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.core:jackson-core:[${jackson_version},3)") {
+    jarJar("com.fasterxml.jackson.core:jackson-core:[${jackson_version},2.18)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.core:jackson-annotations:[${jackson_version},3)") {
+    jarJar("com.fasterxml.jackson.core:jackson-annotations:[${jackson_version},2.18)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.core:jackson-databind:[${jackson_version},3)") {
+    jarJar("com.fasterxml.jackson.core:jackson-databind:[${jackson_version},2.18)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:[${jackson_version},3)") {
+    jarJar("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:[${jackson_version},2.18)") {
         transitive = false
     }
 

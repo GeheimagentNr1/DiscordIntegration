@@ -61,9 +61,13 @@ public class LinkingsManagementMessageManager extends AbstractDiscordIntegration
 		}
 	}
 	
-	public synchronized void stop() {
+	public void stop() {
 		
-		channel = null;
+		synchronized( DiscordManager.class ) {
+			synchronized( LinkingsManagementMessageManager.class ) {
+				channel = null;
+			}
+		}
 	}
 	
 	private boolean shouldInitialize() {
@@ -230,24 +234,26 @@ public class LinkingsManagementMessageManager extends AbstractDiscordIntegration
 		@NotNull LinkingMessageRequestCounter linkingMessageRequestCounter ) {
 		
 		synchronized( DiscordManager.class ) {
-			if( isInitialized() ) {
-				if( message.getReactionByUnicode( TRUE_EMOJI ) == null ) {
-					linkingMessageRequestCounter.addRequest( "ar_t" );
-					message.addReaction( TRUE_EMOJI ).queue();
+			synchronized( LinkingsManagementMessageManager.class ) {
+				if( isInitialized() ) {
+					if( message.getReactionByUnicode( TRUE_EMOJI ) == null ) {
+						linkingMessageRequestCounter.addRequest( "ar_t" );
+						message.addReaction( TRUE_EMOJI ).queue();
+					}
+					if( message.getReactionByUnicode( FALSE_EMOJI ) == null ) {
+						linkingMessageRequestCounter.addRequest( "ar_f" );
+						message.addReaction( FALSE_EMOJI ).queue();
+					}
+					log.debug(
+						"Run {} request for linking discord user \"{}\" and Minecraft user \"{}\" requests: {}",
+						linkingMessageRequestCounter.getCount(),
+						linkingMessageRequestCounter.getDiscordName(),
+						linkingMessageRequestCounter.getMinecraftName(),
+						linkingMessageRequestCounter.getRequestsString()
+					);
+					
+					messageIdHandler.accept( message.getIdLong() );
 				}
-				if( message.getReactionByUnicode( FALSE_EMOJI ) == null ) {
-					linkingMessageRequestCounter.addRequest( "ar_f" );
-					message.addReaction( FALSE_EMOJI ).queue();
-				}
-				log.debug(
-					"Run {} request for linking discord user \"{}\" and Minecraft user \"{}\" requests: {}",
-					linkingMessageRequestCounter.getCount(),
-					linkingMessageRequestCounter.getDiscordName(),
-					linkingMessageRequestCounter.getMinecraftName(),
-					linkingMessageRequestCounter.getRequestsString()
-				);
-				
-				messageIdHandler.accept( message.getIdLong() );
 			}
 		}
 	}
@@ -275,9 +281,11 @@ public class LinkingsManagementMessageManager extends AbstractDiscordIntegration
 	//package-private
 	void deleteMessage( @NotNull Linking linking ) {
 		
-		if( isInitialized() ) {
+		synchronized( DiscordManager.class ) {
 			synchronized( LinkingsManagementMessageManager.class ) {
-				channel.deleteMessageById( linking.getMessageId() ).complete();
+				if( isInitialized() ) {
+					channel.deleteMessageById( linking.getMessageId() ).complete();
+				}
 			}
 		}
 	}

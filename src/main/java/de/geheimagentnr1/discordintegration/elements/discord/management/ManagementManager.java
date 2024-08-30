@@ -3,6 +3,7 @@ package de.geheimagentnr1.discordintegration.elements.discord.management;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -43,9 +44,14 @@ public class ManagementManager extends AbstractDiscordIntegrationServiceProvider
 		}
 	}
 	
-	public synchronized void stop() {
+	public void stop() {
 		
-		channel = null;
+		
+		synchronized( DiscordManager.class ) {
+			synchronized( ManagementManager.class ) {
+				channel = null;
+			}
+		}
 	}
 	
 	private boolean shouldInitialize() {

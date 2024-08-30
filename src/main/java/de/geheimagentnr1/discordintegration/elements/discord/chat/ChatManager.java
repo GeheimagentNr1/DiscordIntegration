@@ -46,9 +46,13 @@ public class ChatManager extends AbstractDiscordIntegrationServiceProvider {
 		}
 	}
 	
-	public synchronized void stop() {
+	public void stop() {
 		
-		channel = null;
+		synchronized( DiscordManager.class ) {
+			synchronized( ChatManager.class ) {
+				channel = null;
+			}
+		}
 	}
 	
 	private boolean shouldInitialize() {
