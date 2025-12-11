@@ -1,8 +1,8 @@
 package de.geheimagentnr1.discordintegration.config.command_config;
 
 
-import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
-import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
+import de.geheimagentnr1.discordintegration.api.AbstractMod;
+import de.geheimagentnr1.discordintegration.api.config.AbstractSubConfig;
 import org.jetbrains.annotations.NotNull;
 
 

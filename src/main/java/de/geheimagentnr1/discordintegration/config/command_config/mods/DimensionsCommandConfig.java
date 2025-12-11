@@ -1,9 +1,9 @@
 package de.geheimagentnr1.discordintegration.config.command_config.mods;
 
 import de.geheimagentnr1.discordintegration.config.command_config.CommandConfig;
-import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
-import de.geheimagentnr1.minecraft_forge_api.config.AbstractSubConfig;
-import de.geheimagentnr1.minecraft_forge_api.util.VersionHelper;
+import de.geheimagentnr1.discordintegration.api.AbstractMod;
+import de.geheimagentnr1.discordintegration.api.config.AbstractSubConfig;
+import de.geheimagentnr1.discordintegration.api.util.VersionHelper;
 import org.jetbrains.annotations.NotNull;
 
 

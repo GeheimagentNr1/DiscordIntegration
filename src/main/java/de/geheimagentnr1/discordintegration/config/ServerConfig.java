@@ -1,10 +1,10 @@
 package de.geheimagentnr1.discordintegration.config;
 
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
-import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
-import de.geheimagentnr1.minecraft_forge_api.config.AbstractConfig;
+import de.geheimagentnr1.discordintegration.api.AbstractMod;
+import de.geheimagentnr1.discordintegration.api.config.AbstractConfig;
 import lombok.extern.log4j.Log4j2;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.config.ModConfig;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -74,7 +74,11 @@ public class ServerConfig extends AbstractConfig {
 	@Override
 	protected void handleConfigChanging() {
 		
-		discordManager.init();
+		// Re-initialize Discord connection when config is reloaded
+		// Note: Initial init is done in ServerStartedEvent, not here
+		if( discordManager.isInitialized() ) {
+			discordManager.init();
+		}
 	}
 	
 	@NotNull

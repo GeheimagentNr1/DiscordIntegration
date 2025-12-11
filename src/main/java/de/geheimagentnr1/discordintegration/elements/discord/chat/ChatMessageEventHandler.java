@@ -6,18 +6,19 @@ import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordMessageBuilder;
 import de.geheimagentnr1.discordintegration.elements.discord.commands.DiscordCommandHandler;
-import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
+import de.geheimagentnr1.discordintegration.api.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -43,20 +44,26 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 	private final DiscordMessageBuilder discordMessageBuilder;
 	
 	@Override
-	public void onTextChannelDelete( @NotNull TextChannelDeleteEvent event ) {
+	public void onChannelDelete( @NotNull ChannelDeleteEvent event ) {
 		
-		if( chatManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+		if( event.getChannelType() == ChannelType.TEXT &&
+			chatManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			chatManager.init();
 		}
 	}
 	
 	@Override
-	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
+	public void onMessageReceived( @NotNull MessageReceivedEvent event ) {
+		
+		if( !event.isFromGuild() || event.getChannelType() != ChannelType.TEXT ) {
+			return;
+		}
 		
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		User author = event.getAuthor();
 		
 		if( server == null ||
+			!serverConfig.isLoaded() ||
 			!chatManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
 			author.getIdLong() == discordManager.getSelfUser().getIdLong() ) {
 			return;

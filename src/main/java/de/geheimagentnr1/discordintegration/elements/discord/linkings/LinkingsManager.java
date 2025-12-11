@@ -9,7 +9,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linking;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.Linkings;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.models.MinecraftGameProfile;
-import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
+import de.geheimagentnr1.discordintegration.api.util.MessageUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

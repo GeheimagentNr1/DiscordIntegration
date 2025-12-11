@@ -5,20 +5,19 @@ import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordMessageBuilder;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
-import de.geheimagentnr1.minecraft_forge_api.events.ForgeEventHandlerInterface;
-import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
+import de.geheimagentnr1.discordintegration.api.events.ForgeEventHandlerInterface;
+import de.geheimagentnr1.discordintegration.api.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.AdvancementEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -43,10 +42,11 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 	@NotNull
 	private final DiscordMessageBuilder discordMessageBuilder;
 	
-	@SubscribeEvent
 	@Override
 	public void handleServerStartedEvent( @NotNull ServerStartedEvent event ) {
 		
+		// Initialize Discord connection when server starts (config values are now accessible)
+		discordManager.init();
 		if( serverConfig.getChatConfig().getChatMessagesConfig().getServerStarted().isEnabled() ) {
 			chatManager.sendMessage(
 				serverConfig.getChatConfig().getChatMessagesConfig().getServerStarted().getMessage()
@@ -60,7 +60,6 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 		discordManager.setServerStarted();
 	}
 	
-	@SubscribeEvent
 	@Override
 	public void handleServerStoppedEvent( @NotNull ServerStoppedEvent event ) {
 		
@@ -90,7 +89,6 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 		discordManager.stop();
 	}
 	
-	@SubscribeEvent
 	@Override
 	public void handlePlayerLoggedInEvent( @NotNull PlayerEvent.PlayerLoggedInEvent event ) {
 		
@@ -117,7 +115,6 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 		discordManager.updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() );
 	}
 	
-	@SubscribeEvent
 	@Override
 	public void handlePlayerLoggedOutEvent( @NotNull PlayerEvent.PlayerLoggedOutEvent event ) {
 		
@@ -144,7 +141,6 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 		discordManager.updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() - 1 );
 	}
 	
-	@SubscribeEvent
 	@Override
 	public void handleServerChatEvent( @NotNull ServerChatEvent event ) {
 		
@@ -153,7 +149,6 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 		}
 	}
 	
-	@SubscribeEvent
 	@Override
 	public void handleLivingDeathEvent( @NotNull LivingDeathEvent event ) {
 		
@@ -190,7 +185,6 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 		}
 	}
 	
-	@SubscribeEvent
 	@Override
 	public void handleAdvancementEarnEvent( @NotNull AdvancementEvent.AdvancementEarnEvent event ) {
 		

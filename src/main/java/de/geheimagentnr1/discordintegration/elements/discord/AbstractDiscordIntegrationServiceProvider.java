@@ -10,7 +10,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsMa
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.WhitelistManager;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementManager;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.config.ModConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

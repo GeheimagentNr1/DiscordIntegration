@@ -4,7 +4,7 @@ import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatMessageEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementMessageEventHandler;
-import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
+import de.geheimagentnr1.discordintegration.api.util.MessageUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,10 +46,10 @@ public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 	private static final List<GatewayIntent> INTENTS = List.of(
 		GatewayIntent.GUILD_MESSAGES,
 		GatewayIntent.GUILD_MEMBERS,
-		GatewayIntent.GUILD_MESSAGE_REACTIONS
+		GatewayIntent.GUILD_MESSAGE_REACTIONS,
+		GatewayIntent.MESSAGE_CONTENT
 	);
 	
-	@SuppressWarnings( "AccessToStaticFieldLockedOnInstance" )
 	public void init() {
 		
 		synchronized( DiscordManager.class ) {

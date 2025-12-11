@@ -4,8 +4,8 @@ import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
-import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandInterface;
-import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandsRegisterFactory;
+import de.geheimagentnr1.discordintegration.api.elements.commands.CommandInterface;
+import de.geheimagentnr1.discordintegration.api.elements.commands.CommandsRegisterFactory;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
