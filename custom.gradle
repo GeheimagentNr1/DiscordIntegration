@@ -50,16 +50,16 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
-    jarJar("com.fasterxml.jackson.core:jackson-core:[${jackson_version},4)") {
+    jarJar("com.fasterxml.jackson.core:jackson-core:[${jackson_version},3)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.core:jackson-annotations:[${jackson_version},4)") {
+    jarJar("com.fasterxml.jackson.core:jackson-annotations:[${jackson_version},3)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.core:jackson-databind:[${jackson_version},4)") {
+    jarJar("com.fasterxml.jackson.core:jackson-databind:[${jackson_version},3)") {
         transitive = false
     }
-    jarJar("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:[${jackson_version},4)") {
+    jarJar("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:[${jackson_version},3)") {
         transitive = false
     }
 
