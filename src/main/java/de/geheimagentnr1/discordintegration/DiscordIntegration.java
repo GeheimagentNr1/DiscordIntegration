@@ -16,11 +16,9 @@ import de.geheimagentnr1.discordintegration.elements.discord.management.Manageme
 import de.geheimagentnr1.discordintegration.handlers.DiscordMessageHandler;
 import de.geheimagentnr1.discordintegration.api.AbstractMod;
 import lombok.Getter;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -75,50 +73,47 @@ public class DiscordIntegration extends AbstractMod {
 		
 		PatchUtilClassLoadFixer.fixPatchUtilClassLoading();
 		
-		if( FMLEnvironment.dist == Dist.DEDICATED_SERVER ) {
-			
-			// Discord
-			discordManager = new DiscordManager( this );
-			
-			ServerConfig serverConfig = registerConfig(
-				abstractMod -> new ServerConfig( abstractMod, discordManager )
-			);
-			
-			// Discord: Chat
-			chatManager = new ChatManager( this );
-			
-			// Discord: Commands
-			discordCommandHandler = new DiscordCommandHandler( this );
-			
-			// Discord: Linkings
-			linkingsFileManager = new LinkingsFileManager();
-			linkingsManagementMessageManager = new LinkingsManagementMessageManager( this );
-			linkingsManager = new LinkingsManager( this );
-			whitelistManager = new WhitelistManager( this );
-			
-			// Discord: Management
-			managementManager = new ManagementManager( this );
-			
-			// Discord
-			discordMessageBuilder = new DiscordMessageBuilder( serverConfig );
-			discordMessageSender = new DiscordMessageSender();
-			
-			// Commands
-			registerEventHandler( new ModCommandsRegisterFactory(
-				serverConfig,
-				discordManager,
-				chatManager,
-				linkingsManager
-			) );
-			
-			// Handels
-			registerEventHandler( new DiscordMessageHandler(
-				serverConfig,
-				discordManager,
-				chatManager,
-				managementManager,
-				discordMessageBuilder
-			) );
-		}
+		// Discord
+		discordManager = new DiscordManager( this );
+
+		ServerConfig serverConfig = registerConfig(
+			abstractMod -> new ServerConfig( abstractMod, discordManager )
+		);
+
+		// Discord: Chat
+		chatManager = new ChatManager( this );
+
+		// Discord: Commands
+		discordCommandHandler = new DiscordCommandHandler( this );
+
+		// Discord: Linkings
+		linkingsFileManager = new LinkingsFileManager();
+		linkingsManagementMessageManager = new LinkingsManagementMessageManager( this );
+		linkingsManager = new LinkingsManager( this );
+		whitelistManager = new WhitelistManager( this );
+
+		// Discord: Management
+		managementManager = new ManagementManager( this );
+
+		// Discord
+		discordMessageBuilder = new DiscordMessageBuilder( serverConfig );
+		discordMessageSender = new DiscordMessageSender();
+
+		// Commands
+		registerEventHandler( new ModCommandsRegisterFactory(
+			serverConfig,
+			discordManager,
+			chatManager,
+			linkingsManager
+		) );
+
+		// Handels
+		registerEventHandler( new DiscordMessageHandler(
+			serverConfig,
+			discordManager,
+			chatManager,
+			managementManager,
+			discordMessageBuilder
+		) );
 	}
 }
