@@ -1,1 +1,1 @@
-Ported to NeoForge for Minecraft version 1.21.1 
+﻿Prepared compatibility for minecraft version 1.21.2+
