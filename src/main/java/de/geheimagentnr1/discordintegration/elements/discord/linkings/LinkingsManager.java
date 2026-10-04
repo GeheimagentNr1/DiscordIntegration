@@ -2,7 +2,6 @@ package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 
 import com.mantledillusion.essentials.json.patch.PatchUtil;
 import com.mantledillusion.essentials.json.patch.model.Patch;
-import com.mojang.authlib.GameProfile;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
@@ -16,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.minecraft.server.players.NameAndId;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -279,7 +279,7 @@ public class LinkingsManager extends AbstractDiscordIntegrationServiceProvider {
 	
 	public void createLinking(
 		@NotNull Member member,
-		@NotNull GameProfile gameProfile,
+		@NotNull NameAndId nameAndId,
 		@NotNull Consumer<Boolean> successHandler,
 		@NotNull Runnable whitelistDisabledErrorHandler,
 		@NotNull Consumer<Throwable> errorHandler ) throws IOException {
@@ -293,7 +293,7 @@ public class LinkingsManager extends AbstractDiscordIntegrationServiceProvider {
 						.discordNickname( member.getEffectiveName() )
 						.hasRole( hasCorrectRole( member ) )
 						.active( !serverConfig().getWhitelistConfig().useSingleLinkingManagement() )
-						.minecraftGameProfile( new MinecraftGameProfile( gameProfile ) )
+						.minecraftGameProfile( new MinecraftGameProfile( nameAndId ) )
 						.build();
 					
 					Linkings linkings = linkingsFileManager().load();
@@ -304,7 +304,7 @@ public class LinkingsManager extends AbstractDiscordIntegrationServiceProvider {
 						PatchUtil.Snapshot snapshot = PatchUtil.take( foundLinking );
 						foundLinking.setDiscordUsername( discordManager().getMemberAsTag( member ) );
 						foundLinking.setDiscordNickname( member.getEffectiveName() );
-						foundLinking.getMinecraftGameProfile().setName( gameProfile.getName() );
+						foundLinking.getMinecraftGameProfile().setName( nameAndId.name() );
 						boolean hasChanged = !snapshot.peek().isEmpty();
 						linkingsManagementMessageManager().sendOrEditMessage(
 							member,
@@ -347,7 +347,7 @@ public class LinkingsManager extends AbstractDiscordIntegrationServiceProvider {
 	
 	public void removeLinking(
 		@NotNull Member member,
-		@NotNull GameProfile gameProfile,
+		@NotNull NameAndId nameAndId,
 		@NotNull Runnable successHandler,
 		@NotNull Runnable whitelistDisabledErrorHandler,
 		@NotNull Consumer<Throwable> errorHandler )
@@ -361,7 +361,7 @@ public class LinkingsManager extends AbstractDiscordIntegrationServiceProvider {
 					Optional<Linking> foundLinking = linkings.findLinking(
 						Linking.builder()
 							.discordMemberId( member.getIdLong() )
-							.minecraftGameProfile( new MinecraftGameProfile( gameProfile ) )
+							.minecraftGameProfile( new MinecraftGameProfile( nameAndId ) )
 							.build()
 					);
 					if( foundLinking.isPresent() ) {

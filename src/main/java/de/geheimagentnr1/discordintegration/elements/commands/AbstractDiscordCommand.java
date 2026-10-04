@@ -1,6 +1,5 @@
 package de.geheimagentnr1.discordintegration.elements.commands;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -16,6 +15,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.players.NameAndId;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -44,12 +44,12 @@ public abstract class AbstractDiscordCommand implements CommandInterface {
 		@NotNull CommandContext<CommandSourceStack> context )
 		throws CommandSyntaxException {
 		
-		GameProfile gameProfile = getGameProfileFromArgument( context );
+		NameAndId nameAndId = getNameAndIdFromArgument( context );
 		
 		try {
 			linkingsManager.createLinking(
 				member,
-				gameProfile,
+				nameAndId,
 				successful -> {
 					if( successful ) {
 						source.sendSuccess(
@@ -60,7 +60,7 @@ public abstract class AbstractDiscordCommand implements CommandInterface {
 								Map.of(
 									"username", discordManager.getMemberAsTag( member ),
 									"nickname", member.getEffectiveName(),
-									"player", gameProfile.getName()
+									"player", nameAndId.name()
 								)
 							) ),
 							true
@@ -74,7 +74,7 @@ public abstract class AbstractDiscordCommand implements CommandInterface {
 								Map.of(
 									"username", discordManager.getMemberAsTag( member ),
 									"nickname", member.getEffectiveName(),
-									"player", gameProfile.getName()
+									"player", nameAndId.name()
 								)
 							) )
 						);
@@ -97,14 +97,14 @@ public abstract class AbstractDiscordCommand implements CommandInterface {
 	}
 	
 	@NotNull
-	private GameProfile getGameProfileFromArgument( @NotNull CommandContext<CommandSourceStack> context )
+	private NameAndId getNameAndIdFromArgument( @NotNull CommandContext<CommandSourceStack> context )
 		throws CommandSyntaxException {
 		
-		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( context, "player" );
-		if( gameProfiles.size() != 1 ) {
+		Collection<NameAndId> nameAndIds = GameProfileArgument.getGameProfiles( context, "player" );
+		if( nameAndIds.size() != 1 ) {
 			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
 		}
-		return gameProfiles.stream()
+		return nameAndIds.stream()
 			.findFirst()
 			.orElseThrow( GameProfileArgument.ERROR_UNKNOWN_PLAYER::create );
 	}
@@ -115,12 +115,12 @@ public abstract class AbstractDiscordCommand implements CommandInterface {
 		@NotNull CommandContext<CommandSourceStack> context )
 		throws CommandSyntaxException {
 		
-		GameProfile gameProfile = getGameProfileFromArgument( context );
+		NameAndId nameAndId = getNameAndIdFromArgument( context );
 		
 		try {
 			linkingsManager.removeLinking(
 				member,
-				gameProfile,
+				nameAndId,
 				() -> source.sendSuccess(
 					() -> Component.literal( MessageUtil.replaceParameters(
 						serverConfig.getCommandSettingsConfig()
@@ -129,7 +129,7 @@ public abstract class AbstractDiscordCommand implements CommandInterface {
 						Map.of(
 							"username", discordManager.getMemberAsTag( member ),
 							"nickname", member.getEffectiveName(),
-							"player", gameProfile.getName()
+							"player", nameAndId.name()
 						)
 					) ),
 					true
