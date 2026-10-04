@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -105,6 +106,17 @@ public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 		synchronized( DiscordManager.class ) {
 			if( isInitialized() ) {
 				jda.shutdown();
+				// Wait for JDA: NeoForge 21.9+ closes the mod class loader after the server stopped, a JDA thread that
+				// is still shutting down then fails to load its classes and keeps the JVM alive.
+				try {
+					if( !jda.awaitShutdown( Duration.ofSeconds( 10 ) ) ) {
+						jda.shutdownNow();
+						jda.awaitShutdown( Duration.ofSeconds( 5 ) );
+					}
+				} catch( InterruptedException exception ) {
+					Thread.currentThread().interrupt();
+					log.error( "Interrupted while waiting for Discord to shut down", exception );
+				}
 				jda = null;
 				guild = null;
 				chatManager().stop();
