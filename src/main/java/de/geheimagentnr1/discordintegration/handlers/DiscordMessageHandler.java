@@ -169,7 +169,7 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 				);
 			}
 		} else {
-			if( entity instanceof TamableAnimal && ( (TamableAnimal)entity ).getOwnerUUID() != null ) {
+			if( entity instanceof TamableAnimal && ( (TamableAnimal)entity ).isTame() ) {
 				if( serverConfig.getChatConfig().getChatMessagesConfig().getTamedMobDied().isEnabled() ) {
 					chatManager.sendMessage(
 						MessageUtil.replaceParameters(

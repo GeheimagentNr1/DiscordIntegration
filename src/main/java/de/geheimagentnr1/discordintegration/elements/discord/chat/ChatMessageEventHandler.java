@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord.chat;
 
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
@@ -122,13 +123,15 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 			);
 			if( serverConfig.getChatConfig().useRawMessageFormatDiscordToMinecraft() ) {
 				try {
+					// Called via the brigadier interface: ComponentArgument.parse has a different signature since 1.21.5
+					ArgumentType<Component> componentArgument = ComponentArgument.textComponent(
+						CommandBuildContext.simple(
+							server.registryAccess(),
+							server.getWorldData().enabledFeatures()
+						)
+					);
 					server.getPlayerList().broadcastSystemMessage(
-						ComponentArgument.textComponent(
-							CommandBuildContext.simple(
-								server.registryAccess(),
-								server.getWorldData().enabledFeatures()
-							)
-						).parse( new StringReader( buildMessage ) ),
+						componentArgument.parse( new StringReader( buildMessage ) ),
 						false
 					);
 				} catch( CommandSyntaxException exception ) {

@@ -100,7 +100,7 @@ class DiscordCommand extends AbstractDiscordCommand {
 	private int showGamerules( @NotNull CommandContext<CommandSourceStack> context ) {
 		
 		CommandSourceStack source = context.getSource();
-		GameRules.visitGameRuleTypes( new GameRules.GameRuleTypeVisitor() {
+		source.getServer().getGameRules().visitGameRuleTypes( new GameRules.GameRuleTypeVisitor() {
 			
 			@Override
 			public <T extends GameRules.Value<T>> void visit(
