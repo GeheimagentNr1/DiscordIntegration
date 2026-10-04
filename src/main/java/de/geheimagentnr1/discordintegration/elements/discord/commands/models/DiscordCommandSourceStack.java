@@ -38,10 +38,8 @@ public class DiscordCommandSourceStack extends CommandSourceStack {
 			Vec2.ZERO,
 			Objects.requireNonNull( server.overworld() ),
 			LevelBasedPermissionSet.forLevel( PermissionLevel.byId( permissionLevel ) ),
-			discordIntegration.getModName(),
 			Component.literal( discordIntegration.getModName() ),
-			server,
-			null
+			server
 		);
 		discordCommandSource = _discordCommandSource;
 		member = _member;

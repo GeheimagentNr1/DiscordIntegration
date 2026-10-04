@@ -189,15 +189,15 @@ public class DiscordMessageHandler implements ForgeEventHandlerInterface {
 	public void handleAdvancementEarnEvent( @NotNull AdvancementEvent.AdvancementEarnEvent event ) {
 		
 		event.getAdvancement().value().display().ifPresent( displayInfo -> {
-			if( displayInfo.shouldAnnounceChat() &&
+			if( displayInfo.announceToChat() &&
 				serverConfig.getChatConfig().getChatMessagesConfig().getPlayerGotAdvancement().isEnabled() ) {
 				chatManager.sendMessage(
 					MessageUtil.replaceParameters(
 						serverConfig.getChatConfig().getChatMessagesConfig().getPlayerGotAdvancement().getMessage(),
 						Map.of(
 							"player", discordMessageBuilder.getEntityName( event.getEntity() ),
-							"advancement_title", displayInfo.getTitle().getString(),
-							"advancement_description", displayInfo.getDescription().getString(),
+							"advancement_title", displayInfo.title().getString(),
+							"advancement_description", displayInfo.description().getString(),
 							"new_line", System.lineSeparator()
 						)
 					)
