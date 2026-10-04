@@ -8,9 +8,7 @@ repositories {
 
 dependencies {
     // json-patch-essentials and its transitive dependency
-    implementation("com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}") {
-        exclude group: 'com.fasterxml.jackson.core'
-    }
+    implementation "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
     jarJar("com.mantledillusion.essentials:json-patch-essentials:[${json_patch_essentials_version},2)") {
         transitive = false
     }
@@ -47,13 +45,21 @@ dependencies {
         transitive = false
     }
 
-    // Jackson core/annotations/databind — provided by Minecraft 1.21.2 at runtime (win_args.txt), no JarInJar
-    compileOnly "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
-    compileOnly "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
-    compileOnly "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
-    // jackson-datatype-jsr310 is NOT provided by Minecraft — must bundle; pinned to match MC's jackson-databind 2.13.4
+    // Jackson
+    implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
-    jarJar("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:[${jackson_version},2.14)") {
+    jarJar("com.fasterxml.jackson.core:jackson-core:[${jackson_version},3)") {
+        transitive = false
+    }
+    jarJar("com.fasterxml.jackson.core:jackson-annotations:[${jackson_version},3)") {
+        transitive = false
+    }
+    jarJar("com.fasterxml.jackson.core:jackson-databind:[${jackson_version},3)") {
+        transitive = false
+    }
+    jarJar("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:[${jackson_version},3)") {
         transitive = false
     }
 

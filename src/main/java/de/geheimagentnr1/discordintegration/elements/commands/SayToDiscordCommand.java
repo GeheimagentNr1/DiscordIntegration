@@ -27,7 +27,7 @@ public class SayToDiscordCommand implements CommandInterface {
 	public LiteralArgumentBuilder<CommandSourceStack> build() {
 		
 		LiteralArgumentBuilder<CommandSourceStack> sayCommand = Commands.literal( "say" )
-			.requires( source -> source.hasPermission( 2 ) );
+			.requires( Commands.hasPermission( Commands.LEVEL_GAMEMASTERS ) );
 		sayCommand.then( Commands.argument( "message", MessageArgument.message() )
 			.executes( this::sendSayMessage ) );
 		return sayCommand;

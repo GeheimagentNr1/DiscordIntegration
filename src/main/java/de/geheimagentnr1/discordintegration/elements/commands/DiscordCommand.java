@@ -16,7 +16,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.gamerules.GameRuleTypeVisitor;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforgespi.language.IModInfo;
 import org.jetbrains.annotations.NotNull;
@@ -100,18 +102,17 @@ class DiscordCommand extends AbstractDiscordCommand {
 	private int showGamerules( @NotNull CommandContext<CommandSourceStack> context ) {
 		
 		CommandSourceStack source = context.getSource();
-		source.getServer().getGameRules().visitGameRuleTypes( new GameRules.GameRuleTypeVisitor() {
+		GameRules gameRules = source.getLevel().getGameRules();
+		gameRules.visitGameRuleTypes( new GameRuleTypeVisitor() {
 			
 			@Override
-			public <T extends GameRules.Value<T>> void visit(
-				@NotNull GameRules.Key<T> key,
-				@NotNull GameRules.Type<T> type ) {
+			public <T> void visit( @NotNull GameRule<T> gameRule ) {
 				
 				source.sendSuccess(
 					() -> Component.translatable(
 						"commands.gamerule.query",
-						key.getId(),
-						source.getServer().getGameRules().getRule( key )
+						gameRule.id(),
+						gameRules.getAsString( gameRule )
 					),
 					false
 				);

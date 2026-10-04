@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +37,7 @@ public class DiscordCommandSourceStack extends CommandSourceStack {
 			Vec3.ZERO,
 			Vec2.ZERO,
 			Objects.requireNonNull( server.overworld() ),
-			permissionLevel,
+			LevelBasedPermissionSet.forLevel( PermissionLevel.byId( permissionLevel ) ),
 			discordIntegration.getModName(),
 			Component.literal( discordIntegration.getModName() ),
 			server,

@@ -34,7 +34,7 @@ class DiscordOpCommand extends AbstractDiscordCommand {
 	public LiteralArgumentBuilder<CommandSourceStack> build() {
 		
 		LiteralArgumentBuilder<CommandSourceStack> opDiscord = Commands.literal( "discord" )
-			.requires( commandSourceStack -> commandSourceStack.hasPermission( 3 ) );
+			.requires( Commands.hasPermission( Commands.LEVEL_ADMINS ) );
 		opDiscord
 			.then( Commands.literal( "linkings" )
 				.then( Commands.literal( "link" )
