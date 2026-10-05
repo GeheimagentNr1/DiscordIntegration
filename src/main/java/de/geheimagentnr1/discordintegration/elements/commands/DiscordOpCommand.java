@@ -40,10 +40,16 @@ class DiscordOpCommand extends AbstractDiscordCommand {
 				.then( Commands.literal( "link" )
 					.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
 						.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+							// Brigadier merges this tree into the /discord node of DiscordCommand and drops the requirement of
+							// the merged literal, so the arguments that only exist here check the permission themselves
+							.requires( Commands.hasPermission( Commands.LEVEL_ADMINS ) )
 							.executes( this::linkMinecraft ) ) ) )
 				.then( Commands.literal( "unlink" )
 					.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
 						.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+							// Brigadier merges this tree into the /discord node of DiscordCommand and drops the requirement of
+							// the merged literal, so the arguments that only exist here check the permission themselves
+							.requires( Commands.hasPermission( Commands.LEVEL_ADMINS ) )
 							.executes( this::unlinkMinecraft ) ) ) ) );
 		
 		return opDiscord;
