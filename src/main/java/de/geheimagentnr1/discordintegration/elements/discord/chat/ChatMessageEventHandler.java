@@ -97,8 +97,9 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 	
 	private void handleBotMessage( @NotNull String message, @NotNull MinecraftServer server ) {
 		
+		// Other bots' messages are transmitted, the feedback messages of this mod's own commands are not
 		if( serverConfig.getChatConfig().transmitBotMessages() &&
-			discordMessageBuilder.isMessageBotFeedback( message ) ) {
+			!discordMessageBuilder.isMessageBotFeedback( message ) ) {
 			server.getPlayerList().broadcastSystemMessage(
 				Component.literal( message ),
 				false
