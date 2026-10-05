@@ -27,15 +27,6 @@ public class TimeCommandConfig extends CommandConfig {
 		return "time query day";
 	}
 	
-	// "time query daytime" was the default before Minecraft 26.1 and no longer exists there (world clocks).
-	@NotNull
-	@Override
-	public String getMinecraftCommand() {
-		
-		String minecraftCommand = super.getMinecraftCommand();
-		return minecraftCommand.equals( "time query daytime" ) ? minecraftCommandDefaultValue() : minecraftCommand;
-	}
-	
 	@NotNull
 	@Override
 	protected String descriptionDefaultValue() {

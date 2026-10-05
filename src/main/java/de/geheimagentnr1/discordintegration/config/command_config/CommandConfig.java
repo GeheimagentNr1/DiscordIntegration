@@ -118,7 +118,10 @@ public class CommandConfig extends AbstractListEntryConfig {
 	@NotNull
 	public String getMinecraftCommand() {
 		
-		return getValue( String.class, MINECRAFT_COMMAND_KEY );
+		String minecraftCommand = getValue( String.class, MINECRAFT_COMMAND_KEY );
+		// "time query daytime" was the default of the time command before Minecraft 26.1 and no longer exists there
+		// (world clocks). Loaded configs are plain CommandConfig instances, so the old value is translated here.
+		return minecraftCommand.equals( "time query daytime" ) ? "time query day" : minecraftCommand;
 	}
 	
 	public boolean useParameters() {
