@@ -45,6 +45,8 @@ jobs:
           sparse-checkout: |
             de/geheimagentnr1/manyideas_core
             de/geheimagentnr1/recipes_lib
+            de/geheimagentnr1/dimension_access_manager
+            de/geheimagentnr1/moremobgriefingoptions
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
