@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
+import de.geheimagentnr1.discordintegration.config.WhitelistConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatMessageEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementMessageEventHandler;
@@ -85,6 +86,7 @@ public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 						);
 						stop();
 					} else {
+						checkLinkingManagementRole();
 						chatManager().init();
 						managementManager().init();
 						linkingsManagementMessageManager().init();
@@ -97,6 +99,34 @@ public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 					log.error( "Login to Discord failed", exception );
 				}
 			}
+		}
+	}
+	
+	private void checkLinkingManagementRole() {
+		
+		WhitelistConfig whitelistConfig = serverConfig().getWhitelistConfig();
+		
+		if( !whitelistConfig.isEnabled() || !whitelistConfig.useSingleLinkingManagement() ) {
+			return;
+		}
+		long roleId = whitelistConfig.getSingleLinkingManagementRoleId();
+		
+		if( roleId == guild.getIdLong() ) {
+			log.warn(
+				"whitelist.single_linking_management_role_id is the @everyone role: " +
+					"every member of the Discord server can activate or deactivate all linkings"
+			);
+		} else if( whitelistConfig.useRole() && roleId == whitelistConfig.getRoleId() ) {
+			log.warn(
+				"whitelist.single_linking_management_role_id is the same role as whitelist.role_id: " +
+					"every member, who can be whitelisted, can activate or deactivate all linkings"
+			);
+		} else if( guild.getRoleById( roleId ) == null ) {
+			log.warn(
+				"whitelist.single_linking_management_role_id {} is no role of the Discord server: " +
+					"nobody can activate or deactivate linkings",
+				roleId
+			);
 		}
 	}
 	
