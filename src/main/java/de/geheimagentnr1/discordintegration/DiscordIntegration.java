@@ -16,6 +16,7 @@ import de.geheimagentnr1.discordintegration.elements.discord.management.Manageme
 import de.geheimagentnr1.discordintegration.handlers.DiscordMessageHandler;
 import de.geheimagentnr1.discordintegration.api.AbstractMod;
 import lombok.Getter;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 @Getter
-@Mod( DiscordIntegration.MODID )
+@Mod( value = DiscordIntegration.MODID, dist = Dist.DEDICATED_SERVER )
 public class DiscordIntegration extends AbstractMod {
 	
 	
