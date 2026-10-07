@@ -1,1 +1,2 @@
 ﻿Make "/discord linkings" only available for admins (permission level 3) in game: players can no longer see or use it in game, "/discord linkings link|unlink <player>" without a Discord ID still works for commands sent from Discord
+Fix Discord users being able to inject own text component elements (for example click events running commands) into the Minecraft chat, if chat.use_raw_message_format_discord_to_minecraft is enabled
