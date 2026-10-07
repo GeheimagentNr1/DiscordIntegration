@@ -34,7 +34,6 @@ public class ModCommandsRegisterFactory extends CommandsRegisterFactory {
 		
 		return List.of(
 			new DiscordCommand( serverConfig, discordManager, linkingsManager ),
-			new DiscordOpCommand( serverConfig, discordManager, linkingsManager ),
 			new EmoteToDiscordCommand( chatManager ),
 			new SayToDiscordCommand( chatManager )
 		);
