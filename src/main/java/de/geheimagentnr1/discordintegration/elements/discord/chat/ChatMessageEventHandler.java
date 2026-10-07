@@ -9,8 +9,9 @@ import de.geheimagentnr1.discordintegration.elements.discord.commands.DiscordCom
 import de.geheimagentnr1.discordintegration.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.network.chat.Component;
@@ -26,16 +27,22 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 	
 	
 	@Override
-	public void onTextChannelDelete( @Nonnull TextChannelDeleteEvent event ) {
+	public void onChannelDelete( @Nonnull ChannelDeleteEvent event ) {
 		
+		if( event.getChannelType() != ChannelType.TEXT ) {
+			return;
+		}
 		if( ChatManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			ChatManager.init();
 		}
 	}
 	
 	@Override
-	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
+	public void onMessageReceived( @NotNull MessageReceivedEvent event ) {
 		
+		if( !event.isFromGuild() || event.getChannelType() != ChannelType.TEXT ) {
+			return;
+		}
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		User author = event.getAuthor();
 		
@@ -73,7 +80,7 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 	private void handleBotMessage( String message, MinecraftServer server ) {
 		
 		if( ServerConfig.CHAT_CONFIG.transmitBotMessages() &&
-			DiscordMessageBuilder.isMessageBotFeedback( message ) ) {
+			!DiscordMessageBuilder.isMessageBotFeedback( message ) ) {
 			server.getPlayerList().broadcastSystemMessage(
 				Component.literal( message ),
 				false
