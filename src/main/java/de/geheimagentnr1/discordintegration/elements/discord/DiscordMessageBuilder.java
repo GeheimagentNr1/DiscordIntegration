@@ -31,7 +31,7 @@ public class DiscordMessageBuilder {
 	
 	public boolean isMessageBotFeedback( @NotNull String message ) {
 		
-		return message.startsWith( FEEDBACK_START ) || message.endsWith( FEEDBACK_END );
+		return message.startsWith( FEEDBACK_START ) && message.endsWith( FEEDBACK_END );
 	}
 	
 	@NotNull

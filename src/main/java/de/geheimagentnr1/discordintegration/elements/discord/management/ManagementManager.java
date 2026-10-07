@@ -3,12 +3,13 @@ package de.geheimagentnr1.discordintegration.elements.discord.management;
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
 import de.geheimagentnr1.discordintegration.elements.discord.AbstractDiscordIntegrationServiceProvider;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
+import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,9 +44,14 @@ public class ManagementManager extends AbstractDiscordIntegrationServiceProvider
 		}
 	}
 	
-	public synchronized void stop() {
+	public void stop() {
 		
-		channel = null;
+		
+		synchronized( DiscordManager.class ) {
+			synchronized( ManagementManager.class ) {
+				channel = null;
+			}
+		}
 	}
 	
 	private boolean shouldInitialize() {
