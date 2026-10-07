@@ -3,8 +3,9 @@ package de.geheimagentnr1.discordintegration.net;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordEventHandler;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraft.command.CommandSource;
@@ -15,8 +16,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.security.auth.login.LoginException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -33,7 +33,7 @@ public class DiscordNet {
 	
 	private static TextChannel channel;
 	
-	private static final List<GatewayIntent> INTENTS = Collections.singletonList( GatewayIntent.GUILD_MESSAGES );
+	private static final List<GatewayIntent> INTENTS = Arrays.asList( GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT );
 	
 	public static synchronized void init() {
 		
@@ -49,7 +49,7 @@ public class DiscordNet {
 				if( channel == null ) {
 					LOGGER.error( "Discord Text Channel {} not found", ServerConfig.getChannelId() );
 				}
-			} catch( LoginException | InterruptedException exception ) {
+			} catch( InvalidTokenException | InterruptedException exception ) {
 				LOGGER.error( "Login to Discord failed", exception );
 			}
 		}
