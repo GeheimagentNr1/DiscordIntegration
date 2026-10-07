@@ -14,7 +14,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -236,13 +237,13 @@ public class LinkingsManagementMessageManager extends AbstractDiscordIntegration
 		synchronized( DiscordManager.class ) {
 			synchronized( LinkingsManagementMessageManager.class ) {
 				if( isInitialized() ) {
-					if( message.getReactionByUnicode( TRUE_EMOJI ) == null ) {
+					if( message.getReaction( Emoji.fromUnicode( TRUE_EMOJI ) ) == null ) {
 						linkingMessageRequestCounter.addRequest( "ar_t" );
-						message.addReaction( TRUE_EMOJI ).queue();
+						message.addReaction( Emoji.fromUnicode( TRUE_EMOJI ) ).queue();
 					}
-					if( message.getReactionByUnicode( FALSE_EMOJI ) == null ) {
+					if( message.getReaction( Emoji.fromUnicode( FALSE_EMOJI ) ) == null ) {
 						linkingMessageRequestCounter.addRequest( "ar_f" );
-						message.addReaction( FALSE_EMOJI ).queue();
+						message.addReaction( Emoji.fromUnicode( FALSE_EMOJI ) ).queue();
 					}
 					log.debug(
 						"Run {} request for linking discord user \"{}\" and Minecraft user \"{}\" requests: {}",
