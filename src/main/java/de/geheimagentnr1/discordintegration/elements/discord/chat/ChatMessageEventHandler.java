@@ -10,8 +10,9 @@ import de.geheimagentnr1.minecraft_forge_api.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.network.chat.Component;
@@ -42,15 +43,20 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 	private final DiscordMessageBuilder discordMessageBuilder;
 	
 	@Override
-	public void onTextChannelDelete( @NotNull TextChannelDeleteEvent event ) {
+	public void onChannelDelete( @NotNull ChannelDeleteEvent event ) {
 		
-		if( chatManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
+		if( event.getChannelType() == ChannelType.TEXT &&
+			chatManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			chatManager.init();
 		}
 	}
 	
 	@Override
-	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
+	public void onMessageReceived( @NotNull MessageReceivedEvent event ) {
+		
+		if( !event.isFromGuild() || event.getChannelType() != ChannelType.TEXT ) {
+			return;
+		}
 		
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		User author = event.getAuthor();
@@ -88,8 +94,9 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 	
 	private void handleBotMessage( @NotNull String message, @NotNull MinecraftServer server ) {
 		
+		// Other bots' messages are transmitted, the feedback messages of this mod's own commands are not
 		if( serverConfig.getChatConfig().transmitBotMessages() &&
-			discordMessageBuilder.isMessageBotFeedback( message ) ) {
+			!discordMessageBuilder.isMessageBotFeedback( message ) ) {
 			server.getPlayerList().broadcastSystemMessage(
 				Component.literal( message ),
 				false
@@ -121,7 +128,8 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 				} catch( CommandSyntaxException exception ) {
 					chatManager.sendFeedbackMessage(
 						MessageUtil.replaceParameters(
-							serverConfig.getChatConfig().getInvalidRawMessageFormatForDiscordToMinecraftErrorMessage(),
+							serverConfig.getChatConfig()
+								.getInvalidRawMessageFormatForDiscordToMinecraftErrorMessage(),
 							Map.of(
 								"username", discordManager.getMemberAsTag( member ),
 								"nickname", member.getEffectiveName(),

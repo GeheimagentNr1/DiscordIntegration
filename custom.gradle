@@ -1,10 +1,3 @@
-repositories {
-    maven {
-        name 'm2-dv8tion'
-        url 'https://m2.dv8tion.net/releases'
-    }
-}
-
 dependencies {
     minecraftLibrary "com.mantledillusion.essentials:json-patch-essentials:${json_patch_essentials_version}"
     minecraftLibrary "net.dv8tion:JDA:${jda_version}", {
@@ -22,7 +15,7 @@ dependencies {
     jarJar("com.flipkart.zjsonpatch:zjsonpatch:[0.4.16,1)") {
         transitive = false
     }
-    jarJar("net.dv8tion:JDA:[${jda_version},5)") {
+    jarJar("net.dv8tion:JDA:[${jda_version},7)") {
         transitive = false
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
@@ -30,16 +23,19 @@ dependencies {
     jarJar("com.neovisionaries:nv-websocket-client:[2.14,3)") {
         transitive = false
     }
-    jarJar("com.squareup.okhttp3:okhttp:[3.13.0,4)") {
+    jarJar("com.squareup.okhttp3:okhttp:[4.9.0,5)") {
         transitive = false
     }
-    jarJar("com.squareup.okio:okio:[1.17.2,2)") {
+    jarJar("com.squareup.okio:okio-jvm:[3.0.0,4)") {
         transitive = false
     }
     jarJar("net.sf.trove4j:trove4j:[3.0.3,4)") {
         transitive = false
     }
     jarJar("org.apache.commons:commons-collections4:[4.1,5)") {
+        transitive = false
+    }
+    jarJar("org.jetbrains.kotlin:kotlin-stdlib:[1.6.0,3)") {
         transitive = false
     }
     jarJar("com.fasterxml.jackson.core:jackson-core:[${jackson_version},3)") {

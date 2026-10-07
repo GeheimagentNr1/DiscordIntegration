@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.discord;
 
 import de.geheimagentnr1.discordintegration.DiscordIntegration;
+import de.geheimagentnr1.discordintegration.config.WhitelistConfig;
 import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatMessageEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.linkings.LinkingsEventHandler;
 import de.geheimagentnr1.discordintegration.elements.discord.management.ManagementMessageEventHandler;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 
+@SuppressWarnings( "SynchronizeOnThis" )
 @Log4j2
 @RequiredArgsConstructor
 public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
@@ -45,64 +47,100 @@ public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 	private static final List<GatewayIntent> INTENTS = List.of(
 		GatewayIntent.GUILD_MESSAGES,
 		GatewayIntent.GUILD_MEMBERS,
-		GatewayIntent.GUILD_MESSAGE_REACTIONS
+		GatewayIntent.GUILD_MESSAGE_REACTIONS,
+		GatewayIntent.MESSAGE_CONTENT
 	);
 	
-	@SuppressWarnings( "AccessToStaticFieldLockedOnInstance" )
-	public synchronized void init() {
+	public void init() {
 		
-		stop();
-		if( shouldInitialize() ) {
-			try {
-				jda = JDABuilder.create( serverConfig().getBotConfig().getBotToken(), INTENTS )
-					.addEventListeners( new ChatMessageEventHandler(
-						serverConfig(),
-						this,
-						chatManager(),
-						discordCommandHandler(),
-						discordMessageBuilder()
-					) )
-					.addEventListeners( new ManagementMessageEventHandler(
-						managementManager(),
-						discordCommandHandler()
-					) )
-					.addEventListeners( new LinkingsEventHandler(
-						this,
-						linkingsManagementMessageManager(),
-						linkingsManager()
-					) )
-					.setAutoReconnect( true )
-					.build();
-				jda.awaitReady();
-				
-				guild = jda.getGuildById( serverConfig().getBotConfig().getGuildId() );
-				if( guild == null ) {
-					log.error( "The bot has no access to the guild {}", serverConfig().getBotConfig().getGuildId() );
-					stop();
-				} else {
-					chatManager().init();
-					managementManager().init();
-					linkingsManagementMessageManager().init();
-					if( serverStarted ) {
-						updateWhitelist();
+		synchronized( DiscordManager.class ) {
+			stop();
+			if( shouldInitialize() ) {
+				try {
+					jda = JDABuilder.create( serverConfig().getBotConfig().getBotToken(), INTENTS )
+						.addEventListeners( new ChatMessageEventHandler(
+							serverConfig(),
+							this,
+							chatManager(),
+							discordCommandHandler(),
+							discordMessageBuilder()
+						) )
+						.addEventListeners( new ManagementMessageEventHandler(
+							managementManager(),
+							discordCommandHandler()
+						) )
+						.addEventListeners( new LinkingsEventHandler(
+							this,
+							linkingsManagementMessageManager(),
+							linkingsManager()
+						) )
+						.setAutoReconnect( true )
+						.build();
+					jda.awaitReady();
+					
+					guild = jda.getGuildById( serverConfig().getBotConfig().getGuildId() );
+					if( guild == null ) {
+						log.error(
+							"The bot has no access to the guild {}",
+							serverConfig().getBotConfig().getGuildId()
+						);
+						stop();
+					} else {
+						checkLinkingManagementRole();
+						chatManager().init();
+						managementManager().init();
+						linkingsManagementMessageManager().init();
+						if( serverStarted ) {
+							updateWhitelist();
+						}
 					}
+					updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() );
+				} catch( Exception exception ) {
+					log.error( "Login to Discord failed", exception );
 				}
-				updatePresence( ServerLifecycleHooks.getCurrentServer().getPlayerCount() );
-			} catch( Exception exception ) {
-				log.error( "Login to Discord failed", exception );
 			}
 		}
 	}
 	
-	public synchronized void stop() {
+	private void checkLinkingManagementRole() {
 		
-		if( isInitialized() ) {
-			jda.shutdown();
-			jda = null;
-			guild = null;
-			chatManager().stop();
-			managementManager().stop();
-			linkingsManagementMessageManager().stop();
+		WhitelistConfig whitelistConfig = serverConfig().getWhitelistConfig();
+		
+		if( !whitelistConfig.isEnabled() || !whitelistConfig.useSingleLinkingManagement() ) {
+			return;
+		}
+		long roleId = whitelistConfig.getSingleLinkingManagementRoleId();
+		
+		if( roleId == guild.getIdLong() ) {
+			log.warn(
+				"whitelist.single_linking_management_role_id is the @everyone role: " +
+					"every member of the Discord server can activate or deactivate all linkings"
+			);
+		} else if( whitelistConfig.useRole() && roleId == whitelistConfig.getRoleId() ) {
+			log.warn(
+				"whitelist.single_linking_management_role_id is the same role as whitelist.role_id: " +
+					"every member, who can be whitelisted, can activate or deactivate all linkings"
+			);
+		} else if( guild.getRoleById( roleId ) == null ) {
+			log.warn(
+				"whitelist.single_linking_management_role_id {} is no role of the Discord server: " +
+					"nobody can activate or deactivate linkings",
+				roleId
+			);
+		}
+	}
+	
+	public void stop() {
+		
+		synchronized( DiscordManager.class ) {
+			if( isInitialized() ) {
+				jda.shutdown();
+				jda = null;
+				guild = null;
+				chatManager().stop();
+				managementManager().stop();
+				linkingsManagementMessageManager().stop();
+			}
 		}
 	}
 	
@@ -111,48 +149,56 @@ public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 		return serverConfig().getBotConfig().isActive();
 	}
 	
-	public synchronized boolean isInitialized() {
+	public boolean isInitialized() {
 		
-		return shouldInitialize() &&
-			jda != null &&
-			jda.getStatus() != JDA.Status.SHUTTING_DOWN &&
-			jda.getStatus() != JDA.Status.SHUTDOWN &&
-			guild != null;
-	}
-	
-	public synchronized JDA getJda() {
-		
-		return jda;
-	}
-	
-	public synchronized void setServerStarted() {
-		
-		if( !serverStarted ) {
-			serverStarted = true;
-			updateWhitelist();
+		synchronized( DiscordManager.class ) {
+			return shouldInitialize() &&
+				jda != null &&
+				jda.getStatus() != JDA.Status.SHUTTING_DOWN &&
+				jda.getStatus() != JDA.Status.SHUTDOWN &&
+				guild != null;
 		}
 	}
 	
-	public synchronized void updatePresence( int onlinePlayerCount ) {
+	public JDA getJda() {
 		
-		if( isInitialized() ) {
-			if( serverConfig().getBotConfig().getDiscordPresenceConfig().isShow() ) {
-				jda.getPresence().setPresence(
-					Activity.playing(
-						MessageUtil.replaceParameters(
-							serverConfig().getBotConfig().getDiscordPresenceConfig().getMessage(),
-							Map.of(
-								"online_player_count",
-								String.valueOf( onlinePlayerCount ),
-								"max_player_count",
-								String.valueOf( ServerLifecycleHooks.getCurrentServer().getMaxPlayers() )
+		synchronized( DiscordManager.class ) {
+			return jda;
+		}
+	}
+	
+	public void setServerStarted() {
+		
+		synchronized( DiscordManager.class ) {
+			if( !serverStarted ) {
+				serverStarted = true;
+				updateWhitelist();
+			}
+		}
+	}
+	
+	public void updatePresence( int onlinePlayerCount ) {
+		
+		synchronized( DiscordManager.class ) {
+			if( isInitialized() ) {
+				if( serverConfig().getBotConfig().getDiscordPresenceConfig().isShow() ) {
+					jda.getPresence().setPresence(
+						Activity.playing(
+							MessageUtil.replaceParameters(
+								serverConfig().getBotConfig().getDiscordPresenceConfig().getMessage(),
+								Map.of(
+									"online_player_count",
+									String.valueOf( onlinePlayerCount ),
+									"max_player_count",
+									String.valueOf( ServerLifecycleHooks.getCurrentServer().getMaxPlayers() )
+								)
 							)
-						)
-					),
-					false
-				);
-			} else {
-				jda.getPresence().setPresence( (Activity)null, false );
+						),
+						false
+					);
+				} else {
+					jda.getPresence().setPresence( (Activity)null, false );
+				}
 			}
 		}
 	}
@@ -176,18 +222,22 @@ public class DiscordManager extends AbstractDiscordIntegrationServiceProvider {
 	}
 	
 	@NotNull
-	public synchronized SelfUser getSelfUser() {
+	public SelfUser getSelfUser() {
 		
-		return jda.getSelfUser();
+		synchronized( DiscordManager.class ) {
+			return jda.getSelfUser();
+		}
 	}
 	
 	@Nullable
-	public synchronized Member getMember( @NotNull Long discordMemberId ) {
+	public Member getMember( @NotNull Long discordMemberId ) {
 		
-		if( isInitialized() ) {
-			return guild.getMemberById( discordMemberId );
-		} else {
-			return null;
+		synchronized( DiscordManager.class ) {
+			if( isInitialized() ) {
+				return guild.getMemberById( discordMemberId );
+			} else {
+				return null;
+			}
 		}
 	}
 	
