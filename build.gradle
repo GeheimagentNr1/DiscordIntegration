@@ -143,7 +143,7 @@ repositories {
     maven { url 'https://jitpack.io' }
     maven {
         name = "ModdingMavenRepositories"
-        url = "file:../ModdingMavenRepositories"
+        url = "file:../../ModdingMavenRepositories"
     }
     mavenCentral() // for transitive dependencies
     maven {
@@ -165,10 +165,18 @@ dependencies {
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
     }
-    shadow("net.dv8tion:JDA:${jda_version}") {
-        exclude module: 'opus-java'
-        exclude module: 'slf4j-api'
-    }
+    // JDA and the dependencies it needs at runtime (pinned, no transitive dependencies)
+    shadow("net.dv8tion:JDA:${jda_version}") { transitive = false }
+    shadow("com.fasterxml.jackson.core:jackson-core:2.18.2") { transitive = false }
+    shadow("com.fasterxml.jackson.core:jackson-annotations:2.18.2") { transitive = false }
+    shadow("com.fasterxml.jackson.core:jackson-databind:2.18.2") { transitive = false }
+    shadow("com.neovisionaries:nv-websocket-client:2.14") { transitive = false }
+    shadow("com.squareup.okhttp3:okhttp:4.12.0") { transitive = false }
+    shadow("com.squareup.okio:okio-jvm:3.6.0") { transitive = false }
+    shadow("org.jetbrains.kotlin:kotlin-stdlib:1.9.24") { transitive = false }
+    shadow("org.jetbrains:annotations:24.0.1") { transitive = false }
+    shadow("net.sf.trove4j:trove4j:3.0.3") { transitive = false }
+    shadow("org.apache.commons:commons-collections4:4.4") { transitive = false }
     runtimeOnly("net.dv8tion:JDA:${jda_version}") {
         exclude module: 'opus-java'
         exclude module: 'slf4j-api'
@@ -187,6 +195,7 @@ dependencies {
 
 shadowJar {
     classifier ""
+    exclude 'META-INF/versions/**'
     configurations = [project.configurations.shadow]
 
     relocate 'com.fasterxml.jackson.annotation', 'lib.com.fasterxml.jackson.annotation'
@@ -201,6 +210,7 @@ shadowJar {
     relocate 'net.dv8tion.jda.internal', 'lib.net.dv8tion.jda.internal'
     relocate 'okhttp3', 'lib.okhttp3'
     relocate 'okio', 'lib.okio'
+    relocate 'kotlin', 'lib.kotlin'
     relocate 'org.apache.commons.collections4', 'lib.org.apache.commons.collections4'
     relocate 'org.intellij.lang.annotations', 'lib.org.intellij.lang.annotations'
     relocate 'org.jetbrains.annotations', 'lib.org.jetbrains.annotations'
@@ -246,7 +256,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file:../ModdingMavenRepositories"
+            url "file:../../ModdingMavenRepositories"
         }
         maven {
             name "minecraft-mods-repo"
