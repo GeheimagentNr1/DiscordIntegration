@@ -38,7 +38,8 @@ public class DiscordManager {
 	private static final List<GatewayIntent> INTENTS = List.of(
 		GatewayIntent.GUILD_MESSAGES,
 		GatewayIntent.GUILD_MEMBERS,
-		GatewayIntent.GUILD_MESSAGE_REACTIONS
+		GatewayIntent.GUILD_MESSAGE_REACTIONS,
+		GatewayIntent.MESSAGE_CONTENT
 	);
 	
 	public static synchronized void init() {

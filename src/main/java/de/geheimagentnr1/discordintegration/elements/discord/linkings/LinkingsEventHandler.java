@@ -3,15 +3,18 @@ package de.geheimagentnr1.discordintegration.elements.discord.linkings;
 import de.geheimagentnr1.discordintegration.elements.discord.DiscordManager;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEmoteEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveAllEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEmojiEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +30,11 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	
 	
 	@Override
-	public void onTextChannelDelete( @Nonnull TextChannelDeleteEvent event ) {
+	public void onChannelDelete( @Nonnull ChannelDeleteEvent event ) {
 		
+		if( event.getChannelType() != ChannelType.TEXT ) {
+			return;
+		}
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			LinkingsManagementMessageManager.init();
 		}
@@ -131,8 +137,11 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageDelete( @Nonnull GuildMessageDeleteEvent event ) {
+	public void onMessageDelete( @Nonnull MessageDeleteEvent event ) {
 		
+		if( !event.isFromGuild() ) {
+			return;
+		}
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
@@ -147,8 +156,11 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReactionAdd( @Nonnull GuildMessageReactionAddEvent event ) {
+	public void onMessageReactionAdd( @Nonnull MessageReactionAddEvent event ) {
 		
+		if( !event.isFromGuild() || event.getUser() == null ) {
+			return;
+		}
 		User user = event.getUser();
 		if( !LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ||
 			user.isBot() ) {
@@ -156,8 +168,8 @@ public class LinkingsEventHandler extends ListenerAdapter {
 		}
 		Member member = event.getMember();
 		long messageId = event.getMessageIdLong();
-		TextChannel channel = event.getChannel();
-		MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
+		GuildMessageChannel channel = event.getGuildChannel();
+		EmojiUnion reactionEmote = event.getEmoji();
 		
 		Boolean shouldActive =
 			LinkingsManagementMessageManager.reactionCodeToBool( reactionEmote.getAsReactionCode() );
@@ -177,16 +189,15 @@ public class LinkingsEventHandler extends ListenerAdapter {
 				errorHandler.accept( exception );
 			}
 		}
-		if( reactionEmote.isEmoji() ) {
-			channel.removeReactionById( messageId, reactionEmote.getEmoji(), user ).queue();
-		} else {
-			channel.removeReactionById( messageId, reactionEmote.getEmote(), user ).queue();
-		}
+		channel.removeReactionById( messageId, reactionEmote, user ).queue();
 	}
 	
 	@Override
-	public void onGuildMessageReactionRemove( @NotNull GuildMessageReactionRemoveEvent event ) {
+	public void onMessageReactionRemove( @NotNull MessageReactionRemoveEvent event ) {
 		
+		if( !event.isFromGuild() ) {
+			return;
+		}
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) &&
 			DiscordManager.getSelfUser().getIdLong() == event.getUserIdLong() ) {
 			
@@ -205,8 +216,11 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReactionRemoveAll( @Nonnull GuildMessageReactionRemoveAllEvent event ) {
+	public void onMessageReactionRemoveAll( @Nonnull MessageReactionRemoveAllEvent event ) {
 		
+		if( !event.isFromGuild() ) {
+			return;
+		}
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
@@ -224,8 +238,11 @@ public class LinkingsEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReactionRemoveEmote( @Nonnull GuildMessageReactionRemoveEmoteEvent event ) {
+	public void onMessageReactionRemoveEmoji( @Nonnull MessageReactionRemoveEmojiEvent event ) {
 		
+		if( !event.isFromGuild() ) {
+			return;
+		}
 		if( LinkingsManagementMessageManager.isCorrectChannel( event.getChannel().getIdLong() ) ) {
 			
 			Consumer<Throwable> errorHandler = throwable ->
