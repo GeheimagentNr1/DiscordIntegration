@@ -183,13 +183,6 @@ dependencies {
 
     testCompileOnly "org.projectlombok:lombok:${lombok_version}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
-    // Minecraft Forge API
-    compileOnly fg.deobf("de.geheimagentnr1.minecraft_forge_api:MinecraftForgeAPI-${minecraft_version}:${mfapi_version}")
-    runtimeOnly fg.deobf("de.geheimagentnr1.minecraft_forge_api:MinecraftForgeAPI-${minecraft_version}:${mfapi_version}:dev")
-    jarJar("de.geheimagentnr1.minecraft_forge_api:MinecraftForgeAPI-${minecraft_version}:[${mfapi_version},${next_unuable_mfapi_version})") {
-        jarJar.pin(it, "${mfapi_version}")
-        transitive = false
-    }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

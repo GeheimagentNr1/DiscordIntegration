@@ -1,39 +1,31 @@
 package de.geheimagentnr1.discordintegration.elements.commands;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import de.geheimagentnr1.discordintegration.net.DiscordNet;
-import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandInterface;
-import lombok.RequiredArgsConstructor;
+import de.geheimagentnr1.discordintegration.elements.discord.chat.ChatManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.server.players.PlayerList;
-import org.jetbrains.annotations.NotNull;
 
 
 @SuppressWarnings( "SameReturnValue" )
-@RequiredArgsConstructor
-public class EmoteToDiscordCommand implements CommandInterface {
+public class EmoteToDiscordCommand {
 	
 	
-	@NotNull
-	private final DiscordNet discordNet;
-	
-	@NotNull
-	@Override
-	public LiteralArgumentBuilder<CommandSourceStack> build() {
+	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
 		LiteralArgumentBuilder<CommandSourceStack> meCommand = Commands.literal( "me" );
 		meCommand.then( Commands.argument( "action", MessageArgument.message() )
-			.executes( this::sendMeMessage ) );
-		return meCommand;
+			.executes( EmoteToDiscordCommand::sendMeMessage ) );
+		dispatcher.register( meCommand );
 	}
 	
-	private int sendMeMessage( @NotNull CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+	private static int sendMeMessage( CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
 		
 		MessageArgument.resolveChatMessage(
 			context,
@@ -47,7 +39,7 @@ public class EmoteToDiscordCommand implements CommandInterface {
 					source,
 					ChatType.bind( ChatType.EMOTE_COMMAND, source )
 				);
-				discordNet.sendEmoteChatMessage( source, playerChatMessage.decoratedContent() );
+				ChatManager.sendEmoteChatMessage( source, playerChatMessage.decoratedContent() );
 			}
 		);
 		return Command.SINGLE_SUCCESS;

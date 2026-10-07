@@ -1,1 +1,11 @@
-- Fix dedicated servers not starting with Forge 47.4.16 and newer ("Attempted to load class net/minecraft/client/multiplayer/MultiPlayerGameMode for invalid dist DEDICATED_SERVER")
+- IMPORTANT: The config structure has been changed and is not compatible with older versions.
+- New whitelist feature with "Only linking", "Role", "Single Link Management" and "Role" + "Single Link Management" features. Details in the [Wiki](https://github.com/GeheimagentNr1/DiscordIntegration/wiki/3.X.X#whitelist)
+- New management channel which shows important Minecraft admin/mod information, for example about the whitelist.
+- All messages are now highly customizable. Details in the [Wiki](https://github.com/GeheimagentNr1/DiscordIntegration/wiki/3.X.X#server-config)
+- Server chat messages can now be disabled from being shown in the Discord chat channel.
+- New "management_command" flag for the config, to decide, if only users with the Discord management role can use a command.
+- Customizable Discord Presence, to show an activity message for the Discord bot, for example with the number of players online on the Minecraft server.
+- Update the Discord library JDA to version 6
+- Fix messages from Discord arriving empty in Minecraft (the Message Content intent is now requested, it has to be enabled for the bot in the Discord Developer Portal)
+- Fix messages of other bots not being transmitted to Minecraft (transmit_bot_messages)
+- Make "/discord linkings" only available for admins (permission level 3) in game: "/discord linkings link|unlink <player> <discordMemberId>" could be used without operator permission, "/discord linkings link|unlink <player>" without a Discord ID still works for commands sent from Discord
