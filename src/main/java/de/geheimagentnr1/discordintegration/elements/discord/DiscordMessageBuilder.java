@@ -23,7 +23,7 @@ public class DiscordMessageBuilder {
 	
 	public static boolean isMessageBotFeedback( String message ) {
 		
-		return message.startsWith( FEEDBACK_START ) || message.endsWith( FEEDBACK_END );
+		return message.startsWith( FEEDBACK_START ) && message.endsWith( FEEDBACK_END );
 	}
 	
 	public static String getEntityName( Entity entity ) {
