@@ -3,7 +3,8 @@ package de.geheimagentnr1.discordintegration.elements.discord;
 import de.geheimagentnr1.discordintegration.config.ServerConfig;
 import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.StringTextComponent;
@@ -21,10 +22,13 @@ public class DiscordEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
+	public void onMessageReceived( @NotNull MessageReceivedEvent event ) {
 		
+		if( !event.isFromGuild() || event.getChannelType() != ChannelType.TEXT ) {
+			return;
+		}
 		User author = event.getAuthor();
-		if( isInitialized() && DiscordNet.feedBackAllowed( event.getChannel(), author ) ) {
+		if( isInitialized() && DiscordNet.feedBackAllowed( event.getChannel().asTextChannel(), author ) ) {
 			String message = event.getMessage().getContentDisplay();
 			if( author.isBot() ) {
 				handleBotMessage( message );
