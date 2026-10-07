@@ -9,3 +9,4 @@
 - Fix messages from Discord arriving empty in Minecraft (the Message Content intent is now requested, it has to be enabled for the bot in the Discord Developer Portal)
 - Fix messages of other bots not being transmitted to Minecraft (transmit_bot_messages)
 - Make "/discord linkings" only available for admins (permission level 3) in game: "/discord linkings link|unlink <player> <discordMemberId>" could be used without operator permission, "/discord linkings link|unlink <player>" without a Discord ID still works for commands sent from Discord
+- Fix Discord users being able to inject own text component elements (for example click events running commands) into the Minecraft chat, if chat.use_raw_message_format_discord_to_minecraft is enabled
