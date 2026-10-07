@@ -1,2 +1,1 @@
-- Fix issues with Kotlin for Forge
-- Update dependencies
+- Fix dedicated servers not starting with Forge 47.4.16 and newer ("Attempted to load class net/minecraft/client/multiplayer/MultiPlayerGameMode for invalid dist DEDICATED_SERVER")
