@@ -7,8 +7,9 @@ import de.geheimagentnr1.minecraft_forge_api.events.ForgeEventHandlerInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraft.commands.CommandSourceStack;
@@ -23,8 +24,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.security.auth.login.LoginException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -40,7 +40,7 @@ public class DiscordNet implements ForgeEventHandlerInterface {
 	public static final String FEEDBACK_END = "```**";
 	
 	@NotNull
-	private final List<GatewayIntent> INTENTS = Collections.singletonList( GatewayIntent.GUILD_MESSAGES );
+	private final List<GatewayIntent> INTENTS = Arrays.asList( GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT );
 	
 	@NotNull
 	private final AbstractMod abstractMod;
@@ -75,7 +75,7 @@ public class DiscordNet implements ForgeEventHandlerInterface {
 				if( channel == null ) {
 					log.error( "Discord Text Channel {} not found", serverConfig().getChannelId() );
 				}
-			} catch( LoginException | InterruptedException exception ) {
+			} catch( InvalidTokenException | InterruptedException exception ) {
 				log.error( "Login to Discord failed", exception );
 			}
 		}

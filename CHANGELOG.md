@@ -1,1 +1,2 @@
-- Fix crash on startup
+- Update the Discord library JDA to version 6
+- Fix messages from Discord arriving empty in Minecraft (the Message Content intent is now requested, it has to be enabled for the bot in the Discord Developer Portal)

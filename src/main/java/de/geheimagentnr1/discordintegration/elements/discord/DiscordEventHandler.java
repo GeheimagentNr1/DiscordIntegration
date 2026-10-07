@@ -6,7 +6,8 @@ import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -36,11 +37,14 @@ public class DiscordEventHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onGuildMessageReceived( @NotNull GuildMessageReceivedEvent event ) {
+	public void onMessageReceived( @NotNull MessageReceivedEvent event ) {
 		
+		if( !event.isFromGuild() || event.getChannelType() != ChannelType.TEXT ) {
+			return;
+		}
 		User author = event.getAuthor();
 		Member member = event.getMember();
-		if( isInitialized() && discordNet.feedBackAllowed( event.getChannel(), author ) ) {
+		if( isInitialized() && discordNet.feedBackAllowed( event.getChannel().asTextChannel(), author ) ) {
 			String message = event.getMessage().getContentDisplay();
 			if( author.isBot() ) {
 				handleBotMessage( message );
