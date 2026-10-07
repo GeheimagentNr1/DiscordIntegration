@@ -113,15 +113,16 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 		
 		if( serverConfig.getChatConfig().getMaxCharCount() == -1 ||
 			message.length() <= serverConfig.getChatConfig().getMaxCharCount() ) {
+			boolean useRawMessageFormat = serverConfig.getChatConfig().useRawMessageFormatDiscordToMinecraft();
 			String buildMessage = MessageUtil.replaceParameters(
 				serverConfig.getChatConfig().getMessageFormatDiscordToMinecraft(),
 				Map.of(
-					"username", discordManager.getMemberAsTag( member ),
-					"nickname", member.getEffectiveName(),
-					"message", message
+					"username", escapeForRawMessageFormat( useRawMessageFormat, discordManager.getMemberAsTag( member ) ),
+					"nickname", escapeForRawMessageFormat( useRawMessageFormat, member.getEffectiveName() ),
+					"message", escapeForRawMessageFormat( useRawMessageFormat, message )
 				)
 			);
-			if( serverConfig.getChatConfig().useRawMessageFormatDiscordToMinecraft() ) {
+			if( useRawMessageFormat ) {
 				try {
 					server.getPlayerList().broadcastSystemMessage(
 						ComponentArgument.textComponent(
@@ -166,5 +167,29 @@ public class ChatMessageEventHandler extends ListenerAdapter {
 				)
 			);
 		}
+	}
+
+	//With the raw message format the values from Discord are inserted into a text component (JSON, SNBT since 1.21.5),
+	//so they must not be able to add own elements, for example click events running commands.
+	//Unicode escapes work in both formats and in single and double quoted strings.
+	@NotNull
+	private static String escapeForRawMessageFormat( boolean useRawMessageFormat, @NotNull String value ) {
+
+		if( !useRawMessageFormat ) {
+			return value;
+		}
+		StringBuilder escaped = new StringBuilder( value.length() );
+		for( char character : value.toCharArray() ) {
+			switch( character ) {
+				case '\\' -> escaped.append( "\\u005c" );
+				case '"' -> escaped.append( "\\u0022" );
+				case '\'' -> escaped.append( "\\u0027" );
+				case '\n' -> escaped.append( "\\n" );
+				case '\r' -> escaped.append( "\\r" );
+				case '\t' -> escaped.append( "\\t" );
+				default -> escaped.append( character );
+			}
+		}
+		return escaped.toString();
 	}
 }
