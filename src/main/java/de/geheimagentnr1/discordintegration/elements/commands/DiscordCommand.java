@@ -1,6 +1,7 @@
 package de.geheimagentnr1.discordintegration.elements.commands;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -55,12 +56,20 @@ class DiscordCommand extends AbstractDiscordCommand {
 		discord.then( Commands.literal( "mods" )
 			.executes( this::showMods ) );
 		discord.then( Commands.literal( "linkings" )
+			// Admins manage the linkings in game, players only link themselves with commands sent from Discord
+			.requires( source -> source instanceof DiscordCommandSourceStack || Commands.hasPermission( Commands.LEVEL_ADMINS ).test( source ) )
 			.then( Commands.literal( "link" )
 				.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
-					.executes( this::linkDiscord ) ) )
+					.executes( this::linkDiscord )
+					.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+						.requires( Commands.hasPermission( Commands.LEVEL_ADMINS ) )
+						.executes( this::linkMinecraft ) ) ) )
 			.then( Commands.literal( "unlink" )
 				.then( Commands.argument( "player", GameProfileArgument.gameProfile() )
-					.executes( this::unlinkDiscord ) ) ) );
+					.executes( this::unlinkDiscord )
+					.then( Commands.argument( "discordMemberId", LongArgumentType.longArg() )
+						.requires( Commands.hasPermission( Commands.LEVEL_ADMINS ) )
+						.executes( this::unlinkMinecraft ) ) ) ) );
 		
 		return discord;
 	}
@@ -160,6 +169,38 @@ class DiscordCommand extends AbstractDiscordCommand {
 			return -1;
 		}
 		Member member = discordSource.getMember();
+		
+		return unlink( source, member, context );
+	}
+	
+	@SuppressWarnings( "DuplicatedCode" )
+	private int linkMinecraft( @NotNull CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+		
+		CommandSourceStack source = context.getSource();
+		if( DiscordCommandHelper.isDiscordSource( source ) ) {
+			return -1;
+		}
+		Member member = discordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );
+		if( member == null ) {
+			DiscordCommandHelper.sendInvalidMember( serverConfig, source );
+			return -1;
+		}
+		
+		return link( source, member, context );
+	}
+	
+	@SuppressWarnings( "DuplicatedCode" )
+	private int unlinkMinecraft( @NotNull CommandContext<CommandSourceStack> context ) throws CommandSyntaxException {
+		
+		CommandSourceStack source = context.getSource();
+		if( DiscordCommandHelper.isDiscordSource( source ) ) {
+			return -1;
+		}
+		Member member = discordManager.getMember( LongArgumentType.getLong( context, "discordMemberId" ) );
+		if( member == null ) {
+			DiscordCommandHelper.sendInvalidMember( serverConfig, source );
+			return -1;
+		}
 		
 		return unlink( source, member, context );
 	}
