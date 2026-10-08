@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.slf4j.simple.SimpleServiceProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,14 @@ public class DiscordNet {
 	
 	
 	private static final Logger LOGGER = LogManager.getLogger( DiscordNet.class );
+	
+	static {
+		//SLF4J 2 (needed by JDA) doesn't find the bundled provider over the service loader in Forge,
+		//so it is set directly. The class name is the relocated one in the mod jar.
+		if( System.getProperty( "slf4j.provider" ) == null ) {
+			System.setProperty( "slf4j.provider", SimpleServiceProvider.class.getName() );
+		}
+	}
 	
 	public static final String FEEDBACK_START = "**```";
 	
