@@ -173,6 +173,8 @@ shadowJar {
     exclude 'META-INF/versions/**'
     exclude 'module-info.class'
     configurations = [project.configurations.shadow]
+    // SLF4J 2 finds its provider over the (relocated) service file
+    mergeServiceFiles()
 
     relocate 'com.fasterxml.jackson.annotation', 'lib.com.fasterxml.jackson.annotation'
     relocate 'com.fasterxml.jackson.core', 'lib.com.fasterxml.jackson.core'
