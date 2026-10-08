@@ -5,6 +5,7 @@ import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import de.geheimagentnr1.discordintegration.util.VersionHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -157,7 +158,7 @@ public class ServerConfig {
 		
 		LOGGER.info( "Loading \"{}\" Server Config", MOD_NAME );
 		LOGGER.info( "{} = {}", ACTIVE.getPath(), ACTIVE.get() );
-		LOGGER.info( "{} = {}", BOT_TOKEN.getPath(), BOT_TOKEN.get() );
+		LOGGER.info( "{} = {}", BOT_TOKEN.getPath(), StringUtils.leftPad( "", BOT_TOKEN.get().length(), '*' ) );
 		LOGGER.info( "{} = {}", CHANNEL_ID.getPath(), CHANNEL_ID.get() );
 		LOGGER.info( "{} = {}", COMMAND_PREFIX.getPath(), COMMAND_PREFIX.get() );
 		LOGGER.info( "{} = {}", TRANSMIT_BOT_MESSAGES.getPath(), TRANSMIT_BOT_MESSAGES.get() );
