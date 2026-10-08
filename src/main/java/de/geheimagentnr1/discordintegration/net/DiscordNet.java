@@ -22,6 +22,14 @@ import java.util.List;
 
 public class DiscordNet {
 	
+	static {
+		//SLF4J 2 (needed by JDA) doesn't find the bundled provider over the service loader in Forge,
+		//so it is set directly. The class name is relocated in the mod jar like the bundled SLF4J.
+		if( System.getProperty( "slf4j.provider" ) == null ) {
+			System.setProperty( "slf4j.provider", "org.slf4j.simple.SimpleServiceProvider" );
+		}
+	}
+	
 	
 	private static final Logger LOGGER = LogManager.getLogger( DiscordNet.class );
 	
