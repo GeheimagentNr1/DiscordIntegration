@@ -5,13 +5,16 @@ import de.geheimagentnr1.discordintegration.net.DiscordNet;
 import de.geheimagentnr1.discordintegration.util.VersionHelper;
 import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
 import de.geheimagentnr1.minecraft_forge_api.config.AbstractConfig;
+import lombok.extern.log4j.Log4j2;
 import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
+@Log4j2
 public class ServerConfig extends AbstractConfig {
 	
 	
@@ -527,5 +530,13 @@ public class ServerConfig extends AbstractConfig {
 	public List<? extends AbstractCommentedConfig> getCommands() {
 		
 		return getListValue( AbstractCommentedConfig.class, COMMANDS_KEY );
+	}
+	
+	//The bot token must not be written into the log. MinecraftForgeAPI 1.0.0 can't mask single values,
+	//so only the masked token is printed.
+	@Override
+	protected void printValues() {
+		
+		log.info( "{} = {}", BOT_TOKEN_KEY, StringUtils.leftPad( "", getBotToken().length(), '*' ) );
 	}
 }
