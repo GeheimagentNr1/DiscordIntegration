@@ -6,7 +6,7 @@ Diese Datei ist auf allen `develop_*`-Branches identisch; Quelle: `../Docs/mod-c
 
 ## Versionen
 
-- Forge: `develop_1.14.4` .. `develop_1.20` mit Mod-Version 2.x (alter, schlanker Aufbau), `develop_1.20.1` .. `develop_1.21` und `develop_1.21.1_forge` mit 3.x (Whitelist, Management-Kanal, konfigurierbare Nachrichten); `develop_1.21.3` ist ein unveröffentlichter Forge-Versuch mit altem JDA. Alle gepflegten Forge-Branches nutzen JDA 6.
+- Forge: `develop_1.14.4` .. `develop_1.20` mit Mod-Version 2.x (alter, schlanker Aufbau), `develop_1.20.1` .. `develop_1.21` und `develop_1.21.1_forge` mit 3.x (Whitelist, Management-Kanal, konfigurierbare Nachrichten). Alle gepflegten Forge-Branches nutzen JDA 6.
 - NeoForge (4.x): sechs Jars - `develop_1.21.1`, `develop_1.21.2` (1.21.2 - 1.21.8), `develop_1.21.9` (1.21.9 - 1.21.10), `develop_1.21.11`, `develop_26.1` (26.1 - 26.2), `develop_26.3`. Details: [`../Docs/migrations/1.21.1-to-1.21.2.md`](../Docs/migrations/1.21.1-to-1.21.2.md) Abschnitt 4j.
 - Ranges, Tags und Java-Versionen pro Branch: [`../Docs/VERSIONEN.md`](../Docs/VERSIONEN.md).
 
