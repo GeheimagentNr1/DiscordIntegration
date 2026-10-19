@@ -1,2 +1,2 @@
-﻿Make "/discord linkings" only available for admins (permission level 3) in game: players can no longer see or use it in game, "/discord linkings link|unlink <player>" without a Discord ID still works for commands sent from Discord
-Fix Discord users being able to inject own text component elements (for example click events running commands) into the Minecraft chat, if chat.use_raw_message_format_discord_to_minecraft is enabled
+﻿Support for NeoForge 26.3.0.37 and newer: the server config is registered with the new config type (version 4.0.4 crashes there)
+An existing world config in `<world>/serverconfig` is copied once to `<world>/syncedconfig`, because NeoForge 26.3 only reads world configs from there (dedicated servers; in singleplayer move the file by hand)

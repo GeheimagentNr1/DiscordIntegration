@@ -1,5 +1,6 @@
 package de.geheimagentnr1.discordintegration.api;
 
+import de.geheimagentnr1.discordintegration.config.ServerConfigRegistration;
 import de.geheimagentnr1.discordintegration.api.config.AbstractConfig;
 import de.geheimagentnr1.discordintegration.api.events.ForgeEventHandlerInterface;
 import de.geheimagentnr1.discordintegration.api.events.ModEventHandlerInterface;
@@ -95,13 +96,17 @@ public abstract class AbstractMod {
 		T config = builder.apply( this );
 		ModConfig.Type configType = config.type();
 		configs.put( configType, config );
-		modContainer.registerConfig( configType, config.getSpec() );
+		if( configType == ModConfig.Type.SYNCED ) {
+			ServerConfigRegistration.register( modContainer, config.getSpec() );
+		} else {
+			modContainer.registerConfig( configType, config.getSpec() );
+		}
 		// Register config events using addListener instead of registering the object
 		// This avoids the NeoForge restriction on @SubscribeEvent in superclasses
 		modEventBus.addListener( config::handleModConfigLoadingEvent );
 		modEventBus.addListener( config::handleModConfigReloadingEvent );
 		NeoForge.EVENT_BUS.addListener( config::handleServerStartingEvent );
-		if( config.isEarlyLoad() && configType != ModConfig.Type.SERVER ) {
+		if( config.isEarlyLoad() && configType != ModConfig.Type.SYNCED ) {
 			config.load();
 		}
 		return config;

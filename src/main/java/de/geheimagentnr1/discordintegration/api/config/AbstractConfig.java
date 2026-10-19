@@ -43,7 +43,7 @@ public abstract class AbstractConfig extends AbstractSubConfig {
 	
 	public void handleServerStartingEvent( @NotNull ServerStartingEvent event ) {
 		
-		if( isEarlyLoad() && type() == ModConfig.Type.SERVER ) {
+		if( isEarlyLoad() && type() == ModConfig.Type.SYNCED ) {
 			load();
 		}
 	}

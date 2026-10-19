@@ -32,7 +32,7 @@ public abstract class AbstractDiscordIntegrationServiceProvider {
 	protected ServerConfig serverConfig() {
 		
 		if( serverConfig == null ) {
-			serverConfig = getDiscordIntegration().getConfig( ModConfig.Type.SERVER, ServerConfig.class )
+			serverConfig = getDiscordIntegration().getConfig( ModConfig.Type.SYNCED, ServerConfig.class )
 				.orElseThrow( () -> new IllegalStateException( SERVER_CONFIG_NOT_FOUND_ERROR_MESSAGE ) );
 		}
 		return serverConfig;
